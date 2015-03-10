@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Starter Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/translator/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/translator/css/create.css" rel="stylesheet">
+    
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+{% csrf_token %}
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="starter-template">
+        <h1>Make your own scenario</h1>
+      </div>
+      
+      <div class="row">
+            <div class="col-md-6">
+            
+            <div class="step-div">
+                <div class="row">
+                <div class="step-number col-md-1"> 1 </div>
+                <div class="step-name col-md-11"><input type="text" class="form-control" id="step-name" placeholder="Step name"></div>
+                </div>
+                
+                <div class="step-description"-div>
+                    <textarea class="form-control" id="step-description" rows="2"></textarea>
+                </div>
+            </div>
+            
+            </div>
+            <div class="col-md-6" id="program"></div>
+        </div>
+        <div class="row" id="button-row">
+            <button type="button" class="btn btn-success btn-translate">Translate</button>
+        </div>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="/static/translator/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/translator/js/send-to-translate.js"></script>
+
+    <script>
+
+    </script>
+  </body>
+</html>

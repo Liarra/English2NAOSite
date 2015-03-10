@@ -1,0 +1,16 @@
+ body {
+        padding-top: 50px;
+        }
+        .starter-template {
+        padding: 40px 15px;
+        }
+
+        #button-row{
+        position:absolute;
+        bottom:50px;
+        text-align:center;
+        }
+
+        .step-description{
+            margin-top:5px;
+        }
