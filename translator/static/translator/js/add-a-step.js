@@ -15,6 +15,7 @@ $("#steps-column")
     .on("click", ".step-div .row .step-delete", function(e) {
         $(this).closest(".step-div").remove();
         renumber_steps();
+        $(".step-div:last").addClass("inactive");
         steps_counter--;
     });
 
