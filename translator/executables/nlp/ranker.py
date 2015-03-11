@@ -69,7 +69,7 @@ class text_breaker(object):
             for j in range(i + 1, min(len(edges), i + 12)):
                 # for j in range(i + 1, min(len(edges), i+5)):
                 # for j in range(i + 1, len(edges)):
-                connections[edges[j]] = 0
+                connections[edges[j]] = 1
             graph[edges[i]] = connections
 
         return graph

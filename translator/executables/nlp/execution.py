@@ -13,8 +13,8 @@ class sequence(component):
         return " & "
 
 class parallel(component):
-    tags = ["and", "while", "same time"]
-    regexp = r"(and|while)$"
+    tags = ["same time"]
+    regexp = r"\W(and|while)$"
 
     def __init__(self, string):
         pass

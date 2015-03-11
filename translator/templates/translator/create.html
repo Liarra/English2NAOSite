@@ -10,7 +10,7 @@
     <title>Starter Template for Bootstrap</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/static/translator/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/translator/bootstrap/css/bootstrap.simplex.min.css" rel="stylesheet">
     <link href="/static/translator/css/create.css" rel="stylesheet">
     
     
@@ -53,24 +53,24 @@
       </div>
       
       <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-5" id="steps-column">
             
-            <div class="step-div">
+            <div class="step-div inactive">
                 <div class="row">
-                <div class="step-number col-md-1"> 1 </div>
-                <div class="step-name col-md-11"><input type="text" class="form-control" id="step-name" placeholder="Step name"></div>
+                <div class="step-number col-md-1"> 1. </div>
+                <div class="step-name col-md-10"><input type="text" class="form-control" id="step-name" placeholder="Step name"></div>
+                <div class="step-delete col-md-1"><span class=" glyphicon glyphicon-remove"> </span></div>
                 </div>
                 
-                <div class="step-description"-div>
-                    <textarea class="form-control" id="step-description" rows="2"></textarea>
+                <div class="step-description-div">
+                    <textarea class="form-control step-description"rows="2"></textarea>
                 </div>
             </div>
             
             </div>
+          <div class="col-md-1"> <button type="button" class="btn btn-success btn-translate">Translate</button></div>
+
             <div class="col-md-6" id="program"></div>
-        </div>
-        <div class="row" id="button-row">
-            <button type="button" class="btn btn-success btn-translate">Translate</button>
         </div>
 
     </div><!-- /.container -->
@@ -82,6 +82,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="/static/translator/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/translator/js/send-to-translate.js"></script>
+    <script src="/static/translator/js/add-a-step.js"></script>
 
     <script>
 

@@ -1,16 +1,40 @@
- body {
-        padding-top: 50px;
-        }
-        .starter-template {
-        padding: 40px 15px;
-        }
+body {
+    padding-top: 50px;
+}
 
-        #button-row{
-        position:absolute;
-        bottom:50px;
-        text-align:center;
-        }
+.starter-template {
+    padding: 20px 15px;
+}
 
-        .step-description{
-            margin-top:5px;
-        }
+#button-row{
+    position:absolute;
+    bottom:50px;
+    text-align:center;
+}
+
+.step-div{
+margin-bottom:20px;
+}
+
+.step-number, .step-delete{
+    font-size:25px;
+    text-align:center;
+    margin:0px;
+}
+
+.step-name input{
+font-size:20px;
+padding:1px 3px;
+}
+
+.step-description{
+    margin-top:5px;
+}
+
+.program-step{
+background:white;
+margin-bottom:40px;
+padding:10px;
+border-radius:5px;
+border: 1px #CCC solid;
+}

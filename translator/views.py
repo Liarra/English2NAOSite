@@ -11,6 +11,14 @@ def create(request):
 
 
 def translate(request):
-    text=request.POST['text']
-    #text = "The robot says 'Hi'"
-    return HttpResponse(str(translator.translate(text)))
+    textlist = request.POST.getlist('text[]')
+    print(textlist)
+    # text = "The robot says 'Hi'"
+    ret = ""
+    i=1;
+    for text in textlist:
+        if text != "":
+            ret += "%d.<div class='program-step'>%s</div>" % (i,translator.translate(text))
+            i+=1
+
+    return HttpResponse(ret)

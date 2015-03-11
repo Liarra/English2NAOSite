@@ -33,11 +33,16 @@ $.ajaxSetup({
 $(document).ready(function(){
     $(".btn-translate").click(function(){
 
+        var values = $('.step-description').map(function() {
+            return this.value;
+        }).get()
+
+
         $.ajax({
             url: "translate/",
             type:"POST",
             data: {
-                text: $("#step-description").val(),
+                text: values,
             },
             success: function( data ) {
                 $( "#program" ).html(data);
