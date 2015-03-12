@@ -44,10 +44,62 @@ $(document).ready(function(){
             data: {
                 text: values,
             },
+
+
             success: function( data ) {
-                $( "#program" ).html(data);
+                var json_data=jQuery.parseJSON(data);
+                $( "#program" ).html(make_program(json_data));
+                assign_balloons();
             }
         });
 
 });
+
 });
+
+function assign_balloons() {
+  $('.program-box').balloon({position: "bottom",minLifetime: 0, css: {'max-width':'200px'}});
+}
+
+function make_program(json_data){
+    var count = Object.keys(json_data).length
+    var htmlString=""
+
+    for(var i=1; i<=count;i++){
+        step_data=json_data[i+""]
+
+        htmlString+="<div class='step-number'>";
+        htmlString+=i+". ";
+        htmlString+="</div>";
+        htmlString+="<div class='program-step'>";
+
+        for (var j=0;j<step_data.length;j++){
+            //Unrecognised
+//            if (step_data[j].indexOf("_UNRECOGNISED_")==0){
+//                htmlString+="<span class='program-box glyphicon glyphicon-question-sign' title='"+step_data[j]+"'></span> "
+//            }
+//
+//            if (step_data[j].indexOf("say(")==0){
+//                htmlString+="<span class='program-box glyphicon glyphicon-comment' title='"+step_data[j]+"'></span> "
+//            }
+//
+//            if (step_data[j].indexOf("wait(")==0){
+//                htmlString+="<span class='program-box glyphicon glyphicon-time' title='"+step_data[j]+"'></span> "
+//            }
+//            if (step_data[j].indexOf("stiff")==0){
+//                htmlString+="<span class='program-box glyphicon glyphicon-move' title='"+step_data[j]+"'></span> "
+//            }
+//            if (step_data[j].indexOf(" | ")==0){
+//                htmlString+="<span class='program-box' title='"+step_data[j]+"'>|</span>"
+//            }
+//
+//            if (step_data[j].indexOf(" & ")==0){
+//                htmlString+="<span class='program-box' title='"+step_data[j]+"'>&</span>"
+//            }
+        }
+        htmlString+=json_data[i+""];
+        htmlString+="</div>";
+    }
+
+    return htmlString;
+}

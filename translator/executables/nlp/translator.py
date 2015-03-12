@@ -18,6 +18,6 @@ def translate(text):
     result=[]
     for text, component in components_mapping:
         if component is not None:
-            result.append(component)
+            result.append(str(component))
 
     return result

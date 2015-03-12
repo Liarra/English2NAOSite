@@ -49,4 +49,4 @@ class unrecognised_component(component):
         self.unrecognised_text = string
 
     def __repr__(self):
-        return "_NOT_RECOGNISED_ [%s]" % self.unrecognised_text
+        return "_UNRECOGNISED_[%s]" % self.unrecognised_text

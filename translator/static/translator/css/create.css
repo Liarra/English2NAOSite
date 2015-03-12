@@ -6,10 +6,8 @@ body {
     padding: 20px 15px;
 }
 
-#button-row{
-    position:absolute;
-    bottom:50px;
-    text-align:center;
+#button{
+vertical-align:middle;
 }
 
 .step-div{
@@ -18,7 +16,7 @@ margin-bottom:20px;
 
 .step-number, .step-delete{
     font-size:25px;
-    text-align:center;
+    //text-align:center;
     margin:0px;
 }
 
@@ -37,4 +35,10 @@ margin-bottom:40px;
 padding:10px;
 border-radius:5px;
 border: 1px #CCC solid;
+}
+
+.program-box{
+    font-size:32px;
+    min-width:32px;
+    margin:5px;
 }

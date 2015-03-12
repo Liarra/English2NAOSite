@@ -14,7 +14,7 @@ class sequence(component):
 
 class parallel(component):
     tags = ["same time"]
-    regexp = r"\W(and|while)$"
+    regexp = r"^\ ?(and|while)$"
 
     def __init__(self, string):
         pass
