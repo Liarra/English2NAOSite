@@ -1,7 +1,7 @@
-from translator.executables.nlp.component import *
-from translator.executables.nlp.execution import *
+from translator.executables.nlp.components.component import *
+from translator.executables.nlp.components.execution import *
 from translator.executables.nlp.ranker import text_breaker
-from translator.executables.nlp.robot_commands import *
+from translator.executables.nlp.components.robot_commands import *
 
 __author__ = 'NBUCHINA'
 

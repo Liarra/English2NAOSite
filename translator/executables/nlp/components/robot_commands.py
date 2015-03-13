@@ -1,4 +1,4 @@
-from translator.executables.nlp.component import component
+from translator.executables.nlp.components.component import component
 
 
 class say_command(component):
@@ -7,7 +7,10 @@ class say_command(component):
 
     say_what = ""
 
-    def __init__(self, string):
+    def __init__(self, string, index_in_text=0):
+        super().__init__(string, index_in_text)
+        self.component_name = "CommandState2"
+
         import re
 
         p = re.compile(self.regexp, re.IGNORECASE)
@@ -18,9 +21,7 @@ class say_command(component):
         if m is None:
             return
         self.say_what = m.group('what').replace(' ', '_')
-
-    def __repr__(self):
-        return "say(%s)" % self.say_what
+        self.command = "say(%s)" % self.say_what
 
 
 class wait_command(component):
@@ -29,7 +30,10 @@ class wait_command(component):
 
     ms = 0
 
-    def __init__(self, string):
+    def __init__(self, string, index_in_text=0):
+        super().__init__(string, index_in_text)
+        self.component_name = "CommandState2"
+
         import re
 
         p = re.compile(self.regexp, re.IGNORECASE)
@@ -52,9 +56,7 @@ class wait_command(component):
             number_ms = int(number)
 
         self.ms = number_ms
-
-    def __repr__(self):
-        return "wait(%d)" % self.ms
+        self.command = "wait(%d)" % self.ms
 
 
 from os import listdir
@@ -66,9 +68,9 @@ class move_command(component):
     tags = []
     regexp = r"(?!x)x"  # A regex that never matches
 
-    def __init__(self, string):
-        string = string.strip()
-        string = string.lower()
+    def __init__(self, string, index_in_text=0):
+        super().__init__(string, index_in_text)
+        self.component_name = "CommandState2"
 
         max = 0
         for move_file in move_command.files_to_tags:
@@ -82,13 +84,13 @@ class move_command(component):
                 max = s
                 self.move = move_command.files_to_moves[move_file]
 
-    def __repr__(self):
-        return "stiff (1, 500, 0) & " + self.move + " & stiff (0, 500, 0)"
+        self.command = "stiff (1, 500, 0) & " + self.move + " & stiff (0, 500, 0)"
 
 
 moves_folder = "moves"
 
 import os
+
 dir = os.path.dirname(__file__)
 moves_folder = os.path.join(dir, moves_folder)
 
