@@ -16,7 +16,16 @@ def translate(text):
     components_mapping = ranker1.map_components_to_text(components)
 
     result=[]
+    components_from_text=[]
+
     for text, component in components_mapping:
+        if component is not None:
+            components_from_text.append(component)
+
+    from translator.executables.nlp import grammar
+    components_from_text = grammar.go_through(components_from_text)
+
+    for component in components_from_text:
         if component is not None:
             result.append(str(component))
 
