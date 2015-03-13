@@ -31,7 +31,7 @@ padding:1px 3px;
 
 .program-step{
 background:white;
-margin-bottom:40px;
+margin-bottom:20px;
 padding:10px;
 border-radius:5px;
 border: 1px #CCC solid;
@@ -41,4 +41,14 @@ border: 1px #CCC solid;
     font-size:32px;
     min-width:32px;
     margin:5px;
+    padding:5px;
+    border-radius:5px;
+    border: 1px solid grey;
+}
+
+.arrow-box{
+    font-size:32px;
+    min-width:32px;
+    margin:5px;
+    padding:5px;
 }

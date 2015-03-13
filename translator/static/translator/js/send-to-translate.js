@@ -75,29 +75,34 @@ function make_program(json_data){
 
         for (var j=0;j<step_data.length;j++){
             //Unrecognised
-//            if (step_data[j].indexOf("_UNRECOGNISED_")==0){
-//                htmlString+="<span class='program-box glyphicon glyphicon-question-sign' title='"+step_data[j]+"'></span> "
-//            }
-//
-//            if (step_data[j].indexOf("say(")==0){
-//                htmlString+="<span class='program-box glyphicon glyphicon-comment' title='"+step_data[j]+"'></span> "
-//            }
-//
-//            if (step_data[j].indexOf("wait(")==0){
-//                htmlString+="<span class='program-box glyphicon glyphicon-time' title='"+step_data[j]+"'></span> "
-//            }
-//            if (step_data[j].indexOf("stiff")==0){
-//                htmlString+="<span class='program-box glyphicon glyphicon-move' title='"+step_data[j]+"'></span> "
-//            }
-//            if (step_data[j].indexOf(" | ")==0){
-//                htmlString+="<span class='program-box' title='"+step_data[j]+"'>|</span>"
-//            }
-//
-//            if (step_data[j].indexOf(" & ")==0){
-//                htmlString+="<span class='program-box' title='"+step_data[j]+"'>&</span>"
-//            }
+            if (step_data[j].indexOf("_UNRECOGNISED_")==0){
+                htmlString+="<span class='program-box glyphicon glyphicon-question-sign' title='"+step_data[j]+"'></span> "
+            }
+
+            if (step_data[j].indexOf("say(")==0){
+                htmlString+="<span class='program-box glyphicon glyphicon-comment' title='"+step_data[j]+"'></span> "
+            }
+
+            if (step_data[j].indexOf("wait(")==0){
+                htmlString+="<span class='program-box glyphicon glyphicon-time' title='"+step_data[j]+"'></span> "
+            }
+            if (step_data[j].indexOf("stiff")==0){
+                htmlString+="<span class='program-box glyphicon glyphicon-move' title='"+step_data[j]+"'></span> "
+            }
+            if (step_data[j].indexOf(" | ")==0){
+                htmlString+="<span class='program-box' title='"+step_data[j]+"'>|</span>"
+            }
+
+            if (step_data[j].indexOf(" & ")==0){
+                htmlString+="<span class='program-box' title='"+step_data[j]+"'>&</span>"
+            }
+
+            if (step_data[j].indexOf("key[")==0){
+                htmlString+="<span class='program-box glyphicon' title='"+step_data[j]+"'>"+step_data[j].charAt(4).toUpperCase()+"</span>"
+                htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
+            }
         }
-        htmlString+=json_data[i+""];
+//        htmlString+=json_data[i+""];
         htmlString+="</div>";
     }
 
