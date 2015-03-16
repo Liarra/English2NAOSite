@@ -11,4 +11,17 @@ class step(object):
     state_ID = -1
     next_state_ID = -1
 
-    condition = []
+    def __init__(self):
+        self.component_name = ""
+        self.commands = []
+
+        self.description = ""
+        self.text_index_start = 0
+
+        self.state_ID = -1
+        self.next_state_ID = -1
+
+class cstep(step):
+    def __init__(self):
+        super().__init__()
+        self.condition = []

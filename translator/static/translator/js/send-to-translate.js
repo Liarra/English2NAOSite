@@ -98,7 +98,7 @@ function make_program(json_data){
             }
 
             if (step_data[j].indexOf("key[")==0){
-                htmlString+="<span class='program-box glyphicon' title='"+step_data[j]+"'>"+step_data[j].charAt(4).toUpperCase()+"</span>"
+                htmlString+="<span class='program-box glyphicon glyphicon-button-input' title='"+step_data[j]+"'>"+step_data[j].charAt(4).toUpperCase()+"</span>"
                 htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
             }
         }

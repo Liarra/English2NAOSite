@@ -1,7 +1,9 @@
 from translator.executables.nlp.components.component import component
 
+class command(component):
+    pass
 
-class say_command(component):
+class say_command(command):
     tags = ["say", "tell", "ask"]
     regexp = r"(say|tell|ask)(s|ing)? ['\"“](?P<what>.+)['\"”]"
 
@@ -24,7 +26,7 @@ class say_command(component):
         self.command = "say(%s)" % self.say_what
 
 
-class wait_command(component):
+class wait_command(command):
     tags = ["wait"]
     regexp = r"waits?.* (?P<number>\d{1,3}) (?P<units>second|minute|ms|sec|min|millisecond)s?"
 
@@ -64,7 +66,7 @@ from os.path import isfile, join, splitext
 import xml.etree.ElementTree as ET
 
 
-class move_command(component):
+class move_command(command):
     tags = []
     regexp = r"(?!x)x"  # A regex that never matches
 

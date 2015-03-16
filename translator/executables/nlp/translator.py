@@ -23,7 +23,7 @@ def translate(text):
             components_from_text.append(component)
 
     from translator.executables.nlp import grammar
-    components_from_text = grammar.go_through(components_from_text)
+    # components_from_text = grammar.go_through(components_from_text)
 
     for component in components_from_text:
         if component is not None:
