@@ -8,10 +8,10 @@ __author__ = 'NBUCHINA'
 
 
 
-def translate(text):
-    components = [say_command, wait_command,
-                  move_command,
-                  button_press, sequence, parallel]
+def translate(text, step_number=1):
+    components = [say_command, wait_command,move_command,
+                  button_press,
+                  sequence, parallel, goto]
 
     ranker1 = text_breaker(text)
     components_mapping = ranker1.map_components_to_text(components)
@@ -24,6 +24,7 @@ def translate(text):
             components_from_text.append(component)
 
     from translator.executables.nlp import grammar
+    grammar.step_counter=step_number
     components_from_text = grammar.go_through(components_from_text)
     #grammar.unite_csteps(components_from_text)
 

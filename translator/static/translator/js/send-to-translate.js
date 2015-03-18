@@ -77,7 +77,7 @@ function make_program(json_data){
 
         for (var substep in step_data){
             //SubstepID
-            htmlString+="<span class='program-box glyphicon glyphicon-button-input'>"+i+"."+substep+"</span>";
+            htmlString+="<span class='program-box glyphicon glyphicon-button-input'>"+substep.toFixed(2)+"</span>";
 
             var conditions=step_data[substep]["conditions"];
 
@@ -127,7 +127,7 @@ function make_program(json_data){
 
             if(nextID>-1){
                 htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>";
-                htmlString+="<span class='program-box glyphicon glyphicon-button-input'>"+i+"."+nextID+"</span>";
+                htmlString+="<span class='program-box glyphicon glyphicon-button-input'>"+nextID.toFixed(2)+"</span>";
             }
             htmlString+="<br/>"
 

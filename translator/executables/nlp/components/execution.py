@@ -23,7 +23,8 @@ class parallel(component):
 
 class goto(component):
     tags = []
-    regexp = r"go to step (?P<number>\d{1,5})$"
+    regexp = r"go to (step|state|point) (?P<number>\d{1,5})"
+    where = -1
 
     def __init__(self, string, index_in_text=0):
         super().__init__(string, index_in_text)
@@ -37,6 +38,6 @@ class goto(component):
         m = p.search(string)
         if (m == None):
             return
-        number = m.group('number')
+        self.where = float(m.group('number'))
 
-        self.command = "goto[" + number + "]"
+        self.command = "goto[%.2f]" % self.where

@@ -20,7 +20,7 @@ def translate(request):
     ret_dictionary = {}
     for text in textlist:
         if text != "":
-            ret_dictionary[i] = translator.translate(text)
+            ret_dictionary[i] = translator.translate(text,i)
             i += 1
 
     ret = json.dumps(ret_dictionary)

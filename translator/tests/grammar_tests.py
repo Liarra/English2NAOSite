@@ -1,7 +1,7 @@
 from translator.executables.nlp import grammar
 from translator.executables.nlp.components.component import *
 from unittest import *
-from translator.executables.nlp.components.execution import parallel, sequence
+from translator.executables.nlp.components.execution import parallel, sequence, goto
 from translator.executables.nlp.components.robot_commands import say_command, move_command
 from translator.executables.nlp.step import step
 
@@ -24,7 +24,6 @@ class GrammarTests(TestCase):
         self.assertEquals(len(new_components), 1)
 
 
-
     def test_go_through_conditions(self):
         components = [
             button_press("A"),
@@ -41,7 +40,7 @@ class GrammarTests(TestCase):
         self.assertEquals(len(new_components), 3)
 
         for i in range(0, len(new_components)):
-            #print(new_components[i].description)
+            # print(new_components[i].description)
             self.assertEquals(isinstance(new_components[i], step), True)
 
 
@@ -64,7 +63,7 @@ class GrammarTests(TestCase):
         ]
 
         new_components = grammar.go_through(components)
-        print(new_components)
+        print([x.description for x in new_components])
         self.assertEquals(len(new_components), 5)
 
 
@@ -73,9 +72,9 @@ class GrammarTests(TestCase):
             say_command("say 'hello'"),
             parallel("and"),
             say_command("say 'OMG'"),
-             parallel("and"),
+            parallel("and"),
             say_command("say 'OooooIoooooooo'"),
-             parallel("and"),
+            parallel("and"),
             say_command("say 'Owow'")
         ]
 
@@ -84,10 +83,10 @@ class GrammarTests(TestCase):
 
     def test_go_through_many_individual_commands(self):
         components = [
-        say_command("say 'hello'"),
-        say_command("say 'OMG'"),
-        say_command("say 'OooooIoooooooo'"),
-        say_command("say 'Owow'")
+            say_command("say 'hello'"),
+            say_command("say 'OMG'"),
+            say_command("say 'OooooIoooooooo'"),
+            say_command("say 'Owow'")
         ]
 
         new_components = grammar.go_through(components)
@@ -96,10 +95,41 @@ class GrammarTests(TestCase):
 
     def test_handshake_and_nice_to_meet_you(self):
         components = [
-        move_command("handshake"),
-        parallel("and"),
-        say_command("say 'OooooIoooooooo'"),
+            move_command("handshake"),
+            parallel("and"),
+            say_command("say 'OooooIoooooooo'"),
         ]
 
         new_components = grammar.go_through(components)
         self.assertEquals(len(new_components), 1)
+
+
+    def test_goto(self):
+        components = [
+            move_command("handshake"),
+            parallel("and"),
+            say_command("say 'OooooIoooooooo'"),
+            goto("go to state 3")
+        ]
+
+        new_components = grammar.go_through(components)
+        self.assertEquals(len(new_components), 1)
+
+        only_state = new_components[0]
+        self.assertEquals(only_state.next_state_ID, 3)
+
+
+    def test_go_through_order_of_nonrecognised(self):
+        components = [
+            unrecognised_component("Cry"),
+            unrecognised_component("again."),
+            say_command("say 'Life has no meaning'"),
+        ]
+
+        new_components = grammar.go_through(components)
+        self.assertEquals(len(new_components), 2)
+
+        first_state = new_components[0]
+        print(first_state.commands[0])
+        print(first_state.state_ID)
+        print(first_state.next_state_ID)
