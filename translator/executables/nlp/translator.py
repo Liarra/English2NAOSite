@@ -1,3 +1,4 @@
+from translator.executables.nlp import encode2json
 from translator.executables.nlp.components.component import *
 from translator.executables.nlp.components.execution import *
 from translator.executables.nlp.ranker import text_breaker
@@ -23,10 +24,13 @@ def translate(text):
             components_from_text.append(component)
 
     from translator.executables.nlp import grammar
-    # components_from_text = grammar.go_through(components_from_text)
+    components_from_text = grammar.go_through(components_from_text)
+    #grammar.unite_csteps(components_from_text)
 
-    for component in components_from_text:
-        if component is not None:
-            result.append(str(component))
+    return encode2json.EncodeStepsArrayToJSON(components_from_text)
 
-    return result
+    # for component in components_from_text:
+    #     if component is not None:
+    #         result.append(str(component))
+    #
+    # return result

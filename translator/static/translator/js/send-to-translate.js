@@ -62,45 +62,77 @@ function assign_balloons() {
 }
 
 function make_program(json_data){
-    var count = Object.keys(json_data).length
-    var htmlString=""
+    var count = Object.keys(json_data).length;
+    var htmlString="";
 
     for(var i=1; i<=count;i++){
-        step_data=json_data[i+""]
+        var step_data=jQuery.parseJSON(json_data[i+""]);
 
         htmlString+="<div class='step-number'>";
         htmlString+=i+". ";
         htmlString+="</div>";
         htmlString+="<div class='program-step'>";
 
-        for (var j=0;j<step_data.length;j++){
-            //Unrecognised
-            if (step_data[j].indexOf("_UNRECOGNISED_")==0){
-                htmlString+="<span class='program-box glyphicon glyphicon-question-sign' title='"+step_data[j]+"'></span> "
-            }
+        var inner_count = Object.keys(step_data).length;
 
-            if (step_data[j].indexOf("say(")==0){
-                htmlString+="<span class='program-box glyphicon glyphicon-comment' title='"+step_data[j]+"'></span> "
-            }
+        for (var substep in step_data){
+            //SubstepID
+            htmlString+="<span class='program-box glyphicon glyphicon-button-input'>"+i+"."+substep+"</span>";
 
-            if (step_data[j].indexOf("wait(")==0){
-                htmlString+="<span class='program-box glyphicon glyphicon-time' title='"+step_data[j]+"'></span> "
-            }
-            if (step_data[j].indexOf("stiff")==0){
-                htmlString+="<span class='program-box glyphicon glyphicon-move' title='"+step_data[j]+"'></span> "
-            }
-            if (step_data[j].indexOf(" | ")==0){
-                htmlString+="<span class='program-box' title='"+step_data[j]+"'>|</span>"
-            }
+            var conditions=step_data[substep]["conditions"];
 
-            if (step_data[j].indexOf(" & ")==0){
-                htmlString+="<span class='program-box' title='"+step_data[j]+"'>&</span>"
-            }
-
-            if (step_data[j].indexOf("key[")==0){
-                htmlString+="<span class='program-box glyphicon glyphicon-button-input' title='"+step_data[j]+"'>"+step_data[j].charAt(4).toUpperCase()+"</span>"
+        if (conditions!=undefined)
+            for (var condition of conditions){
+                if (condition.indexOf("key[")==0){
+                htmlString+="<span class='program-box glyphicon glyphicon-button-input' title='"+condition+"'>"+condition.charAt(4).toUpperCase()+"</span>"
                 htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
+                }
             }
+
+        else
+          htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
+
+        var actions=step_data[substep]["actions"]
+        if (actions!=undefined)
+
+            for (var action of actions){
+                if (action.indexOf("_UNRECOGNISED_")==0){
+                htmlString+="<span class='program-box glyphicon glyphicon-question-sign' title='"+action+"'></span> "
+            }
+
+            if (action.indexOf("say(")==0){
+                htmlString+="<span class='program-box glyphicon glyphicon-comment' title='"+action+"'></span> "
+            }
+
+            if (action.indexOf("wait(")==0){
+                htmlString+="<span class='program-box glyphicon glyphicon-time' title='"+action+"'></span> "
+            }
+            if (action.indexOf("stiff")==0){
+                htmlString+="<span class='program-box glyphicon glyphicon-move' title='"+action+"'></span> "
+            }
+            if (action.indexOf(" | ")==0){
+                htmlString+="<span class='program-box' title='"+action+"'>|</span>"
+            }
+
+            if (action.indexOf(" & ")==0){
+                htmlString+="<span class='program-box' title='"+action+"'>&</span>"
+            }
+
+
+            }
+
+
+
+            nextID=step_data[substep]["nextID"]
+
+            if(nextID>-1){
+                htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>";
+                htmlString+="<span class='program-box glyphicon glyphicon-button-input'>"+i+"."+nextID+"</span>";
+            }
+            htmlString+="<br/>"
+
+            //Unrecognised
+//
         }
 //        htmlString+=json_data[i+""];
         htmlString+="</div>";

@@ -79,14 +79,14 @@ class move_command(command):
             s = 0
             move_tags = move_command.files_to_tags[move_file]
             for tag in move_tags:
-                if tag in string:
+                if tag in self.description:
                     s += 1
 
             if s > max:
                 max = s
                 self.move = move_command.files_to_moves[move_file]
 
-        self.command = "stiff (1, 500, 0) & " + self.move + " & stiff (0, 500, 0)"
+                self.command = "stiff (1, 500, 0) & " + self.move + " & stiff (0, 500, 0)"
 
 
 moves_folder = "moves"

@@ -32,6 +32,7 @@ def go_through(components):
                 new_step.description = components[i].description + " " + components[i + 2].description
                 new_step.state_ID = step_counter
                 new_step.commands.append(components[i])
+                new_step.commands.append(components[i+2])
 
                 step_counter += step_modifier
                 new_list.append(new_step)
@@ -56,6 +57,21 @@ def go_through(components):
                 i += 2
                 continue
 
+            elif isinstance(components[i], component) & isinstance(components[i + 1], parallel) & isinstance(
+                    components[i + 2], step):
+                new_step = components[i+2]
+                new_step.text_index_start = components[i].text_index_start
+                new_step.component_name = components[i].component_name
+                new_step.description = components[i].description + " " + components[i + 2].description
+                new_step.state_ID = step_counter
+                new_step.commands.append(components[i])
+
+                new_list.append(new_step)
+
+                gone_through = False
+                i += 2
+                continue
+
             elif isinstance(components[i], step) & isinstance(components[i + 1], parallel) & isinstance(
                     components[i + 2], step):
                 new_step = step()
@@ -68,6 +84,21 @@ def go_through(components):
 
                 step_counter += step_modifier
                 new_list.append(new_step)
+
+                gone_through = False
+                i += 2
+                continue
+
+
+            elif isinstance(components[i], step) & isinstance(components[i + 1], sequence) & isinstance(
+                    components[i + 2], step):
+                step1 = components[i]
+                step2 = components[i + 2]
+
+                step1.next_state_ID = step2.state_ID
+
+                new_list.append(step1)
+                new_list.append(step2)
 
                 gone_through = False
                 i += 2
@@ -132,8 +163,20 @@ def go_through(components):
                 i += 1
                 continue
 
+            elif (isinstance(components[i], step) and isinstance(components[i + 1], step)) and components[i].next_state_ID == -1:
+                step1 = components[i]
+                step2 = components[i + 1]
 
-        if isinstance(components[i], command):
+                step1.next_state_ID = step2.state_ID
+
+                new_list.append(step1)
+                new_list.append(step2)
+
+                gone_through = False
+                i += 1
+                continue
+
+        if isinstance(components[i], command) or isinstance(components[i], unrecognised_component):
             new_step = step()
             new_step.text_index_start = components[i].text_index_start
             new_step.component_name = components[i].component_name
@@ -150,6 +193,28 @@ def go_through(components):
         new_list.append(components[i])
 
     if gone_through:
+        step_counter = 1
         return new_list
     else:
         return go_through(new_list)
+
+
+
+#TODO: Only unite keys?
+def unite_csteps(steps):
+    first_step_id=-1
+    last_step_next_id=-1
+
+    for step in steps:
+        if isinstance(step, cstep):
+            if first_step_id==-1:
+                first_step_id=step.state_ID
+
+            if step.state_ID!=first_step_id:
+                step.state_ID=first_step_id
+
+            last_step_next_id=step.next_state_ID
+
+    for step in steps:
+        if isinstance(step, cstep):
+            step.next_state_ID=last_step_next_id

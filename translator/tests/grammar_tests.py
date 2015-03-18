@@ -1,8 +1,8 @@
 from translator.executables.nlp import grammar
 from translator.executables.nlp.components.component import *
 from unittest import *
-from translator.executables.nlp.components.execution import parallel
-from translator.executables.nlp.components.robot_commands import say_command
+from translator.executables.nlp.components.execution import parallel, sequence
+from translator.executables.nlp.components.robot_commands import say_command, move_command
 from translator.executables.nlp.step import step
 
 __author__ = 'NBUCHINA'
@@ -20,8 +20,9 @@ class GrammarTests(TestCase):
         ]
 
         new_components = grammar.go_through(components)
+        print(new_components)
         self.assertEquals(len(new_components), 1)
-        # print(new_components)
+
 
 
     def test_go_through_conditions(self):
@@ -63,6 +64,7 @@ class GrammarTests(TestCase):
         ]
 
         new_components = grammar.go_through(components)
+        print(new_components)
         self.assertEquals(len(new_components), 5)
 
 
@@ -90,3 +92,14 @@ class GrammarTests(TestCase):
 
         new_components = grammar.go_through(components)
         self.assertEquals(len(new_components), 4)
+
+
+    def test_handshake_and_nice_to_meet_you(self):
+        components = [
+        move_command("handshake"),
+        parallel("and"),
+        say_command("say 'OooooIoooooooo'"),
+        ]
+
+        new_components = grammar.go_through(components)
+        self.assertEquals(len(new_components), 1)
