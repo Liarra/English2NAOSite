@@ -13,15 +13,19 @@ def create(request):
 
 def translate(request):
     textlist = request.POST.getlist('text[]')
-    print(textlist)
+    # print(textlist)
     # text = "The robot says 'Hi'"
     i = 1
 
     ret_dictionary = {}
     for text in textlist:
-        if text != "":
-            ret_dictionary[i] = translator.translate(text,i)
-            i += 1
+        if text == "":
+            ret_dictionary[i] = "{}"
+        else:
+            ret_dictionary[i] = translator.translate(text, i)
+        i += 1
+
+    print(i)
 
     ret = json.dumps(ret_dictionary)
     return HttpResponse(ret)

@@ -24,13 +24,13 @@ def go_through(components):
 
         ####3-tuple####
         if i < len(components) - 2:
-            if isinstance(components[i], component) & isinstance(components[i + 1], parallel) & isinstance(
-                    components[i + 2], component):
+            if isinstance(components[i], command) & isinstance(components[i + 1], parallel) & isinstance(
+                    components[i + 2], command):
                 new_step = step()
                 new_step.text_index_start = components[i].text_index_start
                 new_step.component_name = components[i].component_name
                 new_step.description = components[i].description + " " + components[i + 2].description
-                new_step.state_ID = step_counter
+                new_step.state_ID = "%.2f" % step_counter
                 new_step.commands.append(components[i])
                 new_step.commands.append(components[i + 2])
 
@@ -40,34 +40,34 @@ def go_through(components):
                 gone_through = False
                 # i += 2
                 # continue
-                new_list.extend(components[i+3:])
+                new_list.extend(components[i + 3:])
                 break
 
             elif isinstance(components[i], step) & isinstance(components[i + 1], parallel) & isinstance(
-                    components[i + 2], component):
-                new_step = step()
-                new_step.text_index_start = components[i].text_index_start
-                new_step.component_name = components[i].component_name
+                    components[i + 2], command):
+                new_step = components[i]
+                # new_step.text_index_start = components[i].text_index_start
+                # new_step.component_name = components[i].component_name
                 new_step.description = components[i].description + " " + components[i + 2].description
-                new_step.state_ID = step_counter
+                # new_step.state_ID = step_counter
                 new_step.commands.append(components[i])
 
-                step_counter += step_modifier
+                # step_counter += step_modifier
                 new_list.append(new_step)
 
                 gone_through = False
                 # i += 2
                 # continue
-                new_list.extend(components[i+3:])
+                new_list.extend(components[i + 3:])
                 break
 
-            elif isinstance(components[i], component) & isinstance(components[i + 1], parallel) & isinstance(
+            elif isinstance(components[i], command) & isinstance(components[i + 1], parallel) & isinstance(
                     components[i + 2], step):
                 new_step = components[i + 2]
                 new_step.text_index_start = components[i].text_index_start
                 new_step.component_name = components[i].component_name
                 new_step.description = components[i].description + " " + components[i + 2].description
-                new_step.state_ID = step_counter
+                # new_step.state_ID = step_counter
                 new_step.commands.append(components[i])
 
                 new_list.append(new_step)
@@ -75,7 +75,7 @@ def go_through(components):
                 gone_through = False
                 # i += 2
                 # continue
-                new_list.extend(components[i+3:])
+                new_list.extend(components[i + 3:])
                 break
 
             elif isinstance(components[i], step) & isinstance(components[i + 1], parallel) & isinstance(
@@ -88,13 +88,13 @@ def go_through(components):
                 new_step.commands.extend(components[i].commands)
                 new_step.commands.extend(components[i + 2].commands)
 
-                step_counter += step_modifier
+                # step_counter += step_modifier
                 new_list.append(new_step)
 
                 gone_through = False
                 # i += 2
                 # continue
-                new_list.extend(components[i+3:])
+                new_list.extend(components[i + 3:])
                 break
 
 
@@ -108,13 +108,10 @@ def go_through(components):
                 new_list.append(step1)
                 new_list.append(step2)
 
-
-
-
                 gone_through = False
                 # i += 2
                 # continue
-                new_list.extend(components[i+3:])
+                new_list.extend(components[i + 3:])
                 break
 
         ####2-tuple####
@@ -126,7 +123,7 @@ def go_through(components):
                 gone_through = False
                 # i += 1
                 # continue
-                new_list.extend(components[i+2:])
+                new_list.extend(components[i + 2:])
                 break
 
             elif isinstance(components[i], unrecognised_component) & isinstance(components[i + 1],
@@ -139,10 +136,42 @@ def go_through(components):
                 gone_through = False
                 # i += 1
                 # continue
-                new_list.extend(components[i+2:])
+                new_list.extend(components[i + 2:])
                 break
 
-            elif isinstance(components[i], condition) & isinstance(components[i + 1], component):
+            elif isinstance(components[i], condition) & isinstance(components[i + 1], goto):
+                new_step = cstep()
+                new_step.text_index_start = components[i].text_index_start
+                new_step.component_name =  components[i].component_name
+                new_step.description =  components[i].description + " " +  components[i+1].description
+                new_step.state_ID = "%.2f" % step_counter
+                new_step.next_state_ID = "%.2f" % components[i + 1].where
+                new_step.condition.append(components[i])
+
+                step_counter += step_modifier
+                new_list.append(new_step)
+
+
+                gone_through = False
+                # i += 1
+                # continue
+                new_list.extend(components[i + 2:])
+                break
+
+            elif isinstance(components[i], step) & isinstance(components[i + 1], goto):
+                new_step = components[i]
+                goto_pointer = components[i + 1]
+
+                new_step.next_state_ID =  "%.2f" %goto_pointer.where
+                new_list.append(new_step)
+
+                gone_through = False
+                # i += 1
+                # continue
+                new_list.extend(components[i + 2:])
+                break
+
+            elif isinstance(components[i], condition) & isinstance(components[i + 1], command):
                 cond = components[i]
                 action = components[i + 1]
 
@@ -150,7 +179,7 @@ def go_through(components):
                 new_step.text_index_start = cond.text_index_start
                 new_step.component_name = cond.component_name
                 new_step.description = cond.description + " " + action.description
-                new_step.state_ID = step_counter
+                new_step.state_ID = "%.2f" % step_counter
                 new_step.commands.append(action)
                 new_step.condition.append(cond)
 
@@ -160,7 +189,7 @@ def go_through(components):
                 gone_through = False
                 # i += 1
                 # continue
-                new_list.extend(components[i+2:])
+                new_list.extend(components[i + 2:])
                 break
 
             elif isinstance(components[i], condition) & isinstance(components[i + 1], step):
@@ -175,13 +204,13 @@ def go_through(components):
                 new_step.commands.extend(action.commands)
                 new_step.condition.append(cond)
 
-                step_counter += step_modifier
+                # step_counter += step_modifier
                 new_list.append(new_step)
 
                 gone_through = False
                 # i += 1
                 # continue
-                new_list.extend(components[i+2:])
+                new_list.extend(components[i + 2:])
                 break
 
             elif (isinstance(components[i], step) and isinstance(components[i + 1], step)) and components[
@@ -197,21 +226,7 @@ def go_through(components):
                 gone_through = False
                 # i += 1
                 # continue\
-                new_list.extend(components[i+2:])
-                break
-
-
-            elif isinstance(components[i], step) & isinstance(components[i + 1], goto):
-                new_step = components[i]
-                goto_pointer = components[i + 1]
-
-                new_step.next_state_ID = goto_pointer.where
-                new_list.append(new_step)
-
-                gone_through = False
-                # i += 1
-                # continue
-                new_list.extend(components[i+2:])
+                new_list.extend(components[i + 2:])
                 break
 
         if isinstance(components[i], command):
@@ -219,7 +234,7 @@ def go_through(components):
             new_step.text_index_start = components[i].text_index_start
             new_step.component_name = components[i].component_name
             new_step.description = components[i].description
-            new_step.state_ID = step_counter
+            new_step.state_ID = "%.2f" % step_counter
             new_step.commands.append(components[i])
 
             step_counter += step_modifier
@@ -229,12 +244,12 @@ def go_through(components):
             continue
 
         if isinstance(components[i], unrecognised_component):
-            if (i > 0 and not isinstance(components[i - 1], unrecognised_component)) or i==0:
+            if (i > 0 and not isinstance(components[i - 1], unrecognised_component)) or i == 0:
                 new_step = step()
                 new_step.text_index_start = components[i].text_index_start
                 new_step.component_name = components[i].component_name
                 new_step.description = components[i].description
-                new_step.state_ID = step_counter
+                new_step.state_ID = "%.2f" % step_counter
                 new_step.commands.append(components[i])
 
                 step_counter += step_modifier

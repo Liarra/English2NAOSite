@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from translator.executables.nlp.step import cstep
 
 __author__ = 'NBUCHINA'
@@ -6,9 +7,10 @@ __author__ = 'NBUCHINA'
 def EncodeStepsArrayToJSON(steps):
     import json
 
-    json_dict = {}
+    json_dict = OrderedDict()
+    steps.sort(key=lambda x: float(x.state_ID), reverse=False)
     for step in steps:
-        print (step)
+        print(step.state_ID)
         stepID = step.state_ID
 
         step_data = {}

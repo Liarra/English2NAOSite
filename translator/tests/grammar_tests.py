@@ -116,7 +116,7 @@ class GrammarTests(TestCase):
         self.assertEquals(len(new_components), 1)
 
         only_state = new_components[0]
-        self.assertEquals(only_state.next_state_ID, 3)
+        self.assertEquals("3.00",only_state.next_state_ID)
 
 
     def test_go_through_order_of_nonrecognised(self):
@@ -129,7 +129,19 @@ class GrammarTests(TestCase):
         new_components = grammar.go_through(components)
         self.assertEquals(len(new_components), 2)
 
+        #first_state = new_components[0]
+        # print(first_state.commands[0])
+        # print(first_state.state_ID)
+        # print(first_state.next_state_ID)
+
+    def test_go_through_keypress_goto(self):
+        components = [
+            button_press("press Y"),
+            goto("Go to step 3.01"),
+        ]
+
+        new_components = grammar.go_through(components)
+        self.assertEquals(len(new_components), 1)
+
         first_state = new_components[0]
-        print(first_state.commands[0])
-        print(first_state.state_ID)
-        print(first_state.next_state_ID)
+        self.assertEquals( "3.01", first_state.next_state_ID)
