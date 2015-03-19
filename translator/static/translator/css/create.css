@@ -31,10 +31,12 @@ padding:1px 3px;
 
 .program-step{
 background:white;
-margin-bottom:20px;
+margin-bottom:30px;
 padding:10px;
 border-radius:5px;
 border: 1px #CCC solid;
+margin-top:40px;
+min-height:60px;
 }
 
 .program-box{
@@ -63,6 +65,13 @@ background:#FFFF99;
 
 .glyphicon-button-input{
 background:#E0C2E0;
+font-family:sans-serif;
+}
+
+.glyphicon-step{
+background:#7094B8;
+color:white;
+font-family:sans-serif;
 }
 
 .glyphicon-move{

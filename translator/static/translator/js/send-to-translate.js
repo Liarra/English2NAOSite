@@ -48,8 +48,9 @@ $(document).ready(function(){
 
             success: function( data ) {
                 var json_data=jQuery.parseJSON(data);
-                $( "#program" ).html(make_program(json_data));
+                $("#program" ).html(make_program(json_data));
                 assign_balloons();
+                alignTextWithProgram();
             }
         });
 
@@ -68,16 +69,19 @@ function make_program(json_data){
     for(var i=1; i<=count;i++){
         var step_data=jQuery.parseJSON(json_data[i+""]);
 
-        htmlString+="<div class='step-number'>";
-        htmlString+=i+". ";
-        htmlString+="</div>";
+//        htmlString+="<div class='step-number'>";
+//        htmlString+=i+". ";
+//        htmlString+="</div>";
         htmlString+="<div class='program-step'>";
 
         var inner_count = Object.keys(step_data).length;
+        if(inner_count==0){
+            htmlString+="<center>(EMPTY STEP)</center>"
+        }
 
         for (var substep in step_data){
             //SubstepID
-            htmlString+="<span class='program-box glyphicon glyphicon-button-input'>"+substep.toFixed(2)+"</span>";
+            htmlString+="<span class='program-box glyphicon glyphicon-step'>"+substep+"</span>";
 
             var conditions=step_data[substep]["conditions"];
 
@@ -127,7 +131,7 @@ function make_program(json_data){
 
             if(nextID>-1){
                 htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>";
-                htmlString+="<span class='program-box glyphicon glyphicon-button-input'>"+nextID.toFixed(2)+"</span>";
+                htmlString+="<span class='program-box glyphicon glyphicon-step'>"+nextID+"</span>";
             }
             htmlString+="<br/>"
 
@@ -139,4 +143,19 @@ function make_program(json_data){
     }
 
     return htmlString;
+}
+
+function alignTextWithProgram(){
+    var numItems = $('.program-step').length
+    var programItems = $('.program-step')
+    var textItems=$('.step-div')
+
+    for(var i=0;i<numItems;i++){
+        ProgramItem=programItems.eq(i)
+        TextItem=textItems.eq(i)
+
+        difference=ProgramItem.height()-TextItem.height()+61
+
+        TextItem.css({"margin-bottom":difference+"px"});
+    }
 }
