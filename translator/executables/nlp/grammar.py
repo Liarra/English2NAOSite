@@ -1,14 +1,15 @@
 from translator.executables.nlp.components.component import *
 from translator.executables.nlp.components.execution import *
 from translator.executables.nlp.components.robot_commands import command
-from translator.executables.nlp.step import step, cstep
+from translator.executables.nlp.step import step, cstep, select_by_key_step
 
 __author__ = 'NBUCHINA'
 
 gone_through = False
 step_counter = 1
 step_modifier = 0.01
-unrecognised_enabled=True
+unrecognised_enabled = True
+
 
 def go_through(components):
     global step_counter
@@ -23,8 +24,8 @@ def go_through(components):
     while i < len(components) - 1:
         i += 1
 
-##Remove unrecognised if not allowed####
-        if not unrecognised_enabled and isinstance(components[i],unrecognised_component):
+        ##Remove unrecognised if not allowed####
+        if not unrecognised_enabled and isinstance(components[i], unrecognised_component):
             gone_through = False
             new_list.extend(components[i + 1:])
             break
@@ -135,7 +136,8 @@ def go_through(components):
                 break
 
 
-            elif (isinstance(components[i], parallel) or isinstance(components[i],sequence)) & isinstance(components[i + 1], goto):
+            elif (isinstance(components[i], parallel) or isinstance(components[i], sequence)) & isinstance(
+                    components[i + 1], goto):
                 new_list.append(components[i + 1])
 
                 gone_through = False
@@ -160,15 +162,14 @@ def go_through(components):
             elif isinstance(components[i], condition) & isinstance(components[i + 1], goto):
                 new_step = cstep()
                 new_step.text_index_start = components[i].text_index_start
-                new_step.component_name =  components[i].component_name
-                new_step.description =  components[i].description + " " +  components[i+1].description
+                new_step.component_name = components[i].component_name
+                new_step.description = components[i].description + " " + components[i + 1].description
                 new_step.state_ID = "%.2f" % step_counter
                 new_step.next_state_ID = "%.2f" % components[i + 1].where
                 new_step.condition.append(components[i])
 
                 step_counter += step_modifier
                 new_list.append(new_step)
-
 
                 gone_through = False
                 # i += 1
@@ -180,7 +181,7 @@ def go_through(components):
                 new_step = components[i]
                 goto_pointer = components[i + 1]
 
-                new_step.next_state_ID =  "%.2f" %goto_pointer.where
+                new_step.next_state_ID = "%.2f" % goto_pointer.where
                 new_list.append(new_step)
 
                 gone_through = False
@@ -302,5 +303,19 @@ def unite_csteps(steps):
                 step.state_ID = first_step_id
 
 
-def make_kstep(steps):
-    pass
+def get_new_list_with_ksteps(steps):
+    unite_csteps(steps)
+    select_key = select_by_key_step()
+
+    new_list=[]
+
+    for step in steps:
+        if isinstance(step, cstep):
+            select_key.add_cstep(step)
+            select_key.state_ID = step.state_ID
+        else:
+            new_list.append(step)
+
+    new_list.append(select_key)
+
+    return new_list

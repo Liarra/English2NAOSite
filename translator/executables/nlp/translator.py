@@ -30,7 +30,9 @@ def translate(text, step_number=1):
     components_from_text = grammar.go_through(components_from_text)
     grammar.unite_csteps(components_from_text)
 
-    encode2csv.getCSVFromSteps(components_from_text)
+    steps_list=grammar.get_new_list_with_ksteps(components_from_text)
+
+    encode2csv.getCSVFromSteps(steps_list)
 
     return encode2json.EncodeStepsArrayToJSON(components_from_text)
 
