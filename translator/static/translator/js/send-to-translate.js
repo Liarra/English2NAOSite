@@ -37,14 +37,12 @@ $(document).ready(function(){
             return this.value;
         }).get()
 
-
         $.ajax({
             url: "translate/",
             type:"POST",
             data: {
                 text: values,
             },
-
 
             success: function( data ) {
                 var json_data=jQuery.parseJSON(data);
@@ -79,63 +77,57 @@ function make_program(json_data){
             htmlString+="<center>(EMPTY STEP)</center>"
         }
 
-        for (var substep in step_data){
-            //SubstepID
-            htmlString+="<span class='program-box glyphicon glyphicon-step'>"+substep+"</span>";
-
-            var conditions=step_data[substep]["conditions"];
-
-        if (conditions!=undefined)
-            for (var condition of conditions){
-                if (condition.indexOf("key[")==0){
-                htmlString+="<span class='program-box glyphicon glyphicon-button-input' title='"+condition+"'>"+condition.charAt(4).toUpperCase()+"</span>"
-                htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
-                }
-            }
-
         else
-          htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
+        for (var substep of step_data){
+            //SubstepID
+            htmlString+="<span class='program-box glyphicon glyphicon-step'>"+substep["stepID"]+"</span>";
 
-        var actions=step_data[substep]["actions"]
-        if (actions!=undefined)
+            var conditions=substep["conditions"];
+            if (conditions!=undefined)
+                for (var condition of conditions){
+                    if (condition.indexOf("key[")==0){
+                    htmlString+="<span class='program-box glyphicon glyphicon-button-input' title='"+condition+"'>"+condition.charAt(4).toUpperCase()+"</span>"
+                    htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
+                    }
+                }
 
-            for (var action of actions){
-                if (action.indexOf("_UNRECOGNISED_")==0){
-                htmlString+="<span class='program-box glyphicon glyphicon-question-sign' title='"+action+"'></span> "
-            }
+            else
+              htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
 
-            if (action.indexOf("say(")==0){
-                htmlString+="<span class='program-box glyphicon glyphicon-comment' title='"+action+"'></span> "
-            }
+            var actions=substep["actions"]
+            if (actions!=undefined)
+                for (var action of actions){
+                    if (action.indexOf("_UNRECOGNISED_")==0){
+                        htmlString+="<span class='program-box glyphicon glyphicon-question-sign' title='"+action+"'></span> "
+                    }
 
-            if (action.indexOf("wait(")==0){
-                htmlString+="<span class='program-box glyphicon glyphicon-time' title='"+action+"'></span> "
-            }
-            if (action.indexOf("stiff")==0){
-                htmlString+="<span class='program-box glyphicon glyphicon-move' title='"+action+"'></span> "
-            }
-            if (action.indexOf(" | ")==0){
-                htmlString+="<span class='program-box' title='"+action+"'>|</span>"
-            }
+                    if (action.indexOf("say(")==0){
+                        htmlString+="<span class='program-box glyphicon glyphicon-comment' title='"+action+"'></span> "
+                    }
 
-            if (action.indexOf(" & ")==0){
-                htmlString+="<span class='program-box' title='"+action+"'>&</span>"
-            }
+                    if (action.indexOf("wait(")==0){
+                        htmlString+="<span class='program-box glyphicon glyphicon-time' title='"+action+"'></span> "
+                    }
+                    if (action.indexOf("stiff")==0){
+                        htmlString+="<span class='program-box glyphicon glyphicon-move' title='"+action+"'></span> "
+                    }
+                    if (action.indexOf(" | ")==0){
+                        htmlString+="<span class='program-box' title='"+action+"'>|</span>"
+                    }
+
+                    if (action.indexOf(" & ")==0){
+                        htmlString+="<span class='program-box' title='"+action+"'>&</span>"
+                    }
+                }
 
 
-            }
 
-
-
-            nextID=step_data[substep]["nextID"]
-
-            if(nextID>-1){
-                htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>";
-                htmlString+="<span class='program-box glyphicon glyphicon-step'>"+nextID+"</span>";
-            }
-            htmlString+="<br/>"
-
-            //Unrecognised
+                nextID=substep["nextID"]
+                if(nextID>-1){
+                    htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>";
+                    htmlString+="<span class='program-box glyphicon glyphicon-step'>"+nextID+"</span>";
+                }
+                htmlString+="<br/>"
 //
         }
 //        htmlString+=json_data[i+""];

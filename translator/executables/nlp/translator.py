@@ -1,6 +1,7 @@
-from translator.executables.nlp import encode2json
 from translator.executables.nlp.components.component import *
 from translator.executables.nlp.components.execution import *
+from translator.executables.nlp.encoders import encode2csv
+from translator.executables.nlp.encoders import encode2json
 from translator.executables.nlp.ranker import text_breaker
 from translator.executables.nlp.components.robot_commands import *
 
@@ -25,8 +26,11 @@ def translate(text, step_number=1):
 
     from translator.executables.nlp import grammar
     grammar.step_counter=step_number
+    grammar.unrecognised_enabled=False
     components_from_text = grammar.go_through(components_from_text)
-    #grammar.unite_csteps(components_from_text)
+    grammar.unite_csteps(components_from_text)
+
+    encode2csv.getCSVFromSteps(components_from_text)
 
     return encode2json.EncodeStepsArrayToJSON(components_from_text)
 

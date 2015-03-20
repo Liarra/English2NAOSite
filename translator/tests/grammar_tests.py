@@ -109,6 +109,7 @@ class GrammarTests(TestCase):
             move_command("handshake"),
             parallel("and"),
             say_command("say 'OooooIoooooooo'"),
+            sequence("then"),
             goto("go to state 3")
         ]
 
@@ -145,3 +146,18 @@ class GrammarTests(TestCase):
 
         first_state = new_components[0]
         self.assertEquals( "3.01", first_state.next_state_ID)
+
+    def test_go_through_keypress_unrec_action(self):
+        components = [
+            unrecognised_component("if I"),
+            button_press("press Y"),
+            unrecognised_component("Then I"),
+            move_command("Shaky shaky")
+        ]
+
+        new_components = grammar.go_through(components)
+        self.assertEquals(len(new_components), 3)
+
+        first_state = new_components[1]
+        second_state= new_components[2]
+        self.assertEquals(second_state.state_ID, first_state.next_state_ID)

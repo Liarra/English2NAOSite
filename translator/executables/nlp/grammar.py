@@ -8,12 +8,13 @@ __author__ = 'NBUCHINA'
 gone_through = False
 step_counter = 1
 step_modifier = 0.01
-
+unrecognised_enabled=True
 
 def go_through(components):
     global step_counter
     global step_modifier
     global gone_through
+    global unrecognised_enabled
 
     new_list = []
     gone_through = True
@@ -21,6 +22,12 @@ def go_through(components):
     i = -1
     while i < len(components) - 1:
         i += 1
+
+##Remove unrecognised if not allowed####
+        if not unrecognised_enabled and isinstance(components[i],unrecognised_component):
+            gone_through = False
+            new_list.extend(components[i + 1:])
+            break
 
         ####3-tuple####
         if i < len(components) - 2:
@@ -42,6 +49,7 @@ def go_through(components):
                 # continue
                 new_list.extend(components[i + 3:])
                 break
+
 
             elif isinstance(components[i], step) & isinstance(components[i + 1], parallel) & isinstance(
                     components[i + 2], command):
@@ -126,6 +134,16 @@ def go_through(components):
                 new_list.extend(components[i + 2:])
                 break
 
+
+            elif (isinstance(components[i], parallel) or isinstance(components[i],sequence)) & isinstance(components[i + 1], goto):
+                new_list.append(components[i + 1])
+
+                gone_through = False
+                # i += 1
+                # continue
+                new_list.extend(components[i + 2:])
+                break
+
             elif isinstance(components[i], unrecognised_component) & isinstance(components[i + 1],
                                                                                 unrecognised_component):
                 unrec1 = components[i]
@@ -200,7 +218,7 @@ def go_through(components):
                 new_step.text_index_start = cond.text_index_start
                 new_step.component_name = cond.component_name
                 new_step.description = cond.description + " " + action.description
-                new_step.state_ID = step.state_ID
+                new_step.state_ID = action.state_ID
                 new_step.commands.extend(action.commands)
                 new_step.condition.append(cond)
 
@@ -241,7 +259,9 @@ def go_through(components):
             new_list.append(new_step)
 
             gone_through = False
-            continue
+
+            new_list.extend(components[i + 1:])
+            break
 
         if isinstance(components[i], unrecognised_component):
             if (i > 0 and not isinstance(components[i - 1], unrecognised_component)) or i == 0:
@@ -256,7 +276,9 @@ def go_through(components):
                 new_list.append(new_step)
 
                 gone_through = False
-                continue
+
+                new_list.extend(components[i + 1:])
+                break
 
         new_list.append(components[i])
 
@@ -270,7 +292,6 @@ def go_through(components):
 # TODO: Only unite keys?
 def unite_csteps(steps):
     first_step_id = -1
-    last_step_next_id = -1
 
     for step in steps:
         if isinstance(step, cstep):
@@ -280,8 +301,6 @@ def unite_csteps(steps):
             if step.state_ID != first_step_id:
                 step.state_ID = first_step_id
 
-            last_step_next_id = step.next_state_ID
 
-    for step in steps:
-        if isinstance(step, cstep):
-            step.next_state_ID = last_step_next_id
+def make_kstep(steps):
+    pass
