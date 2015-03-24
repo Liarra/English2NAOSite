@@ -51,8 +51,50 @@ $(document).ready(function(){
                 alignTextWithProgram();
             }
         });
+    });
 
-});
+
+    $('.application-form').submit(function(e)
+    {
+        e.preventDefault();
+
+        $.cookie(getCookie('csrftoken'));
+    });
+
+    $("#btn-download").click(function(){
+
+        var values = $('.step-description').map(function() {
+            return this.value;
+        }).get()
+
+        var params={};
+        var i=0;
+
+        for(v of values){
+            params["text["+i+"]"]=v;
+            i++;
+        }
+
+        $.ajax({
+            url: "csv/",
+            type:"POST",
+            data: params,
+
+            success: function( response, status, request ) {
+                var disp = request.getResponseHeader('Content-Disposition');
+                if (disp && disp.search('attachment') != -1) {
+
+                var form = $('<form method="POST" class="application-form" action="csv/">{% csrf_token %}');
+                $.each(params, function(k, v) {
+                    form.append($("<input type='hidden' name='text[]' value='" + v + "'>"));
+                });
+                form.append($('<input type="hidden" name="csrfmiddlewaretoken" class="csrf" value="' + csrftoken + '">'));
+                $('body').append(form);
+                form.submit();
+                }
+            }
+        });
+    });
 
 });
 

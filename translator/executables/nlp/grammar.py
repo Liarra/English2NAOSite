@@ -281,6 +281,13 @@ def go_through(components):
                 new_list.extend(components[i + 1:])
                 break
 
+
+                ##Remove orphan controls####
+        if isinstance(components[i], parallel) or isinstance(components[i], sequence):
+            gone_through = False
+            new_list.extend(components[i + 1:])
+            break
+
         new_list.append(components[i])
 
     if gone_through:
@@ -302,12 +309,17 @@ def unite_csteps(steps):
             if step.state_ID != first_step_id:
                 step.state_ID = first_step_id
 
+    return first_step_id
+
 
 def get_new_list_with_ksteps(steps):
-    unite_csteps(steps)
+    first_cstep_id = unite_csteps(steps)
+    if first_cstep_id == -1:
+        return steps
+
     select_key = select_by_key_step()
 
-    new_list=[]
+    new_list = []
 
     for step in steps:
         if isinstance(step, cstep):
