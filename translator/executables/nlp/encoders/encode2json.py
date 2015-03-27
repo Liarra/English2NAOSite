@@ -7,7 +7,7 @@ __author__ = 'NBUCHINA'
 def EncodeStepsArrayToJSON(steps):
     import json
 
-    json_steps_array=[]
+    json_steps_array = []
     steps.sort(key=lambda x: float(x.state_ID), reverse=False)
     for step in steps:
         # print(step.state_ID)

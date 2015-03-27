@@ -16,7 +16,7 @@ def go_through(components):
     global step_modifier
     global gone_through
     global unrecognised_enabled
-    unrecognised_enabled = True
+    # unrecognised_enabled = False
 
     new_list = []
     gone_through = True
@@ -282,18 +282,17 @@ def go_through(components):
                 new_list.extend(components[i + 1:])
                 break
 
-
         new_list.append(components[i])
 
     if gone_through:
         step_counter = 1
 
-        new_new_list=[]
-        
+        new_new_list = []
+
         ##Remove orphan controls####
-        for component in new_list:
-            if not isinstance(component, parallel) or isinstance(component, sequence):
-                new_new_list.append(component)
+        for item in new_list:
+            if not (isinstance(item, parallel) or isinstance(item, sequence)):
+                new_new_list.append(item)
 
         return new_new_list
     else:
