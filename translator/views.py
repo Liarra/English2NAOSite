@@ -16,28 +16,28 @@ def translate(request):
     i = 1
 
     ret_dictionary = {}
+    steps = []
     for text in textlist:
         if text == "":
             ret_dictionary[i] = "{}"
+            steps.append({})
         else:
-            ret_dictionary[i] = translator.get_json(text, i)
+            result = translator.translate(text, i)
+            ret_dictionary[i] = translator.get_json(result)
+            steps.append(result)
         i += 1
 
-    print(i)
-
+    request.session['steps'] = steps
     ret = json.dumps(ret_dictionary)
     return HttpResponse(ret)
 
 
 def csv(request):
-    textlist = request.POST.getlist('text[]')
-    i = 1
-
+    steps=request.session['steps'];
     csvfile = StringIO()
-    for text in textlist:
-        if text != "":
-            translator.get_csv(text, csvfile, i)
-        i += 1
+    for step in steps:
+        if step != {}:
+            translator.get_csv(step, csvfile)
 
     string = csvfile.getvalue()
     print(string)

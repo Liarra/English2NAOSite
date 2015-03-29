@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -23,9 +24,9 @@ SECRET_KEY = 'r2#wlvxl$(=bwrk7#wp7e$o11j^x-u^af$7xs+#mi6h*i-gokr'
 DEBUG = True
 
 TEMPLATE_DEBUG = True
-#TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
-TEMPLATE_LOADERS=('django.template.loaders.filesystem.Loader',
- 'django.template.loaders.app_directories.Loader')
+# TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
+TEMPLATE_LOADERS = ('django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader')
 
 ALLOWED_HOSTS = []
 
@@ -66,6 +67,9 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/

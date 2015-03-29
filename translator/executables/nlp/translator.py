@@ -32,13 +32,10 @@ def translate(text, step_number=1):
     return components_from_text
 
 
-def get_json(text, step_number=1):
-    components = translate(text, step_number)
-    return encode2json.EncodeStepsArrayToJSON(components)
+def get_json(steps):
+    return encode2json.EncodeStepsArrayToJSON(steps)
 
 
-def get_csv(text, csv_for_result, step_number=1):
-    components = translate(text, step_number)
-    steps_list = grammar.get_new_list_with_ksteps(components)
-
+def get_csv(steps, csv_for_result):
+    steps_list = grammar.get_new_list_with_ksteps(steps)
     encode2csv.writeCSVFromSteps(steps_list, csv_for_result)
