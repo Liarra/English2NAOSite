@@ -20,7 +20,7 @@ class GrammarTests(TestCase):
         ]
 
         new_components = grammar.go_through(components)
-        print(new_components)
+        # print(new_components)
         self.assertEquals(len(new_components), 1)
 
 
@@ -63,7 +63,7 @@ class GrammarTests(TestCase):
         ]
 
         new_components = grammar.go_through(components)
-        print([x.description for x in new_components])
+
         self.assertEquals(len(new_components), 5)
 
 
@@ -117,7 +117,7 @@ class GrammarTests(TestCase):
         self.assertEquals(len(new_components), 1)
 
         only_state = new_components[0]
-        self.assertEquals("3.00",only_state.next_state_ID)
+        self.assertEquals("3.00", only_state.next_state_ID)
 
 
     def test_go_through_order_of_nonrecognised(self):
@@ -130,11 +130,6 @@ class GrammarTests(TestCase):
         new_components = grammar.go_through(components)
         self.assertEquals(len(new_components), 2)
 
-        #first_state = new_components[0]
-        # print(first_state.commands[0])
-        # print(first_state.state_ID)
-        # print(first_state.next_state_ID)
-
     def test_go_through_keypress_goto(self):
         components = [
             button_press("press Y"),
@@ -145,19 +140,40 @@ class GrammarTests(TestCase):
         self.assertEquals(len(new_components), 1)
 
         first_state = new_components[0]
-        self.assertEquals( "3.01", first_state.next_state_ID)
+        self.assertEquals("3.01", first_state.next_state_ID)
 
-    # def test_go_through_keypress_unrec_action(self):
-    #     components = [
-    #         unrecognised_component("if I"),
-    #         button_press("press Y"),
-    #         unrecognised_component("Then I"),
-    #         move_command("Shaky shaky")
-    #     ]
-    #
-    #     new_components = grammar.go_through(components)
-    #     self.assertEquals(len(new_components), 1)
-    #
-    #     first_state = new_components[1]
-    #     second_state= new_components[2]
-    #     self.assertEquals(second_state.state_ID, first_state.next_state_ID)
+    def test_go_through_only_steps(self):
+        components = [
+            button_press("A"),
+            say_command("say 'hello'"),
+
+            parallel("and"),
+            parallel("and"),
+            parallel("and"),
+            sequence("then"),
+
+            unrecognised_component("This is not recognised"),
+            unrecognised_component("This too"),
+            unrecognised_component("This too"),
+
+            button_press("B"),
+            parallel("and"),
+            sequence("then"),
+            sequence("then"),
+            sequence("then"),
+            sequence("then"),
+            say_command("say 'bye'"),
+
+            unrecognised_component("hahaha almost there"),
+
+            button_press("C"),
+            sequence("then"),
+            sequence("then"),
+            say_command("say 'OMG'")
+        ]
+
+        new_components = grammar.go_through(components)
+        print([x.description for x in new_components])
+        self.assertEquals(len(new_components), 5)
+        self.assertTrue(all([isinstance(x, step) for x in new_components]))
+

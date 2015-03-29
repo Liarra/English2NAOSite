@@ -25,16 +25,19 @@ def go_through(components):
     while i < len(components) - 1:
         i += 1
 
-        ##Remove unrecognised if not allowed####
+        # Remove unrecognised if not allowed
         if (not unrecognised_enabled) and isinstance(components[i], unrecognised_component):
             gone_through = False
             new_list.extend(components[i + 1:])
             break
 
-        ####3-tuple####
+        ####### Grammar rules start here ############
+        # 3-tuple #
         if i < len(components) - 2:
-            if isinstance(components[i], command) & isinstance(components[i + 1], parallel) & isinstance(
-                    components[i + 2], command):
+
+            if isinstance(components[i], command) \
+                    and isinstance(components[i + 1], parallel) \
+                    and isinstance(components[i + 2], command):
                 new_step = step()
                 new_step.text_index_start = components[i].text_index_start
                 new_step.component_name = components[i].component_name
@@ -47,49 +50,40 @@ def go_through(components):
                 new_list.append(new_step)
 
                 gone_through = False
-                # i += 2
-                # continue
                 new_list.extend(components[i + 3:])
                 break
 
-
-            elif isinstance(components[i], step) & isinstance(components[i + 1], parallel) & isinstance(
-                    components[i + 2], command):
+            elif isinstance(components[i], step) \
+                    and isinstance(components[i + 1], parallel) \
+                    and isinstance(components[i + 2], command):
                 new_step = components[i]
-                # new_step.text_index_start = components[i].text_index_start
-                # new_step.component_name = components[i].component_name
                 new_step.description = components[i].description + " " + components[i + 2].description
-                # new_step.state_ID = step_counter
                 new_step.commands.append(components[i])
 
-                # step_counter += step_modifier
                 new_list.append(new_step)
 
                 gone_through = False
-                # i += 2
-                # continue
                 new_list.extend(components[i + 3:])
                 break
 
-            elif isinstance(components[i], command) & isinstance(components[i + 1], parallel) & isinstance(
-                    components[i + 2], step):
+            elif isinstance(components[i], command) \
+                    and isinstance(components[i + 1], parallel) \
+                    and isinstance(components[i + 2], step):
                 new_step = components[i + 2]
                 new_step.text_index_start = components[i].text_index_start
                 new_step.component_name = components[i].component_name
                 new_step.description = components[i].description + " " + components[i + 2].description
-                # new_step.state_ID = step_counter
                 new_step.commands.append(components[i])
 
                 new_list.append(new_step)
 
                 gone_through = False
-                # i += 2
-                # continue
                 new_list.extend(components[i + 3:])
                 break
 
-            elif isinstance(components[i], step) & isinstance(components[i + 1], parallel) & isinstance(
-                    components[i + 2], step):
+            elif isinstance(components[i], step) \
+                    and isinstance(components[i + 1], parallel) \
+                    and isinstance(components[i + 2], step):
                 new_step = step()
                 new_step.text_index_start = components[i].text_index_start
                 new_step.component_name = components[i].component_name
@@ -98,18 +92,15 @@ def go_through(components):
                 new_step.commands.extend(components[i].commands)
                 new_step.commands.extend(components[i + 2].commands)
 
-                # step_counter += step_modifier
                 new_list.append(new_step)
 
                 gone_through = False
-                # i += 2
-                # continue
                 new_list.extend(components[i + 3:])
                 break
 
-
-            elif isinstance(components[i], step) & isinstance(components[i + 1], sequence) & isinstance(
-                    components[i + 2], step):
+            elif isinstance(components[i], step) \
+                    and isinstance(components[i + 1], sequence) \
+                    and isinstance(components[i + 2], step):
                 step1 = components[i]
                 step2 = components[i + 2]
 
@@ -119,48 +110,39 @@ def go_through(components):
                 new_list.append(step2)
 
                 gone_through = False
-                # i += 2
-                # continue
                 new_list.extend(components[i + 3:])
                 break
 
-        ####2-tuple####
+        # 2-tuple #
         if i < len(components) - 1:
 
-            if isinstance(components[i], parallel) & isinstance(components[i + 1], sequence):
+            if isinstance(components[i], parallel) and isinstance(components[i + 1], sequence):
                 new_list.append(components[i + 1])
 
                 gone_through = False
-                # i += 1
-                # continue
                 new_list.extend(components[i + 2:])
                 break
 
-
-            elif (isinstance(components[i], parallel) or isinstance(components[i], sequence)) & isinstance(
-                    components[i + 1], goto):
+            elif (isinstance(components[i], parallel) or isinstance(components[i], sequence)) \
+                    and isinstance(components[i + 1], goto):
                 new_list.append(components[i + 1])
 
                 gone_through = False
-                # i += 1
-                # continue
                 new_list.extend(components[i + 2:])
                 break
 
-            elif isinstance(components[i], unrecognised_component) & isinstance(components[i + 1],
-                                                                                unrecognised_component):
+            elif isinstance(components[i], unrecognised_component) \
+                    and isinstance(components[i + 1], unrecognised_component):
                 unrec1 = components[i]
                 unrec2 = components[i + 1]
                 new_list.append(
                     unrecognised_component(unrec1.description + " " + unrec2.description, unrec1.text_index_start))
 
                 gone_through = False
-                # i += 1
-                # continue
                 new_list.extend(components[i + 2:])
                 break
 
-            elif isinstance(components[i], condition) & isinstance(components[i + 1], goto):
+            elif isinstance(components[i], condition) and isinstance(components[i + 1], goto):
                 new_step = cstep()
                 new_step.text_index_start = components[i].text_index_start
                 new_step.component_name = components[i].component_name
@@ -173,12 +155,10 @@ def go_through(components):
                 new_list.append(new_step)
 
                 gone_through = False
-                # i += 1
-                # continue
                 new_list.extend(components[i + 2:])
                 break
 
-            elif isinstance(components[i], step) & isinstance(components[i + 1], goto):
+            elif isinstance(components[i], step) and isinstance(components[i + 1], goto):
                 new_step = components[i]
                 goto_pointer = components[i + 1]
 
@@ -186,12 +166,10 @@ def go_through(components):
                 new_list.append(new_step)
 
                 gone_through = False
-                # i += 1
-                # continue
                 new_list.extend(components[i + 2:])
                 break
 
-            elif isinstance(components[i], condition) & isinstance(components[i + 1], command):
+            elif isinstance(components[i], condition) and isinstance(components[i + 1], command):
                 cond = components[i]
                 action = components[i + 1]
 
@@ -207,12 +185,10 @@ def go_through(components):
                 new_list.append(new_step)
 
                 gone_through = False
-                # i += 1
-                # continue
                 new_list.extend(components[i + 2:])
                 break
 
-            elif isinstance(components[i], condition) & isinstance(components[i + 1], step):
+            elif isinstance(components[i], condition) and isinstance(components[i + 1], step):
                 cond = components[i]
                 action = components[i + 1]
 
@@ -224,17 +200,16 @@ def go_through(components):
                 new_step.commands.extend(action.commands)
                 new_step.condition.append(cond)
 
-                # step_counter += step_modifier
                 new_list.append(new_step)
 
                 gone_through = False
-                # i += 1
-                # continue
                 new_list.extend(components[i + 2:])
                 break
 
-            elif (isinstance(components[i], step) and isinstance(components[i + 1], step)) and components[
-                i].next_state_ID == -1:
+            elif (isinstance(components[i], step)
+                  and isinstance(components[i + 1], step)) \
+                    and components[i].next_state_ID == -1:
+
                 step1 = components[i]
                 step2 = components[i + 1]
 
@@ -244,11 +219,10 @@ def go_through(components):
                 new_list.append(step2)
 
                 gone_through = False
-                # i += 1
-                # continue\
                 new_list.extend(components[i + 2:])
                 break
 
+        # 1-tuple #
         if isinstance(components[i], command):
             new_step = step()
             new_step.text_index_start = components[i].text_index_start
@@ -283,18 +257,26 @@ def go_through(components):
                 break
 
         new_list.append(components[i])
+    ####### Grammar rules end here ############
 
     if gone_through:
         step_counter = 1
 
         new_new_list = []
 
-        ##Remove orphan controls####
+        # Remove orphan controls, then go through once again
+        orphans = 0
         for item in new_list:
             if not (isinstance(item, parallel) or isinstance(item, sequence)):
                 new_new_list.append(item)
+            else:
+                orphans += 1
 
-        return new_new_list
+        if orphans > 0:
+            return go_through(new_new_list)
+        else:
+            return new_new_list
+
     else:
         return go_through(new_list)
 
