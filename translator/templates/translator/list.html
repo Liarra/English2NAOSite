@@ -48,34 +48,17 @@
 
     <div class="container">
 
-      <div class="starter-template">
-        <h1>Make your own scenario   <button type="button" class="btn" id="btn-download">Download</button> </h1>
-      </div>
-      
-      <div class="row">
-            <div class="col-md-5" id="steps-column">
-            
-            <div class="step-div inactive">
-                <div class="row">
-                <div class="step-number col-md-1"> 1. </div>
-                <div class="step-name col-md-10"><input type="text" class="form-control" id="step-name" placeholder="Step name"></div>
-                <div class="step-delete col-md-1"><span class=" glyphicon glyphicon-remove"> </span></div>
-                </div>
-                
-                <div class="step-description-div">
-                    <textarea class="form-control step-description"rows="1"></textarea>
-                </div>
-            </div>
-            
-            </div>
-          <div class="col-md-1" id="button"></div>
 
-            <div class="col-md-6" id="program">
-                {% include "translator/program.html" %}
-            </div>
-        </div>
+        {% if scenarios_list %}
+        <ul>
+        {% for scenario in scenarios_list %}
+            <li><a href="/view_scenario/{{ scenario.id }}/">{{ scenario.id }}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>No scenarios.</p>
+        {% endif %}
 
-        <button type="button" class="btn btn-success btn-translate">Translate</button>
     </div><!-- /.container -->
 
 

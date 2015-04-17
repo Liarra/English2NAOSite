@@ -4,12 +4,17 @@ from django.http import HttpResponse
 from django.template import RequestContext, loader
 import json
 from io import StringIO
+import pickle
 from translator.executables.nlp import translator
+from translator.models import RobotProgram
 
 
 def create(request):
     return render(request, 'translator/create.html')
 
+
+# def edit(request, id):
+# program=RobotProgram.
 
 def translate(request):
     textlist = request.POST.getlist('text[]')
@@ -28,12 +33,40 @@ def translate(request):
         i += 1
 
     request.session['steps'] = steps
+    request.session['text_description'] = textlist
+
     ret = json.dumps(ret_dictionary)
-    return HttpResponse(ret)
+    # return HttpResponse(ret)
+
+    context = {'steps_list': steps}
+    return render(request, 'translator/program.html', context)
+
+
+def save_program(request):
+    steps = request.session['steps']
+    description = request.session['text_description']
+
+    pickled_steps = pickle.dumps(steps)
+    pickled_description = pickle.dumps(description)
+
+    new_program = RobotProgram()
+    new_program.text_description = description
+    new_program.pickled_formal_description = steps
+
+    new_program.save()
+
+    return view_scenarios(request)
+
+
+def view_scenarios(request):
+    scenarios_list = RobotProgram.objects.all()
+    context = {'scenarios_list': scenarios_list}
+
+    return render(request, 'translator/list.html', context)
 
 
 def csv(request):
-    steps=request.session['steps'];
+    steps = request.session['steps']
     csvfile = StringIO()
     for step in steps:
         if step != {}:

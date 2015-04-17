@@ -7,5 +7,6 @@ urlpatterns = patterns('',
     # ex: /polls/
     url(r'^$', views.create, name='create'),
     url(r'^translate/$', views.translate),
-    url(r'^csv/$', views.csv)
+    url(r'^csv/$', views.csv),
+    url(r'^save/$', views.save_program)
 )

@@ -35,7 +35,6 @@ def translate(text, step_number=1):
 def get_json(steps):
     return encode2json.EncodeStepsArrayToJSON(steps)
 
-
 def get_csv(steps, csv_for_result):
     steps_list = grammar.get_new_list_with_ksteps(steps)
     encode2csv.writeCSVFromSteps(steps_list, csv_for_result)

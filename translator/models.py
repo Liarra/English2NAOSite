@@ -6,6 +6,6 @@ from django.db.models import Model
 
 
 class RobotProgram(models.Model):
-    text_description = models.TextField
-    pickled_formal_description = models.TextField
-    user = models.ForeignKey(User)
+    text_description = models.TextField()
+    pickled_formal_description = models.TextField()
+    # user = models.ForeignKey(User)

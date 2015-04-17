@@ -45,8 +45,9 @@ $(document).ready(function(){
             },
 
             success: function( data ) {
-                var json_data=jQuery.parseJSON(data);
-                $("#program" ).html(make_program(json_data));
+//                var json_data=jQuery.parseJSON(data);
+//                $("#program" ).html(make_program(json_data));
+                $("#program" ).html(data);
                 assign_balloons();
                 alignTextWithProgram();
             }
@@ -108,10 +109,6 @@ function make_program(json_data){
 
     for(var i=1; i<=count;i++){
         var step_data=jQuery.parseJSON(json_data[i+""]);
-
-//        htmlString+="<div class='step-number'>";
-//        htmlString+=i+". ";
-//        htmlString+="</div>";
         htmlString+="<div class='program-step'>";
 
         var inner_count = Object.keys(step_data).length;
@@ -125,16 +122,16 @@ function make_program(json_data){
             htmlString+="<span class='program-box glyphicon glyphicon-step'>"+substep["stepID"]+"</span>";
 
             var conditions=substep["conditions"];
-            if (conditions!=undefined)
+            if (conditions!=undefined){
                 for (var condition of conditions){
                     if (condition.indexOf("key[")==0){
                     htmlString+="<span class='program-box glyphicon glyphicon-button-input' title='"+condition+"'>"+condition.charAt(4).toUpperCase()+"</span>"
-                    htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
                     }
                 }
+//                htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
+                }
 
-            else
-              htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
+          htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
 
             var actions=substep["actions"]
             if (actions!=undefined)
