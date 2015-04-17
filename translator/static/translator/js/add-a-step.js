@@ -1,4 +1,4 @@
-var steps_counter=2;
+var steps_counter=$(".step-div").length+1;
 $("#steps-column")
     .on("click focus", ".step-div.inactive .step-description", function(e) {
         var curRow = $(".step-div.inactive");

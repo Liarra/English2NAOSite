@@ -1,7 +1,11 @@
 {% if descriptions_list %}
 {% for description in descriptions_list %}
 
+{% if forloop.counter ==  descriptions_list|length %}
+<div class="step-div inactive">
+{% else %}
 <div class="step-div">
+{% endif %}
     <div class="row">
     <div class="step-number col-md-1"> {{forloop.counter}}. </div>
     <div class="step-name col-md-10"><input type="text" class="form-control step-name-text"  placeholder="Step name" value="{{description.step_name}}"></div>
@@ -14,18 +18,7 @@
 </div>
 
 
+
+
 {% endfor %}
 {% endif %}
-
-
-<div class="step-div inactive">
-    <div class="row">
-    <div class="step-number col-md-1"> {{ forloop.counter|default:1 }}. </div>
-    <div class="step-name col-md-10"><input type="text" class="form-control" id="step-name" placeholder="Step name"></div>
-    <div class="step-delete col-md-1"><span class=" glyphicon glyphicon-remove"> </span></div>
-    </div>
-
-    <div class="step-description-div">
-        <textarea class="form-control step-description"rows="1"></textarea>
-    </div>
-</div>
