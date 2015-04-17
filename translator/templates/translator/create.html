@@ -55,17 +55,19 @@
       <div class="row">
             <div class="col-md-5" id="steps-column">
             
-            <div class="step-div inactive">
-                <div class="row">
-                <div class="step-number col-md-1"> 1. </div>
-                <div class="step-name col-md-10"><input type="text" class="form-control" id="step-name" placeholder="Step name"></div>
-                <div class="step-delete col-md-1"><span class=" glyphicon glyphicon-remove"> </span></div>
-                </div>
-                
-                <div class="step-description-div">
-                    <textarea class="form-control step-description"rows="1"></textarea>
-                </div>
-            </div>
+            <!--<div class="step-div inactive">-->
+                <!--<div class="row">-->
+                <!--<div class="step-number col-md-1"> 1. </div>-->
+                <!--<div class="step-name col-md-10"><input type="text" class="form-control step-name-text"  placeholder="Step name"></div>-->
+                <!--<div class="step-delete col-md-1"><span class=" glyphicon glyphicon-remove"> </span></div>-->
+                <!--</div>-->
+                <!---->
+                <!--<div class="step-description-div">-->
+                    <!--<textarea class="form-control step-description"rows="1"></textarea>-->
+                <!--</div>-->
+            <!--</div>-->
+
+                {% include "translator/description.html" %}
             
             </div>
           <div class="col-md-1" id="button"></div>

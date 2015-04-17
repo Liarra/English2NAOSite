@@ -1,3 +1,4 @@
+from itertools import cycle
 from wsgiref.util import FileWrapper
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -6,25 +7,36 @@ import json
 from io import StringIO
 import pickle
 from translator.executables.nlp import translator
-from translator.models import RobotProgram
+from translator.models import RobotProgram, ProgramStep
 
 
 def create(request):
     return render(request, 'translator/create.html')
 
 
-# def edit(request, id):
-# program=RobotProgram.
+def edit(request, program_id):
+    program = RobotProgram.objects.get(id=program_id)
+    steps = pickle.loads(program.pickled_formal_description)
+    descriptions = program.programstep_set.all()
+
+    context = {'steps_list': steps, 'descriptions_list': descriptions}
+    return render(request, 'translator/create.html', context)
+
 
 def translate(request):
     textlist = request.POST.getlist('text[]')
+    headerlist = request.POST.getlist('headers[]')
     i = 1
 
     ret_dictionary = {}
     steps = []
+    step_descriptions = []
+
+    header_cycle = cycle(headerlist)
     for text in textlist:
+        step_descriptions.append([next(header_cycle), text])
+
         if text == "":
-            ret_dictionary[i] = "{}"
             steps.append({})
         else:
             result = translator.translate(text, i)
@@ -33,10 +45,7 @@ def translate(request):
         i += 1
 
     request.session['steps'] = steps
-    request.session['text_description'] = textlist
-
-    ret = json.dumps(ret_dictionary)
-    # return HttpResponse(ret)
+    request.session['step_descriptions'] = step_descriptions
 
     context = {'steps_list': steps}
     return render(request, 'translator/program.html', context)
@@ -44,16 +53,20 @@ def translate(request):
 
 def save_program(request):
     steps = request.session['steps']
-    description = request.session['text_description']
+    description = request.session['step_descriptions']
 
     pickled_steps = pickle.dumps(steps)
-    pickled_description = pickle.dumps(description)
 
     new_program = RobotProgram()
-    new_program.text_description = description
-    new_program.pickled_formal_description = steps
-
+    new_program.pickled_formal_description = pickled_steps
     new_program.save()
+
+    for heading, text in description:
+        new_step = ProgramStep()
+        new_step.step_description = text
+        new_step.step_name = heading
+        new_step.program=new_program
+        new_step.save()
 
     return view_scenarios(request)
 

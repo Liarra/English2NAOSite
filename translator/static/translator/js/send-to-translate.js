@@ -31,9 +31,18 @@ $.ajaxSetup({
 });
 
 $(document).ready(function(){
+
+    assign_balloons();
+    alignTextWithProgram();
+
+
     $(".btn-translate").click(function(){
 
-        var values = $('.step-description').map(function() {
+        var text_values = $('.step-description').map(function() {
+            return this.value;
+        }).get()
+
+        var headers_values = $('.step-name-text').map(function() {
             return this.value;
         }).get()
 
@@ -41,7 +50,8 @@ $(document).ready(function(){
             url: "translate/",
             type:"POST",
             data: {
-                text: values,
+                text: text_values,
+                headers: headers_values
             },
 
             success: function( data ) {
@@ -101,79 +111,6 @@ $(document).ready(function(){
 
 function assign_balloons() {
   $('.program-box').balloon({position: "bottom",minLifetime: 0, css: {'max-width':'200px'}});
-}
-
-function make_program(json_data){
-    var count = Object.keys(json_data).length;
-    var htmlString="";
-
-    for(var i=1; i<=count;i++){
-        var step_data=jQuery.parseJSON(json_data[i+""]);
-        htmlString+="<div class='program-step'>";
-
-        var inner_count = Object.keys(step_data).length;
-        if(inner_count==0){
-            htmlString+="<center>(EMPTY STEP)</center>"
-        }
-
-        else
-        for (var substep of step_data){
-            //SubstepID
-            htmlString+="<span class='program-box glyphicon glyphicon-step'>"+substep["stepID"]+"</span>";
-
-            var conditions=substep["conditions"];
-            if (conditions!=undefined){
-                for (var condition of conditions){
-                    if (condition.indexOf("key[")==0){
-                    htmlString+="<span class='program-box glyphicon glyphicon-button-input' title='"+condition+"'>"+condition.charAt(4).toUpperCase()+"</span>"
-                    }
-                }
-//                htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
-                }
-
-          htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>"
-
-            var actions=substep["actions"]
-            if (actions!=undefined)
-                for (var action of actions){
-                    if (action.indexOf("_UNRECOGNISED_")==0){
-                        htmlString+="<span class='program-box glyphicon glyphicon-question-sign' title='"+action+"'></span> "
-                    }
-
-                    if (action.indexOf("say(")==0){
-                        htmlString+="<span class='program-box glyphicon glyphicon-comment' title='"+action+"'></span> "
-                    }
-
-                    if (action.indexOf("wait(")==0){
-                        htmlString+="<span class='program-box glyphicon glyphicon-time' title='"+action+"'></span> "
-                    }
-                    if (action.indexOf("stiff")==0){
-                        htmlString+="<span class='program-box glyphicon glyphicon-move' title='"+action+"'></span> "
-                    }
-                    if (action.indexOf(" | ")==0){
-                        htmlString+="<span class='program-box' title='"+action+"'>|</span>"
-                    }
-
-                    if (action.indexOf(" & ")==0){
-                        htmlString+="<span class='program-box' title='"+action+"'>&</span>"
-                    }
-                }
-
-
-
-                nextID=substep["nextID"]
-                if(nextID>-1){
-                    htmlString+="<span class='arrow-box glyphicon glyphicon-arrow-right'></span>";
-                    htmlString+="<span class='program-box glyphicon glyphicon-step'>"+nextID+"</span>";
-                }
-                htmlString+="<br/>"
-//
-        }
-//        htmlString+=json_data[i+""];
-        htmlString+="</div>";
-    }
-
-    return htmlString;
 }
 
 function alignTextWithProgram(){

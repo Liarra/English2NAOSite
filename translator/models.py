@@ -6,6 +6,11 @@ from django.db.models import Model
 
 
 class RobotProgram(models.Model):
-    text_description = models.TextField()
-    pickled_formal_description = models.TextField()
+    pickled_formal_description = models.BinaryField()
     # user = models.ForeignKey(User)
+
+
+class ProgramStep(models.Model):
+    program = models.ForeignKey(RobotProgram)
+    step_name = models.CharField(max_length=100)
+    step_description = models.TextField()
