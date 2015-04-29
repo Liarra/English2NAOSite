@@ -7,6 +7,7 @@
         <center>(EMPTY STEP)</center>
         {% else %}
             {% for substep in step %}
+                <div class="substep-div">
                 <span class='program-box glyphicon glyphicon-step'> {{substep.state_ID}} </span>
 
                 <!--Conditions-->
@@ -45,8 +46,12 @@
                 <span class='program-box glyphicon glyphicon-step'>{{substep.next_state_ID}}</span>
                 {% endif %}
 
-                <br/>
 
+                    <div class="substep-buttons">
+                        <button type="button" class="btn btn-edit-substep" title="Edit this substep">...</button>
+                        <button type="button" class="btn btn-remove-substep" title="Remove this substep">X</button>
+                    </div>
+                </div>
             {% endfor %}
         {% endif %}
     </div>

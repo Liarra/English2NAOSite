@@ -47,7 +47,7 @@ $(document).ready(function(){
         }).get()
 
         $.ajax({
-            url: "translate/",
+            url: "/translator/translate/",
             type:"POST",
             data: {
                 text: text_values,
