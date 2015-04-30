@@ -20,6 +20,9 @@ def edit(request, program_id):
     descriptions = program.programstep_set.all()
 
     context = {'steps_list': steps, 'descriptions_list': descriptions}
+    request.session['steps'] = steps
+    request.session['step_descriptions'] = descriptions
+
     return render(request, 'translator/create.html', context)
 
 
@@ -91,3 +94,16 @@ def csv(request):
     response['Content-Disposition'] = 'attachment; filename=scenario.csv'
     response['Content-Length'] = csvfile.tell()
     return response
+
+
+def remove_substep(request):
+    steps = request.session['steps']
+    step_id_for_removal = request.POST['substep_id']
+
+    for step in steps:
+        for substep in step:
+            if substep.ID==step_id_for_removal:
+                step.remove(substep)
+
+    return HttpResponse("OK")
+# TODO: Change SubStep id, add command etc

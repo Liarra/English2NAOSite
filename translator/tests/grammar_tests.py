@@ -3,7 +3,7 @@ from translator.executables.nlp.components.component import *
 from unittest import *
 from translator.executables.nlp.components.execution import parallel, sequence, goto
 from translator.executables.nlp.components.robot_commands import say_command, move_command
-from translator.executables.nlp.step import step
+from translator.executables.nlp.substep import SubStep
 
 __author__ = 'NBUCHINA'
 
@@ -41,7 +41,7 @@ class GrammarTests(TestCase):
 
         for i in range(0, len(new_components)):
             # print(new_components[i].description)
-            self.assertEquals(isinstance(new_components[i], step), True)
+            self.assertEquals(isinstance(new_components[i], SubStep), True)
 
 
     def test_go_through_conditions_and_unrecognised(self):
@@ -117,7 +117,7 @@ class GrammarTests(TestCase):
         self.assertEquals(len(new_components), 1)
 
         only_state = new_components[0]
-        self.assertEquals("3.00", only_state.next_state_ID)
+        self.assertEquals("3.00", only_state.next_ID)
 
 
     def test_go_through_order_of_nonrecognised(self):
@@ -140,7 +140,7 @@ class GrammarTests(TestCase):
         self.assertEquals(len(new_components), 1)
 
         first_state = new_components[0]
-        self.assertEquals("3.01", first_state.next_state_ID)
+        self.assertEquals("3.01", first_state.next_ID)
 
     def test_go_through_only_steps(self):
         components = [
@@ -175,5 +175,5 @@ class GrammarTests(TestCase):
         new_components = grammar.go_through(components)
         print([x.description for x in new_components])
         self.assertEquals(len(new_components), 5)
-        self.assertTrue(all([isinstance(x, step) for x in new_components]))
+        self.assertTrue(all([isinstance(x, SubStep) for x in new_components]))
 
