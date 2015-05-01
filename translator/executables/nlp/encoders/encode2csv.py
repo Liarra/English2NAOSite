@@ -9,7 +9,7 @@ def writeCSVFromSteps(steps, csvfile):
                              quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
     for step in steps:
-        step_commands = ("|").join([str(x) for x in step.commands])
+        step_commands = "|".join([str(x) for x in step.commands])
         ID = int(float(step.ID) * 100)
         next_ID = "" if float(step.next_ID) < 0 else int(float(step.next_ID) * 100)
 

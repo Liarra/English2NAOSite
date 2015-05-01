@@ -84,7 +84,7 @@ class move_command(command):
 
             if s > max:
                 max = s
-                self.move = move_command.files_to_moves[move_file]
+                self.move = move_command.files_to_moves[move_file].replace('\n', '').replace('\r', '')
 
                 self.command = "stiff (1, 500, 0) & " + self.move + " & stiff (0, 500, 0)"
 

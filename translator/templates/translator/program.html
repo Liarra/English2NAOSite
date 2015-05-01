@@ -3,7 +3,7 @@
 {% if steps_list %}
 {% for step in steps_list %}
     <div class='program-step'>
-        {% if SubStep|length < 1 %}
+        {% if step|length < 1 %}
         <center>(EMPTY STEP)</center>
         {% else %}
             {% for substep in step %}

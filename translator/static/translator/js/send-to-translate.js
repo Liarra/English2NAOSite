@@ -36,7 +36,43 @@ $(document).ready(function(){
     alignTextWithProgram();
 
 
+    $(".step-name-text").focus(function(){
+        $("#btn-save").addClass("btn-info");
+    });
+
+    $(".step-description").focus(function(){
+        $("#btn-save").addClass("btn-info");
+    });
+
+    $("#btn-save").click(function(){
+
+        var text_values = $('.step-description').map(function() {
+            return this.value;
+        }).get()
+
+        var headers_values = $('.step-name-text').map(function() {
+            return this.value;
+        }).get()
+
+        $.ajax({
+            url: "/translator/save/",
+            type:"POST",
+            data: {
+                text: text_values,
+                headers: headers_values
+            },
+
+            success: function( data ) {
+                $("#btn-save").removeClass("btn-info");
+                assign_balloons();
+                alignTextWithProgram();
+            }
+        });
+    });
+
+
     $(".btn-translate").click(function(){
+        $("#btn-save").addClass("btn-info");
 
         var text_values = $('.step-description').map(function() {
             return this.value;
@@ -87,7 +123,7 @@ $(document).ready(function(){
         }
 
         $.ajax({
-            url: "csv/",
+            url: "/translator/csv/",
             type:"POST",
             data: params,
 
@@ -95,7 +131,7 @@ $(document).ready(function(){
                 var disp = request.getResponseHeader('Content-Disposition');
                 if (disp && disp.search('attachment') != -1) {
 
-                var form = $('<form method="POST" class="application-form" action="csv/">{% csrf_token %}');
+                var form = $('<form method="POST" class="application-form" action="/translator/csv/">{% csrf_token %}');
                 $.each(params, function(k, v) {
                     form.append($("<input type='hidden' name='text[]' value='" + v + "'>"));
                 });

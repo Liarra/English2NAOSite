@@ -10,5 +10,6 @@ urlpatterns = patterns('',
     url(r'^csv/$', views.csv),
     url(r'^save/$', views.save_program),
     url(r'^view/(?P<program_id>[0-9]+)/?$', views.edit),
-    url(r'^explore/$', views.view_scenarios)
+    url(r'^explore/$', views.view_scenarios),
+    url(r'^remove-substep/$', views.remove_substep),
 )
