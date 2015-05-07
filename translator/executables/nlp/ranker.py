@@ -20,9 +20,9 @@ class text_breaker(object):
             component = components_mapping[maxpath[i]][maxpath[i + 1]]
 
             if component is not None:
-                component_object = component(text_piece)
+                component_object = component.from_string(text_piece)
             else:
-                component_object = unrecognised_component(text_piece)
+                component_object = unrecognised_component.from_string(text_piece)
 
             text_to_components.append((text_piece, component_object))
 

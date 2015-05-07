@@ -96,6 +96,7 @@ $(document).ready(function(){
                 $("#program" ).html(data);
                 assign_balloons();
                 alignTextWithProgram();
+                assign_remove_buttons();
             }
         });
     });

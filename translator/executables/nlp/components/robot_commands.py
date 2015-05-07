@@ -1,29 +1,33 @@
 from translator.executables.nlp.components.component import component
 
+
 class command(component):
     pass
+
 
 class say_command(command):
     tags = ["say", "tell", "ask"]
     regexp = r"(say|tell|ask)(s|ing)? ['\"“](?P<what>.+)['\"”]"
 
-    say_what = ""
+    command = "say({text})"
 
-    def __init__(self, string, index_in_text=0):
-        super().__init__(string, index_in_text)
-        self.component_name = "CommandState2"
+    @classmethod
+    def from_string(cls, string, index_in_text=0):
+        ret = super().from_string(string, index_in_text)
+        ret.tivipe_component_name = "CommandState2"
 
         import re
 
-        p = re.compile(self.regexp, re.IGNORECASE)
+        p = re.compile(cls.regexp, re.IGNORECASE)
         string = string.strip()
         string = string.lower()
 
         m = p.search(string)
         if m is None:
             return
-        self.say_what = m.group('what').replace(' ', '_')
-        self.command = "say(%s)" % self.say_what
+        say_what = m.group('what').replace(' ', '_')
+        ret.params["text"] = say_what
+        return ret
 
 
 class wait_command(command):
@@ -34,7 +38,7 @@ class wait_command(command):
 
     def __init__(self, string, index_in_text=0):
         super().__init__(string, index_in_text)
-        self.component_name = "CommandState2"
+        self.tivipe_component_name = "CommandState2"
 
         import re
 
@@ -69,24 +73,26 @@ import xml.etree.ElementTree as ET
 class move_command(command):
     tags = []
     regexp = r"(?!x)x"  # A regex that never matches
+    params={"move":''}
+    command = "stiff (1, 500, 0) & {move} & stiff (0, 500, 0)"
 
-    def __init__(self, string, index_in_text=0):
-        super().__init__(string, index_in_text)
-        self.component_name = "CommandState2"
+    @classmethod
+    def from_string(cls, string, index_in_text=0):
+        ret = super().from_string(string, index_in_text)
+        ret.tivipe_component_name = "CommandState2"
 
         max = 0
         for move_file in move_command.files_to_tags:
             s = 0
             move_tags = move_command.files_to_tags[move_file]
             for tag in move_tags:
-                if tag in self.description:
+                if tag in ret.description:
                     s += 1
 
             if s > max:
                 max = s
-                self.move = move_command.files_to_moves[move_file].replace('\n', '').replace('\r', '')
-
-                self.command = "stiff (1, 500, 0) & " + self.move + " & stiff (0, 500, 0)"
+                ret.params["move"] = move_command.files_to_moves[move_file].replace('\n', '').replace('\r', '')
+        return ret
 
 
 moves_folder = "moves"

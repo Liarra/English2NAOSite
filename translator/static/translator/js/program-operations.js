@@ -1,3 +1,4 @@
+function assign_remove_buttons(){
 $(".btn-remove-substep").click(function() {
 
     var substep_div = $(this).parent().parent();
@@ -10,6 +11,7 @@ $(".btn-remove-substep").click(function() {
     });
 
 });
+}
 
 
 
@@ -36,3 +38,5 @@ function remove_substep(substep_div){
 function throw_exception(){
     alert("Nope, baby");
 }
+
+assign_remove_buttons();

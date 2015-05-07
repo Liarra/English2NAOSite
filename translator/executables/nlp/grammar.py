@@ -40,7 +40,7 @@ def go_through(components):
                     and isinstance(components[i + 2], command):
                 new_step = SubStep()
                 new_step.text_index_start = components[i].text_index_start
-                new_step.component_name = components[i].component_name
+                new_step.tivipe_component_name = components[i].tivipe_component_name
                 new_step.description = components[i].description + " " + components[i + 2].description
                 new_step.ID = "%.2f" % step_counter
                 new_step.commands.append(components[i])
@@ -71,7 +71,7 @@ def go_through(components):
                     and isinstance(components[i + 2], SubStep):
                 new_step = components[i + 2]
                 new_step.text_index_start = components[i].text_index_start
-                new_step.component_name = components[i].component_name
+                new_step.tivipe_component_name = components[i].tivipe_component_name
                 new_step.description = components[i].description + " " + components[i + 2].description
                 new_step.commands.append(components[i])
 
@@ -86,7 +86,7 @@ def go_through(components):
                     and isinstance(components[i + 2], SubStep):
                 new_step = SubStep()
                 new_step.text_index_start = components[i].text_index_start
-                new_step.component_name = components[i].component_name
+                new_step.tivipe_component_name = components[i].tivipe_component_name
                 new_step.description = components[i].description + " " + components[i + 2].description
                 new_step.ID = components[i].ID
                 new_step.commands.extend(components[i].commands)
@@ -136,7 +136,7 @@ def go_through(components):
                 unrec1 = components[i]
                 unrec2 = components[i + 1]
                 new_list.append(
-                    unrecognised_component(unrec1.description + " " + unrec2.description, unrec1.text_index_start))
+                    unrecognised_component.from_string(unrec1.description + " " + unrec2.description, unrec1.text_index_start))
 
                 gone_through = False
                 new_list.extend(components[i + 2:])
@@ -145,10 +145,10 @@ def go_through(components):
             elif isinstance(components[i], condition) and isinstance(components[i + 1], goto):
                 new_step = ConditionSubStep()
                 new_step.text_index_start = components[i].text_index_start
-                new_step.component_name = components[i].component_name
+                new_step.tivipe_component_name = components[i].tivipe_component_name
                 new_step.description = components[i].description + " " + components[i + 1].description
                 new_step.ID = "%.2f" % step_counter
-                new_step.next_ID = "%.2f" % components[i + 1].where
+                new_step.next_ID = "%.2f" % components[i + 1].params["where"]
                 new_step.condition.append(components[i])
 
                 step_counter += step_modifier
@@ -162,7 +162,7 @@ def go_through(components):
                 new_step = components[i]
                 goto_pointer = components[i + 1]
 
-                new_step.next_ID = "%.2f" % goto_pointer.where
+                new_step.next_ID = "%.2f" % goto_pointer.params["where"]
                 new_list.append(new_step)
 
                 gone_through = False
@@ -175,7 +175,7 @@ def go_through(components):
 
                 new_step = ConditionSubStep()
                 new_step.text_index_start = cond.text_index_start
-                new_step.component_name = cond.component_name
+                new_step.tivipe_component_name = cond.tivipe_component_name
                 new_step.description = cond.description + " " + action.description
                 new_step.ID = "%.2f" % step_counter
                 new_step.commands.append(action)
@@ -194,7 +194,7 @@ def go_through(components):
 
                 new_step = ConditionSubStep()
                 new_step.text_index_start = cond.text_index_start
-                new_step.component_name = cond.component_name
+                new_step.tivipe_component_name = cond.tivipe_component_name
                 new_step.description = cond.description + " " + action.description
                 new_step.ID = action.ID
                 new_step.commands.extend(action.commands)
@@ -226,7 +226,7 @@ def go_through(components):
         if isinstance(components[i], command):
             new_step = SubStep()
             new_step.text_index_start = components[i].text_index_start
-            new_step.component_name = components[i].component_name
+            new_step.tivipe_component_name = components[i].tivipe_component_name
             new_step.description = components[i].description
             new_step.ID = "%.2f" % step_counter
             new_step.commands.append(components[i])
@@ -243,7 +243,7 @@ def go_through(components):
             if (i > 0 and not isinstance(components[i - 1], unrecognised_component)) or i == 0:
                 new_step = SubStep()
                 new_step.text_index_start = components[i].text_index_start
-                new_step.component_name = components[i].component_name
+                new_step.tivipe_component_name = components[i].tivipe_component_name
                 new_step.description = components[i].description
                 new_step.ID = "%.2f" % step_counter
                 new_step.commands.append(components[i])
