@@ -6,6 +6,7 @@ $("#steps-column")
 
         newRow.find(".step-number:first").html(steps_counter+".");
         newRow.find("input:first").val("");
+        newRow.find("textarea:first").html("");
 
         newRow.css({"margin-bottom":"3px"});
 
