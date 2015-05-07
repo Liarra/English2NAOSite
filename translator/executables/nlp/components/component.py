@@ -44,11 +44,11 @@ class button_press(condition):
 
     params = {"button": ''}
     command = "key[{button}]->"
+    tivipe_component_name = "CommandStateSelectByKey"
 
     @classmethod
     def from_string(cls, string, index_in_text=0):
         ret = super().from_string(string, index_in_text)
-        ret.tivipe_component_name = "CommandStateSelectByKey"
 
         import re
 
@@ -71,6 +71,6 @@ class unrecognised_component(component):
 
     @classmethod
     def from_string(cls, string, index_in_text=0):
-        ret=super().from_string(string, index_in_text)
+        ret = super().from_string(string, index_in_text)
         ret.params["unrecognised_text"] = string
         return ret

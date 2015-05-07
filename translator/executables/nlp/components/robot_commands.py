@@ -10,11 +10,11 @@ class say_command(command):
     regexp = r"(say|tell|ask)(s|ing)? ['\"“](?P<what>.+)['\"”]"
 
     command = "say({text})"
+    tivipe_component_name = "CommandState2"
 
     @classmethod
     def from_string(cls, string, index_in_text=0):
         ret = super().from_string(string, index_in_text)
-        ret.tivipe_component_name = "CommandState2"
 
         import re
 
@@ -33,16 +33,18 @@ class say_command(command):
 class wait_command(command):
     tags = ["wait"]
     regexp = r"waits?.* (?P<number>\d{1,3}) (?P<units>second|minute|ms|sec|min|millisecond)s?"
+    tivipe_component_name = "CommandState2"
+    command = "wait({ms})"
 
-    ms = 0
+    params = {"ms": 0}
 
-    def __init__(self, string, index_in_text=0):
-        super().__init__(string, index_in_text)
-        self.tivipe_component_name = "CommandState2"
+    @classmethod
+    def from_string(cls, string, index_in_text=0):
+        ret = super().from_string(string, index_in_text)
 
         import re
 
-        p = re.compile(self.regexp, re.IGNORECASE)
+        p = re.compile(cls.regexp, re.IGNORECASE)
         string = string.strip()
         string = string.lower()
 
@@ -52,7 +54,6 @@ class wait_command(command):
         number = m.group('number')
         units = m.group('units')
 
-        number_ms = 0
         if units in ["second", "sec"]:
             number_ms = int(number) * 1000
         elif units in ["minute", "min"]:
@@ -61,8 +62,8 @@ class wait_command(command):
         else:
             number_ms = int(number)
 
-        self.ms = number_ms
-        self.command = "wait(%d)" % self.ms
+        ret.params["ms"] = number_ms
+        return ret
 
 
 from os import listdir
@@ -73,7 +74,7 @@ import xml.etree.ElementTree as ET
 class move_command(command):
     tags = []
     regexp = r"(?!x)x"  # A regex that never matches
-    params={"move":''}
+    params = {"move": ''}
     command = "stiff (1, 500, 0) & {move} & stiff (0, 500, 0)"
 
     @classmethod

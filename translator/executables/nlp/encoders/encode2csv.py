@@ -14,7 +14,7 @@ def writeCSVFromSteps(steps, csvfile):
         next_ID = "" if float(step.next_ID) < 0 else int(float(step.next_ID) * 100)
 
         step_writer.writerow(
-            [step.component_name, '1', step.description, ID, step_commands, next_ID])
+            [step.tivipe_component_name, '1', step.description, ID, step_commands, next_ID])
         # print(csvfile.getvalue())
 
 

@@ -46,7 +46,6 @@ def translate(request):
             steps.append({})
         else:
             result = translator.translate(text, i)
-            # ret_dictionary[i] = translator.get_json(result)
             steps.append(result)
         i += 1
 

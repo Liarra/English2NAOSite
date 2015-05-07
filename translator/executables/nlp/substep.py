@@ -31,15 +31,14 @@ class ConditionSubStep(SubStep):
 class SelectByKeyState(SubStep):
     keys = []
     states = []
-    component_name = "CommandStateSelectByKey"
+    tivipe_component_name = "CommandStateSelectByKey"
 
     def __init__(self):
-        self.component_name = "CommandStateSelectByKey"
         self.keys = []
         self.states = []
 
     def add_cstep(self, new_cstep):
-        key = new_cstep.condition[0].button
+        key = new_cstep.condition[0].params["button"]
         state = new_cstep.next_ID
 
         self.keys.append(key)

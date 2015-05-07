@@ -55,11 +55,11 @@ class text_breaker(object):
 
     def _build_graph_for_text_(self, text):
         edges = [0]
-        i = 0;
+        i = 0
         for c in text:
             if c in [' ']:
-                edges.append(i);
-            i += 1;
+                edges.append(i)
+            i += 1
 
         edges.append(len(text))
 
@@ -67,8 +67,6 @@ class text_breaker(object):
         for i in range(0, len(edges)):
             connections = {}
             for j in range(i + 1, min(len(edges), i + 12)):
-                # for j in range(i + 1, min(len(edges), i+5)):
-                # for j in range(i + 1, len(edges)):
                 connections[edges[j]] = 1
             graph[edges[i]] = connections
 
