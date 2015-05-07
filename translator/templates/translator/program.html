@@ -13,7 +13,7 @@
                 <!--Conditions-->
                 {% if substep.condition|length > 0 %}
                     {% for condition in substep.condition %}
-                        <span class='program-box glyphicon glyphicon-button-input' title='{{condition}}'>{{condition.button}}</span>
+                        <span class='program-box glyphicon glyphicon-button-input' title='{{condition}}'>{{condition.params.button}}</span>
                     {% endfor %}
                 {% endif %}
 
