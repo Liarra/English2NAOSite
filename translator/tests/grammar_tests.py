@@ -2,6 +2,7 @@ from translator.executables.nlp import grammar
 from translator.executables.nlp.components.component import *
 from unittest import *
 from translator.executables.nlp.components.execution import parallel, sequence, goto
+from translator.executables.nlp.components.moves.demo_moves import *
 from translator.executables.nlp.components.robot_commands import say_command, move_command
 from translator.executables.nlp.substep import SubStep, ConditionSubStep
 
@@ -183,3 +184,20 @@ class GrammarTests(TestCase):
         self.assertEquals(len(new_components), 5)
         self.assertTrue(all([isinstance(x, SubStep) for x in new_components]))
 
+
+    def test_many_ands(self):
+        components = [
+            wave,
+            parallel(),
+            nod,
+            parallel(),
+            handshake,
+            parallel(),
+            wave,
+        ]
+
+        new_components = grammar.go_through(components)
+        self.assertEquals(1, len(new_components))
+
+        commands = new_components[0].commands
+        self.assertTrue(all(isinstance(x, move_command) for x in commands))

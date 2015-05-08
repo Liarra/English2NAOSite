@@ -70,55 +70,50 @@ from os import listdir
 from os.path import isfile, join, splitext
 import xml.etree.ElementTree as ET
 
-
+"""
+This command is a bit different from others. Here, text is checked not against class, but against the instance.
+"""
 class move_command(command):
     tags = []
     regexp = r"(?!x)x"  # A regex that never matches
-    params = {"move": ''}
-    command = "stiff (1, 500, 0) & {move} & stiff (0, 500, 0)"
+    params = {"move": '', "base_pose": 'Crouch'}
+    command = "stiff (1, 500, 0) & posture({base_pose}) & {move} & posture({base_pose}) & stiff (0, 500, 0)"
 
-    @classmethod
-    def from_string(cls, string, index_in_text=0):
+    def from_string(self, string, index_in_text=0):
         ret = super().from_string(string, index_in_text)
         ret.tivipe_component_name = "CommandState2"
 
-        max = 0
-        for move_file in move_command.files_to_tags:
-            s = 0
-            move_tags = move_command.files_to_tags[move_file]
-            for tag in move_tags:
-                if tag in ret.description:
-                    s += 1
+        ret.params = self.params
+        ret.regexp = self.regexp
+        ret.command = self.command
+        ret.tags = self.tags
 
-            if s > max:
-                max = s
-                ret.params["move"] = move_command.files_to_moves[move_file].replace('\n', '').replace('\r', '')
         return ret
 
 
-moves_folder = "moves"
-
-import os
-
-dir = os.path.dirname(__file__)
-moves_folder = os.path.join(dir, moves_folder)
-
-move_files = [f for f in listdir(moves_folder) if isfile(join(moves_folder, f))]
-
-move_tags = {}
-move_codes = {}
-for m in move_files:
-    file = join(moves_folder, m)
-
-    tree = ET.parse(file)
-    tags = [tag.text for tag in tree.findall('tag')]
-    move = tree.find('move').text
-
-    move_tags[splitext(m)] = tags
-    move_codes[splitext(m)] = move
-
-    move_command.tags.extend(tags)
-
-# move_command.tags = move_regex.keys()
-move_command.files_to_tags = move_tags
-move_command.files_to_moves = move_codes
+        # moves_folder = "moves"
+        #
+        # import os
+        #
+        # dir = os.path.dirname(__file__)
+        # moves_folder = os.path.join(dir, moves_folder)
+        #
+        # move_files = [f for f in listdir(moves_folder) if isfile(join(moves_folder, f))]
+        #
+        # move_tags = {}
+        # move_codes = {}
+        # for m in move_files:
+        # file = join(moves_folder, m)
+        #
+        #     tree = ET.parse(file)
+        #     tags = [tag.text for tag in tree.findall('tag')]
+        #     move = tree.find('move').text
+        #
+        #     move_tags[splitext(m)] = tags
+        #     move_codes[splitext(m)] = move
+        #
+        #     move_command.tags.extend(tags)
+        #
+        # # move_command.tags = move_regex.keys()
+        # move_command.files_to_tags = move_tags
+        # move_command.files_to_moves = move_codes

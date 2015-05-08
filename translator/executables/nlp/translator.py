@@ -1,5 +1,6 @@
 from translator.executables.nlp.components.component import *
 from translator.executables.nlp.components.execution import *
+from translator.executables.nlp.components.moves.demo_moves import *
 from translator.executables.nlp.encoders import encode2csv
 from translator.executables.nlp.encoders import encode2json
 from translator.executables.nlp.ranker import text_breaker
@@ -10,7 +11,8 @@ __author__ = 'NBUCHINA'
 
 
 def translate(text, step_number=1):
-    components = [say_command, wait_command, move_command,
+    components = [say_command, wait_command,
+                  wave, nod, handshake,
                   button_press,
                   sequence, parallel, goto]
 
@@ -34,6 +36,7 @@ def translate(text, step_number=1):
 
 def get_json(steps):
     return encode2json.EncodeStepsArrayToJSON(steps)
+
 
 def get_csv(steps, csv_for_result):
     steps_list = grammar.get_new_list_with_ksteps(steps)

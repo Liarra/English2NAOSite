@@ -58,7 +58,7 @@ def go_through(components):
                     and isinstance(components[i + 2], command):
                 new_step = components[i]
                 new_step.description = components[i].description + " " + components[i + 2].description
-                new_step.commands.append(components[i])
+                new_step.commands.append(components[i+2])
 
                 new_list.append(new_step)
 

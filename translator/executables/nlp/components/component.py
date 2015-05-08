@@ -8,9 +8,12 @@ class component(object):
     summary = ""
     text_index_start = 0
     command = ""
+    params = {}
 
     def __init__(self, **params):
-        self.params = {}
+        if self.params is None:
+            self.params = {}
+
         if params is not None:
             for key, value in params.items():
                 self.params[key] = value
