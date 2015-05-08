@@ -10,12 +10,12 @@ def writeCSVFromSteps(steps, csvfile):
 
     for step in steps:
         step_commands = "|".join([str(x) for x in step.commands])
-        ID = int(float(step.ID) * 100)
+        ID = int(str(step.ID).replace(".", ""))
         next_ID = "" if float(step.next_ID) < 0 else int(float(step.next_ID) * 100)
 
         step_writer.writerow(
             [step.tivipe_component_name, '1', step.description, ID, step_commands, next_ID])
-        # print(csvfile.getvalue())
+        print(csvfile.getvalue())
 
 
 def initCSV():

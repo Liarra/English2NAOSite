@@ -136,7 +136,8 @@ def go_through(components):
                 unrec1 = components[i]
                 unrec2 = components[i + 1]
                 new_list.append(
-                    unrecognised_component.from_string(unrec1.description + " " + unrec2.description, unrec1.text_index_start))
+                    unrecognised_component.from_string(unrec1.description + " " + unrec2.description,
+                                                       unrec1.text_index_start))
 
                 gone_through = False
                 new_list.extend(components[i + 2:])
@@ -297,6 +298,7 @@ def unite_csteps(steps):
 
 
 def get_new_list_with_ksteps(steps):
+    global step_counter
     first_cstep_id = unite_csteps(steps)
     if first_cstep_id == -1:
         return steps
@@ -307,8 +309,12 @@ def get_new_list_with_ksteps(steps):
 
     for step in steps:
         if isinstance(step, ConditionSubStep):
-            select_key.add_cstep(step)
+            orphan_step = select_key.add_cstep(step)
             select_key.ID = step.ID
+
+            if orphan_step is not None:
+                new_list.append(orphan_step)
+
         else:
             new_list.append(step)
 

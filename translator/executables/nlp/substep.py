@@ -2,7 +2,7 @@ __author__ = 'NBUCHINA'
 
 
 class SubStep(object):
-    component_name = ""
+    tivipe_component_name = ""
     commands = []
 
     description = ""
@@ -39,11 +39,27 @@ class SelectByKeyState(SubStep):
 
     def add_cstep(self, new_cstep):
         key = new_cstep.condition[0].params["button"]
+        commands = new_cstep.commands
         state = new_cstep.next_ID
 
+        new_commands_step = None
+
+        if len(commands) > 0:
+            new_commands_step = SubStep()
+            new_commands_step.commands = commands
+            new_commands_step.tivipe_component_name = "CommandState2"
+            new_commands_step_id = float((self.states[-1] + 1)/1000) if len(self.states) > 0 else float(new_cstep.ID) + 0.001
+            new_commands_step.ID = "%.3f" % new_commands_step_id
+            new_commands_step.description = ". ".join([x.description for x in commands])
+            if float(state) > 0: new_commands_step.next_ID = state
+            state = new_commands_step_id
+
         self.keys.append(key)
-        self.states.append(int(float(state) * 100))
+        self.states.append(int(str(state).replace(".", "")))
         self.reconstruct_description()
+
+        return new_commands_step
+
 
     def reconstruct_description(self):
         if len(self.keys) == 1:
