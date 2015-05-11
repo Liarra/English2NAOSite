@@ -48,6 +48,10 @@ min-height:60px;
     border: 1px solid grey;
 }
 
+.empty-program-box{
+border: 3px dashed grey;
+}
+
 .arrow-box{
     font-size:32px;
     min-width:32px;

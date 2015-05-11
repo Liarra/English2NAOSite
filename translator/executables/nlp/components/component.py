@@ -8,11 +8,10 @@ class component(object):
     summary = ""
     text_index_start = 0
     command = ""
-    params = {}
+    default_params={}
 
     def __init__(self, **params):
-        if self.params is None:
-            self.params = {}
+        self.params = self.__class__.default_params.copy()
 
         if params is not None:
             for key, value in params.items():
@@ -32,8 +31,15 @@ class component(object):
     def __repr__(self):
         return self.command.format(**self.params)
 
-    def parse_from_string(self, string):
-        pass
+    # def __getstate__(self):
+    #     ret = self.__dict__
+    #     ret["params"] = self.params
+    #
+    #     return ret
+    #
+    # def __setstate(self, state):
+    #     self.__dict__ = state
+    #     self.params = state["params"]
 
 
 class condition(component):

@@ -7,7 +7,7 @@ import json
 from io import StringIO
 import pickle
 from translator.executables.nlp import translator
-from translator.models import RobotProgram, ProgramStep
+from translator.models import *
 
 
 def create(request):
@@ -105,6 +105,20 @@ def csv(request):
     return response
 
 
+def substep_editor(request):
+    steps = request.session['steps']
+    step_id = request.POST['substep_id'].strip()
+
+    step_for_display = None
+    for step in steps:
+        for substep in step:
+            if substep.ID == step_id:
+                step_for_display = substep
+
+    context = {'substep': step_for_display}
+    return render(request, 'translator/substep_editor.html', context)
+
+
 def remove_substep(request):
     steps = request.session['steps']
     step_id_for_removal = request.POST['substep_id'].strip()
@@ -117,3 +131,10 @@ def remove_substep(request):
     request.session['steps'] = steps
     return HttpResponse("OK")
     # TODO: Change SubStep id, add command etc
+
+
+def load_components_from_db():
+    atomic_components = AtomicActionComponent.objects.all()
+    # TODO: Rather select components from the user's library
+    user_components = UserActionComponent.objects.all()
+    pass

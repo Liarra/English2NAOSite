@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^view/(?P<program_id>[0-9]+)/?$', views.edit),
     url(r'^explore/$', views.view_scenarios),
     url(r'^remove-substep/$', views.remove_substep),
+    url(r'^editor-substep/$', views.substep_editor),
 )

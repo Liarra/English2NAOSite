@@ -11,6 +11,14 @@ $(".btn-remove-substep").click(function() {
     });
 
 });
+
+$(".btn-edit-substep").click(function(){
+
+ var substep_div = $(this).parent().parent();
+ var substep_number=substep_div.children(".glyphicon-step").first().html()
+ edit_substep(substep_div)
+
+});
 }
 
 
@@ -27,6 +35,40 @@ function remove_substep(substep_div){
 
             success: function( data ) {
                 substep_div.remove();
+            },
+
+            fail:function(data){
+                throw_exception;
+            }
+        });
+}
+
+
+function edit_substep(substep_div){
+ $("#btn-save").addClass("btn-info");
+
+ $.ajax({
+            url: "/translator/editor-substep/",
+            type:"POST",
+            data: {
+                substep_id: substep_div.children(".glyphicon-step").first().html(),
+            },
+
+            success: function( data ) {
+                bootbox.dialog({
+                message:data,
+
+                 buttons: {
+
+                    success: {
+
+                      label: "Success!",
+
+                      className: "btn-success",
+
+                    }
+                    }
+                });
             },
 
             fail:function(data){

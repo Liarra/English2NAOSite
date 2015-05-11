@@ -1,5 +1,59 @@
-{% include "translator/program.html" %}
+{% load extras %}
 
-<div>
+{% if substep %}
+<div class="substep-div">
+                <span class='program-box glyphicon glyphicon-step'> {{substep.ID}} </span>
+
+                <!--Conditions-->
+                {% if substep.condition|length > 0 %}
+                    {% for condition in substep.condition %}
+                        <span class='program-box glyphicon glyphicon-button-input' title='{{condition}}'>{{condition.params.button}}</span>
+                    {% endfor %}
+                {% endif %}
+
+                 <span class='program-box empty-program-box glyphicon' title='New'>+</span>
+
+                <!--Arrow-->
+                <span class='arrow-box glyphicon glyphicon-arrow-right'></span>
+
+                <!--Commands-->
+                {% if substep.commands|length > 0 %}
+                    {% for command in substep.commands %}
+                        {% if command|get_class == 'move_command' %}
+                        <span class='program-box glyphicon glyphicon-move' title='{{command}}'></span>
+                        {% endif %}
+
+                        {% if command|get_class == 'say_command' %}
+                        <span class='program-box glyphicon glyphicon-comment' title='{{command}}'></span>
+                        {% endif %}
+
+                        {% if command|get_class == 'wait_command' %}
+                        <span class='program-box glyphicon glyphicon-time' title='{{command}}'></span>
+                        {% endif %}
+
+                        {% if command|get_class == 'unrecognised_component' %}
+                        <span class='program-box glyphicon glyphicon-question-sign' title='{{command}}'></span>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <span class='program-box empty-program-box glyphicon' title='New'>+</span>
+
+                <span class='arrow-box glyphicon glyphicon-arrow-right'></span>
+                {% if substep.next_ID != -1 %}
+
+                <span class='program-box glyphicon glyphicon-step'>{{substep.next_ID}}</span>
+
+                {% else %}
+                <span class='program-box empty-program-box glyphicon' title='New'>+</span>
+                {% endif %}
+
+
+
+                </div>
+
+{% endif %}
+
+<div id="substep_editor_library">
 
 </div>

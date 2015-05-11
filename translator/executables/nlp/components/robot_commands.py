@@ -8,7 +8,7 @@ class command(component):
 class say_command(command):
     tags = ["say", "tell", "ask"]
     regexp = r"(say|tell|ask)(s|ing)? ['\"“](?P<what>.+)['\"”]"
-
+    default_params = {"text": ''}
     command = "say({text})"
     tivipe_component_name = "CommandState2"
 
@@ -35,8 +35,7 @@ class wait_command(command):
     regexp = r"waits?.* (?P<number>\d{1,3}) (?P<units>second|minute|ms|sec|min|millisecond)s?"
     tivipe_component_name = "CommandState2"
     command = "wait({ms})"
-
-    params = {"ms": 0}
+    default_params = {"ms": 0}
 
     @classmethod
     def from_string(cls, string, index_in_text=0):
@@ -73,11 +72,13 @@ import xml.etree.ElementTree as ET
 """
 This command is a bit different from others. Here, text is checked not against class, but against the instance.
 """
+
+
 class move_command(command):
     tags = []
     regexp = r"(?!x)x"  # A regex that never matches
-    params = {"move": '', "base_pose": 'Crouch'}
     command = "stiff (1, 500, 0) & posture({base_pose}) & {move} & posture({base_pose}) & stiff (0, 500, 0)"
+    default_params = {"move": '', "base_pose": 'Crouch'}
 
     def from_string(self, string, index_in_text=0):
         ret = super().from_string(string, index_in_text)
@@ -89,31 +90,3 @@ class move_command(command):
         ret.tags = self.tags
 
         return ret
-
-
-        # moves_folder = "moves"
-        #
-        # import os
-        #
-        # dir = os.path.dirname(__file__)
-        # moves_folder = os.path.join(dir, moves_folder)
-        #
-        # move_files = [f for f in listdir(moves_folder) if isfile(join(moves_folder, f))]
-        #
-        # move_tags = {}
-        # move_codes = {}
-        # for m in move_files:
-        # file = join(moves_folder, m)
-        #
-        #     tree = ET.parse(file)
-        #     tags = [tag.text for tag in tree.findall('tag')]
-        #     move = tree.find('move').text
-        #
-        #     move_tags[splitext(m)] = tags
-        #     move_codes[splitext(m)] = move
-        #
-        #     move_command.tags.extend(tags)
-        #
-        # # move_command.tags = move_regex.keys()
-        # move_command.files_to_tags = move_tags
-        # move_command.files_to_moves = move_codes

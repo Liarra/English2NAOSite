@@ -10,11 +10,13 @@ from translator.executables.nlp import grammar
 __author__ = 'NBUCHINA'
 
 
-def translate(text, step_number=1):
+def translate(text, step_number=1, components_from_db=[]):
     components = [say_command, wait_command,
                   wave, nod, handshake,
                   button_press,
                   sequence, parallel, goto]
+
+    components.extend(components_from_db)
 
     ranker1 = text_breaker(text)
     components_mapping = ranker1.map_components_to_text(components)
