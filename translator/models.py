@@ -30,3 +30,4 @@ class AtomicActionComponent(ActionComponent):
 
 class UserActionComponent(ActionComponent):
     program = models.ForeignKey(RobotProgram)
+    icon = models.ImageField()

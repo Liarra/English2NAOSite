@@ -97,7 +97,7 @@ class GrammarTests(TestCase):
 
     def test_handshake_and_nice_to_meet_you(self):
         components = [
-            move_command.from_string("handshake"),
+            handshake.from_string("handshake"),
             parallel(),
             say_command.from_string("say 'OooooIoooooooo'"),
         ]
@@ -108,7 +108,7 @@ class GrammarTests(TestCase):
 
     def test_goto(self):
         components = [
-            move_command.from_string("handshake"),
+            handshake.from_string("handshake"),
             parallel(),
             say_command.from_string("say 'OooooIoooooooo'"),
             sequence.from_string("then"),

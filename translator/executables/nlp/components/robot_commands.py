@@ -48,7 +48,7 @@ class wait_command(command):
         string = string.lower()
 
         m = p.search(string)
-        if (m == None):
+        if m is None:
             return
         number = m.group('number')
         units = m.group('units')

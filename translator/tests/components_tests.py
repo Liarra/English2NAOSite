@@ -64,4 +64,4 @@ class ComponentsTests(TestCase):
         button_press_text = button_press.from_string("I press A")
 
         self.assertEquals('A', button_press_params.params["button"])
-        self.assertEquals('A', button_press_text.params["button"])
+        self.assertEquals('a', button_press_text.params["button"])
