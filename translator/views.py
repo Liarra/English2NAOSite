@@ -1,11 +1,10 @@
 from itertools import cycle
-from wsgiref.util import FileWrapper
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.template import RequestContext, loader
-import json
 from io import StringIO
 import pickle
+
+from django.shortcuts import render
+from django.http import HttpResponse
+
 from translator.executables.nlp import translator
 from translator.models import *
 
@@ -117,6 +116,17 @@ def substep_editor(request):
 
     context = {'substep': step_for_display}
     return render(request, 'translator/substep_editor.html', context)
+
+
+def substep_editor_components_list(request):
+    from translator.executables.nlp.components.robot_commands import say_command, wait_command
+    from translator.executables.nlp.components.moves.demo_moves import wave, nod, handshake
+
+    components = [say_command, wait_command,
+                  wave, nod, handshake]
+
+    context = {'components_list': components}
+    return render(request, "translator/components_list.html", context)
 
 
 def remove_substep(request):

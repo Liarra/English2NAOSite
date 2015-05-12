@@ -12,6 +12,7 @@ $(".btn-remove-substep").click(function() {
 
 });
 
+
 $(".btn-edit-substep").click(function(){
 
  var substep_div = $(this).parent().parent();
@@ -19,6 +20,19 @@ $(".btn-edit-substep").click(function(){
  edit_substep(substep_div)
 
 });
+}
+
+function assign_substep_actions_icons(){
+$(".program-box-clickable").click(
+    function(){
+    }
+);
+
+$(".empty-program-box").click(
+    function(){
+        load_actions_library();
+    }
+);
 }
 
 
@@ -69,6 +83,23 @@ function edit_substep(substep_div){
                     }
                     }
                 });
+                assign_substep_actions_icons();
+            },
+
+            fail:function(data){
+                throw_exception;
+            }
+        });
+}
+
+
+function load_actions_library(){
+    $.ajax({
+            url: "/translator/editor-substep-actions/",
+            type:"GET",
+
+            success: function( data ) {
+                $("#substep_editor_library").html(data)
             },
 
             fail:function(data){

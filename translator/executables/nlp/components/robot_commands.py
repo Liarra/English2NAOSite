@@ -11,6 +11,7 @@ class say_command(command):
     default_params = {"text": ''}
     command = "say({text})"
     tivipe_component_name = "CommandState2"
+    name = "Say something"
 
     @classmethod
     def from_string(cls, string, index_in_text=0):
@@ -36,6 +37,7 @@ class wait_command(command):
     tivipe_component_name = "CommandState2"
     command = "wait({ms})"
     default_params = {"ms": 0}
+    name="Wait"
 
     @classmethod
     def from_string(cls, string, index_in_text=0):

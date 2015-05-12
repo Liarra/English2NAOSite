@@ -1,0 +1,13 @@
+{% if component %}
+
+<div id="component-fields">
+    {% for param, value in component.params %}
+    {% endfor %}
+</div>
+
+<div id="component-info">
+</div>
+
+{% else %}
+Component not provided!
+{% endif %}
