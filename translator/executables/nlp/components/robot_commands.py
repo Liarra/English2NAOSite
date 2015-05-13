@@ -12,6 +12,7 @@ class say_command(command):
     command = "say({text})"
     tivipe_component_name = "CommandState2"
     name = "Say something"
+    summary = "This command makes the robot say the specified text."
 
     @classmethod
     def from_string(cls, string, index_in_text=0):
@@ -66,10 +67,6 @@ class wait_command(command):
         ret.params["ms"] = number_ms
         return ret
 
-
-from os import listdir
-from os.path import isfile, join, splitext
-import xml.etree.ElementTree as ET
 
 """
 This command is a bit different from others. Here, text is checked not against class, but against the instance.

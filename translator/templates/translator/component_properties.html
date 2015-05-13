@@ -1,11 +1,18 @@
 {% if component %}
 
 <div id="component-fields">
-    {% for param, value in component.params %}
+    {% for key,value in component.params.items %}
+    <b>{{key}}</b>
+    <br/>
+    <input type="text" value="{{value}}">
+    {{component.params.key}}
+    <br/>
     {% endfor %}
 </div>
 
 <div id="component-info">
+    <h4>{{component.name}}</h4>
+    {{component.summary}}
 </div>
 
 {% else %}

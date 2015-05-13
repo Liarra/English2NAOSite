@@ -14,4 +14,6 @@ urlpatterns = patterns('',
     url(r'^remove-substep/$', views.remove_substep),
     url(r'^editor-substep/$', views.substep_editor),
     url(r'^editor-substep-actions/$', views.substep_editor_components_list),
+    url(r'^editor-substep-actions/$', views.substep_editor_components_list),
+    url(r'^editor-substep-params/$', views.substep_editor_params),
 )

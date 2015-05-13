@@ -117,3 +117,13 @@ font-weight:600;
 text-align:center;
 max-width:50px;
 }
+
+#component-fields, #component-info{
+display:inline-block;
+}
+
+#component-info{
+text-align:right;
+max-width:50%;
+right:0px;
+}

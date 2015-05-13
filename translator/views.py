@@ -128,6 +128,20 @@ def substep_editor_components_list(request):
     context = {'components_list': components}
     return render(request, "translator/components_list.html", context)
 
+def substep_editor_params(request):
+    steps = request.session['steps']
+    step_id = request.POST['substep_id'].strip()
+    action_index = int(request.POST['substep_action_index'].strip())
+
+    action=None
+    for step in steps:
+        for substep in step:
+            if substep.ID == step_id:
+                action=substep.commands[action_index-1]
+
+    context = {'component': action}
+    return render(request, "translator/component_properties.html", context)
+
 
 def remove_substep(request):
     steps = request.session['steps']

@@ -20,19 +20,19 @@
                 {% if substep.commands|length > 0 %}
                     {% for command in substep.commands %}
                         {% if command|get_class == 'move_command' %}
-                        <span class='program-box glyphicon glyphicon-move program-box-clickable' title='{{command}}'></span>
+                        <span class='program-box glyphicon glyphicon-move program-box-clickable' title='{{command}}' about="{{forloop.counter}}"></span>
                         {% endif %}
 
                         {% if command|get_class == 'say_command' %}
-                        <span class='program-box glyphicon glyphicon-comment program-box-clickable' title='{{command}}'></span>
+                        <span class='program-box glyphicon glyphicon-comment program-box-clickable' title='{{command}}' about="{{forloop.counter}}"></span>
                         {% endif %}
 
                         {% if command|get_class == 'wait_command' %}
-                        <span class='program-box glyphicon glyphicon-time program-box-clickable' title='{{command}}'></span>
+                        <span class='program-box glyphicon glyphicon-time program-box-clickable' title='{{command}}' about="{{forloop.counter}}"></span>
                         {% endif %}
 
                         {% if command|get_class == 'unrecognised_component' %}
-                        <span class='program-box glyphicon glyphicon-question-sign program-box-clickable' title='{{command}}'></span>
+                        <span class='program-box glyphicon glyphicon-question-sign program-box-clickable' title='{{command}}' about="{{forloop.counter}}"></span>
                         {% endif %}
                     {% endfor %}
                 {% endif %}

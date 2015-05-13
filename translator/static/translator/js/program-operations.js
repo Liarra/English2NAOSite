@@ -9,22 +9,22 @@ $(".btn-remove-substep").click(function() {
             remove_substep(substep_div);
         }
     });
-
 });
 
 
 $(".btn-edit-substep").click(function(){
-
  var substep_div = $(this).parent().parent();
  var substep_number=substep_div.children(".glyphicon-step").first().html()
  edit_substep(substep_div)
-
 });
 }
 
 function assign_substep_actions_icons(){
 $(".program-box-clickable").click(
     function(){
+    substep_div=$(this).parent()
+    substepid=substep_div.children(".glyphicon-step").first().html()
+        load_component_params($(this).attr('about'), substepid)
     }
 );
 
@@ -75,13 +75,10 @@ function edit_substep(substep_div){
                  buttons: {
 
                     success: {
-
-                      label: "Success!",
-
+                      label: "Done!",
                       className: "btn-success",
-
                     }
-                    }
+                 }
                 });
                 assign_substep_actions_icons();
             },
@@ -97,6 +94,27 @@ function load_actions_library(){
     $.ajax({
             url: "/translator/editor-substep-actions/",
             type:"GET",
+
+            success: function( data ) {
+                $("#substep_editor_library").html(data)
+            },
+
+            fail:function(data){
+                throw_exception;
+            }
+        });
+}
+
+
+function load_component_params(index, substepid){
+    $.ajax({
+            url: "/translator/editor-substep-params/",
+            type:"POST",
+
+            data: {
+                substep_id: substepid,
+                substep_action_index: index,
+            },
 
             success: function( data ) {
                 $("#substep_editor_library").html(data)
