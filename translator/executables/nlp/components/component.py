@@ -15,7 +15,9 @@ class component(object):
 
         if params is not None:
             for key, value in params.items():
-                self.params[key] = value
+                # Ignore params that do not belong to the class.
+                if key in self.__class__.default_params.keys():
+                    self.params[key] = value
 
     @classmethod
     def from_string(cls, string, index_in_text=0):
@@ -51,7 +53,7 @@ class button_press(condition):
     tags = ["press", "button"]
     regexp = r"(press|type) ['\"]?(?P<button>.)['\"]?\W?$"
 
-    params = {"button": ''}
+    default_params = {"button": ''}
     command = "key[{button}]->"
     tivipe_component_name = "CommandStateSelectByKey"
 
