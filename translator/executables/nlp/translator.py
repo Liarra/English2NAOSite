@@ -39,6 +39,10 @@ def translate(text, step_number=1, components_from_db=[]):
 def get_json(steps):
     return encode2json.EncodeStepsArrayToJSON(steps)
 
+def get_CSV_file_with_header():
+    return encode2csv.initCSV()
+
+
 
 def get_csv(steps, csv_for_result):
     steps_list = grammar.get_new_list_with_ksteps(steps)

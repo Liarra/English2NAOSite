@@ -91,7 +91,7 @@ def view_scenarios(request):
 
 def csv(request):
     steps = request.session['steps']
-    csvfile = StringIO()
+    csvfile = translator.get_CSV_file_with_header()
     for step in steps:
         if step != {}:
             translator.get_csv(step, csvfile)
@@ -101,6 +101,7 @@ def csv(request):
     response = HttpResponse(csvfile.getvalue(), content_type='application/csv')
     response['Content-Disposition'] = 'attachment; filename=scenario.csv'
     response['Content-Length'] = csvfile.tell()
+    csvfile.close()
     return response
 
 
@@ -154,7 +155,10 @@ def remove_substep(request):
 
     request.session['steps'] = steps
     return HttpResponse("OK")
-    # TODO: Change SubStep id, add command etc
+
+
+def update_substep(request):
+    pass
 
 
 def load_components_from_db():
