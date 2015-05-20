@@ -13,12 +13,14 @@ class component(object):
     def __init__(self, **params):
         self.params = self.__class__.default_params.copy()
 
+        self.load_params(params)
+
+    def load_params(self,params):
         if params is not None:
             for key, value in params.items():
                 # Ignore params that do not belong to the class.
                 if key in self.__class__.default_params.keys():
                     self.params[key] = value
-
     @classmethod
     def from_string(cls, string, index_in_text=0):
         string = string.strip()
@@ -33,45 +35,9 @@ class component(object):
     def __repr__(self):
         return self.command.format(**self.params)
 
-    # def __getstate__(self):
-    #     ret = self.__dict__
-    #     ret["params"] = self.params
-    #
-    #     return ret
-    #
-    # def __setstate(self, state):
-    #     self.__dict__ = state
-    #     self.params = state["params"]
-
 
 class condition(component):
     pass
-
-
-class button_press(condition):
-    name = "Keyboard button press"
-    tags = ["press", "button"]
-    regexp = r"(press|type) ['\"]?(?P<button>.)['\"]?\W?$"
-
-    default_params = {"button": ''}
-    command = "key[{button}]->"
-    tivipe_component_name = "CommandStateSelectByKey"
-
-    @classmethod
-    def from_string(cls, string, index_in_text=0):
-        ret = super().from_string(string, index_in_text)
-
-        import re
-
-        p = re.compile(ret.regexp, re.IGNORECASE)
-        string = string.strip()
-        string = string.lower()
-        m = p.search(string)
-        if m is None:
-            return
-        button = m.group('button')
-        ret.params["button"] = button
-        return ret
 
 
 class unrecognised_component(component):

@@ -1,4 +1,4 @@
-from translator.executables.nlp.components.component import button_press, unrecognised_component
+from translator.executables.nlp.components.component import unrecognised_component
 from translator.executables.nlp.components.execution import sequence, parallel
 from translator.executables.nlp.ranker import text_breaker
 from translator.executables.nlp.components.robot_commands import *

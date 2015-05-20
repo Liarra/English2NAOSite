@@ -26,6 +26,7 @@ class ConditionSubStep(SubStep):
     def __init__(self):
         super().__init__()
         self.condition = []
+        self.uID = -1
 
 
 class SelectByKeyState(SubStep):
@@ -48,7 +49,8 @@ class SelectByKeyState(SubStep):
             new_commands_step = SubStep()
             new_commands_step.commands = commands
             new_commands_step.tivipe_component_name = "CommandState2"
-            new_commands_step_id = float((self.states[-1] + 1)/1000) if len(self.states) > 0 else float(new_cstep.ID) + 0.001
+            new_commands_step_id = float((self.states[-1] + 1) / 1000) if len(self.states) > 0 else float(
+                new_cstep.ID) + 0.001
             new_commands_step.ID = "%.3f" % new_commands_step_id
             new_commands_step.description = ". ".join([x.description for x in commands])
             if float(state) > 0: new_commands_step.next_ID = state

@@ -1,4 +1,4 @@
-from translator.executables.nlp.components.component import component
+from translator.executables.nlp.components.component import component, condition
 
 
 class command(component):
@@ -88,4 +88,30 @@ class move_command(command):
         ret.command = self.command
         ret.tags = self.tags
 
+        return ret
+
+
+class button_press(condition):
+    name = "Keyboard button press"
+    tags = ["press", "button"]
+    regexp = r"(press|type) ['\"]?(?P<button>.)['\"]?\W?$"
+
+    default_params = {"button": ''}
+    command = "key[{button}]->"
+    tivipe_component_name = "CommandStateSelectByKey"
+
+    @classmethod
+    def from_string(cls, string, index_in_text=0):
+        ret = super().from_string(string, index_in_text)
+
+        import re
+
+        p = re.compile(ret.regexp, re.IGNORECASE)
+        string = string.strip()
+        string = string.lower()
+        m = p.search(string)
+        if m is None:
+            return
+        button = m.group('button')
+        ret.params["button"] = button
         return ret

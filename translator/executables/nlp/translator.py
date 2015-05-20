@@ -1,4 +1,3 @@
-from translator.executables.nlp.components.component import *
 from translator.executables.nlp.components.execution import *
 from translator.executables.nlp.components.moves.demo_moves import *
 from translator.executables.nlp.encoders import encode2csv
@@ -10,7 +9,9 @@ from translator.executables.nlp import grammar
 __author__ = 'NBUCHINA'
 
 
-def translate(text, step_number=1, components_from_db=[]):
+def translate(text, step_number=1, components_from_db=None):
+    if not components_from_db:
+        components_from_db = []
     components = [say_command, wait_command,
                   wave, nod, handshake,
                   button_press,

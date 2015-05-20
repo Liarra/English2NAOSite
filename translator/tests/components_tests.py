@@ -1,7 +1,9 @@
 from unittest import TestCase
-from translator.executables.nlp.components.component import button_press
+
 from translator.executables.nlp.components.execution import goto
 from translator.executables.nlp.components.robot_commands import *
+from translator.executables.nlp.components.robot_commands import button_press
+
 
 __author__ = 'NBUCHINA'
 

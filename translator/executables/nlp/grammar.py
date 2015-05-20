@@ -58,7 +58,7 @@ def go_through(components):
                     and isinstance(components[i + 2], command):
                 new_step = components[i]
                 new_step.description = components[i].description + " " + components[i + 2].description
-                new_step.commands.append(components[i+2])
+                new_step.commands.append(components[i + 2])
 
                 new_list.append(new_step)
 
@@ -149,6 +149,7 @@ def go_through(components):
                 new_step.tivipe_component_name = components[i].tivipe_component_name
                 new_step.description = components[i].description + " " + components[i + 1].description
                 new_step.ID = "%.2f" % step_counter
+                new_step.uID = "%.2f" % step_counter
                 new_step.next_ID = "%.2f" % components[i + 1].params["where"]
                 new_step.condition.append(components[i])
 
@@ -179,6 +180,7 @@ def go_through(components):
                 new_step.tivipe_component_name = cond.tivipe_component_name
                 new_step.description = cond.description + " " + action.description
                 new_step.ID = "%.2f" % step_counter
+                new_step.uID = "%.2f" % step_counter
                 new_step.commands.append(action)
                 new_step.condition.append(cond)
 
@@ -198,6 +200,7 @@ def go_through(components):
                 new_step.tivipe_component_name = cond.tivipe_component_name
                 new_step.description = cond.description + " " + action.description
                 new_step.ID = action.ID
+                new_step.uID = action.ID
                 new_step.commands.extend(action.commands)
                 new_step.condition.append(cond)
 
@@ -308,7 +311,7 @@ def get_new_list_with_ksteps(steps):
     new_list = []
 
     for step in steps:
-        if isinstance(step, ConditionSubStep):
+        if isinstance(step, ConditionSubStep) and len(step.conditions) > 0:
             orphan_step = select_key.add_cstep(step)
             select_key.ID = step.ID
 

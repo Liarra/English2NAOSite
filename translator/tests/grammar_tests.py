@@ -1,10 +1,12 @@
+from unittest import *
+
 from translator.executables.nlp import grammar
 from translator.executables.nlp.components.component import *
-from unittest import *
 from translator.executables.nlp.components.execution import parallel, sequence, goto
 from translator.executables.nlp.components.moves.demo_moves import *
-from translator.executables.nlp.components.robot_commands import say_command, move_command
+from translator.executables.nlp.components.robot_commands import say_command, move_command, button_press
 from translator.executables.nlp.substep import SubStep, ConditionSubStep
+
 
 __author__ = 'NBUCHINA'
 

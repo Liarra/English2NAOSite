@@ -1,5 +1,4 @@
 from itertools import cycle
-from io import StringIO
 import pickle
 
 from django.shortcuts import render
@@ -129,16 +128,17 @@ def substep_editor_components_list(request):
     context = {'components_list': components}
     return render(request, "translator/components_list.html", context)
 
+
 def substep_editor_params(request):
     steps = request.session['steps']
     step_id = request.POST['substep_id'].strip()
     action_index = int(request.POST['substep_action_index'].strip())
 
-    action=None
+    action = None
     for step in steps:
         for substep in step:
             if substep.ID == step_id:
-                action=substep.commands[action_index-1]
+                action = substep.commands[action_index - 1]
 
     context = {'component': action}
     return render(request, "translator/component_properties.html", context)
@@ -158,7 +158,22 @@ def remove_substep(request):
 
 
 def update_substep(request):
-    pass
+    from translator.executables.nlp import ProgramEditor
+
+    # TODO: Make a good JSON here.
+    step_id = request.POST['substep_id'].strip()
+    actions_to_add = request.POST.getlist('actions_to_add[]')
+    conditions_to_add = request.POST.getlist('conditions_to_add[]')
+    actions_to_remove = request.POST.getlist('actions_to_remove[]')
+    conditions_to_remove = request.POST.getlist('conditions_to_remove[]')
+    change_actions = request.POST.getlist('change_actions[]')
+    change_conditions = request.POST.getlist('change_actions[]')
+
+    request.session["steps"] = ProgramEditor.update_substep(request.session["steps"], step_id,
+                                                            actions_to_add, conditions_to_add,
+                                                            actions_to_remove, conditions_to_remove,
+                                                            change_actions, change_conditions)
+    return HttpResponse("OK")
 
 
 def load_components_from_db():
