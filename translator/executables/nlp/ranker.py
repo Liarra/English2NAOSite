@@ -66,8 +66,8 @@ class text_breaker(object):
         graph = {}
         for i in range(0, len(edges)):
             connections = {}
-            for j in range(i + 1, min(len(edges), i + 12)):
-                connections[edges[j]] = 1
+            for j in range(i + 1, min(len(edges), i + 100)):
+                connections[edges[j]] = 0
             graph[edges[i]] = connections
 
         return graph
@@ -110,7 +110,7 @@ class ranker(object):
 
     def rankLength(self, text):
         shortest = 3
-        longest = 100
+        longest = 500
         if len(text) > longest or len(text) < shortest:
             return -5
         return 0

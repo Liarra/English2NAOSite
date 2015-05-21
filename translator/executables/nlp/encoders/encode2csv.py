@@ -11,7 +11,8 @@ def writeCSVFromSteps(steps, csvfile):
     for step in steps:
         step_commands = "|".join([str(x) for x in step.commands])
         ID = int(str(step.ID).replace(".", ""))
-        next_ID = "" if float(step.next_ID) < 0 else int(float(step.next_ID) * 100)
+        next_ID = int(str(step.next_ID).replace(".", ""))
+        # next_ID = "" if float(step.next_ID) < 0 else int(round((float(step.next_ID) * 100)))
 
         step_writer.writerow(
             [step.tivipe_component_name, '1', step.description, ID, step_commands.replace("\n","").replace("\r",""), next_ID])

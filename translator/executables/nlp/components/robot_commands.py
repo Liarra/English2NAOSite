@@ -9,7 +9,7 @@ class say_command(command):
     tags = ["say", "tell", "ask"]
     regexp = r"(say|tell|ask)(s|ing)? ['\"“](?P<what>.+)['\"”]"
     default_params = {"text": ''}
-    command = "say({text})"
+    command = "[say({text})]"
     tivipe_component_name = "CommandState2"
     name = "Say something"
     summary = "This command makes the robot say the specified text."
@@ -76,7 +76,7 @@ This command is a bit different from others. Here, text is checked not against c
 class move_command(command):
     tags = []
     regexp = r"(?!x)x"  # A regex that never matches
-    command = "stiff (1, 500, 0) & posture({base_pose}) & {move} & posture({base_pose}) & stiff (0, 500, 0)"
+    command = "[stiff (1, 500, 0)] & [posture({base_pose})] & [{move}] & [posture({base_pose})] & [stiff (0, 500, 0)]"
     default_params = {"move": '', "base_pose": 'Crouch'}
 
     def from_string(self, string, index_in_text=0):
