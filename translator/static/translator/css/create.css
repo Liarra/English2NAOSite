@@ -48,10 +48,6 @@ min-height:60px;
     border: 1px solid grey;
 }
 
-.empty-program-box{
-border: 3px dashed grey;
-}
-
 .arrow-box{
     font-size:32px;
     min-width:32px;
@@ -98,32 +94,4 @@ display:block;
 
 .substep-div:hover .substep-buttons {
     visibility:visible;
-}
-
-#substep_editor_library{
-margin-top:30px;
-padding:10px;
-border:1px solid grey;
-}
-
-.component-icon{
-display:inline-block;
-vertical-align:top;
-}
-
-.component-name-div{
-font-size:10px;
-font-weight:600;
-text-align:center;
-max-width:50px;
-}
-
-#component-fields, #component-info{
-display:inline-block;
-}
-
-#component-info{
-text-align:right;
-max-width:50%;
-right:0px;
 }

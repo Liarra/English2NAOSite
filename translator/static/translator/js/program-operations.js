@@ -22,6 +22,8 @@ $(".btn-edit-substep").click(function(){
 function assign_substep_actions_icons(){
 $(".program-box-clickable").click(
     function(){
+    $(".active-box").removeClass("active-box");
+    $(this).addClass("active-box");
     substep_div=$(this).parent()
     substepid=substep_div.children(".glyphicon-step").first().html()
         load_component_params($(this).attr('about'), substepid)
@@ -30,6 +32,8 @@ $(".program-box-clickable").click(
 
 $(".empty-program-box").click(
     function(){
+        $(".active-box").removeClass("active-box");
+        $(this).addClass("active-box");
         load_actions_library();
     }
 );
@@ -96,7 +100,8 @@ function load_actions_library(){
             type:"GET",
 
             success: function( data ) {
-                $("#substep_editor_library").html(data)
+                $("#substep_editor_library").show();
+                $("#substep_editor_library").html(data);
             },
 
             fail:function(data){
@@ -117,7 +122,8 @@ function load_component_params(index, substepid){
             },
 
             success: function( data ) {
-                $("#substep_editor_library").html(data)
+                $("#substep_editor_library").show();
+                $("#substep_editor_library").html(data);
             },
 
             fail:function(data){

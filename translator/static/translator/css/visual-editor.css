@@ -1,0 +1,36 @@
+#substep_editor_library{
+margin-top:30px;
+padding:10px;
+border:1px solid grey;
+display:none;
+}
+
+.component-icon{
+display:inline-block;
+vertical-align:top;
+}
+
+.component-name-div{
+font-size:10px;
+font-weight:600;
+text-align:center;
+max-width:50px;
+}
+
+#component-fields, #component-info{
+display:inline-block;
+}
+
+#component-info{
+text-align:right;
+max-width:50%;
+right:0px;
+}
+
+.empty-program-box{
+border: 3px dashed grey;
+}
+.active-box{
+border:3px solid orange;
+}
+

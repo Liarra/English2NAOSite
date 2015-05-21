@@ -4,21 +4,24 @@
 {% for component in components_list %}
 
 <div class="component-icon">
-<div>
                         {% if component|get_class == 'move_command' or component|str == 'move_command' %}
                         <span class='program-box glyphicon glyphicon-move'></span>
+                        <div class="component-name-div">{{component.params.name}}</div>
+
                         {% endif %}
 
                         {% if component|get_class == 'say_command' or component|str == 'say_command' %}
                         <span class='program-box glyphicon glyphicon-comment'></span>
+                        <div class="component-name-div">{{component.name}}</div>
+
                         {% endif %}
 
                         {% if component|get_class == 'wait_command' or component|str == 'wait_command' %}
                         <span class='program-box glyphicon glyphicon-time'></span>
+                        <div class="component-name-div">{{component.name}}</div>
                         {% endif %}
 </div>
-<div class="component-name-div">{{component.name}}</div>
-</div>
+
 
     {% endfor %}
 {% else %}
