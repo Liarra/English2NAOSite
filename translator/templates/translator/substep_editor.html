@@ -20,7 +20,7 @@
                 {% if substep.commands|length > 0 %}
                     {% for command in substep.commands %}
                         {% if command|get_class == 'move_command' %}
-                        <span class='program-box glyphicon glyphicon-move program-box-clickable' title='{{command}}' about="{{forloop.counter}}"></span>
+                        <span class='program-box glyphicon glyphicon-move program-box-clickable' title='{{command.params.name}}' about="{{forloop.counter}}"></span>
                         {% endif %}
 
                         {% if command|get_class == 'say_command' %}

@@ -13,7 +13,7 @@ def translate(text, step_number=1, components_from_db=None):
     if not components_from_db:
         components_from_db = []
     components = [say_command, wait_command,
-                  wave, nod, handshake,
+                  wave, nod, handshake, stand, cry, crouch,dance,
                   button_press,
                   sequence, parallel, goto]
 
@@ -40,9 +40,9 @@ def translate(text, step_number=1, components_from_db=None):
 def get_json(steps):
     return encode2json.EncodeStepsArrayToJSON(steps)
 
+
 def get_CSV_file_with_header():
     return encode2csv.initCSV()
-
 
 
 def get_csv(steps, csv_for_result):

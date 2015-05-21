@@ -13,6 +13,7 @@ class ProgramEditorTests(TestCase):
                                  1),
             translator.translate("When I press Y, say 'Yes'. When I press N, say 'No'. Go to step 3", 2),
             translator.translate("shake and say 'I dont know who I am anymore'", 3),
+            translator.translate("when I press z, dance and say 'Naah whatever'", 4),
         ]
 
         return steps
@@ -80,12 +81,12 @@ class ProgramEditorTests(TestCase):
         new_steps = ProgramEditor.update_substep(sample_steps, '1.00', change_actions=change_actions)
         new_command = new_steps[0][0].commands
         self.assertEquals(1, len(new_command))
-        self.assertEquals('say(Omg Yes Yes Yes)', str(new_command[0]))
+        self.assertEquals('[say(Omg Yes Yes Yes)]', str(new_command[0]))
 
         new_steps = ProgramEditor.update_substep(sample_steps, '2.01', change_actions=change_actions)
         new_command = new_steps[1][1].commands
         self.assertEquals(1, len(new_command))
-        self.assertEquals('say(Omg Yes Yes Yes)', str(new_command[0]))
+        self.assertEquals('[say(Omg Yes Yes Yes)]', str(new_command[0]))
 
         new_steps = ProgramEditor.update_substep(sample_steps, '1.01', change_actions=change_actions)
         new_command = new_steps[0][1].commands
@@ -119,4 +120,58 @@ class ProgramEditorTests(TestCase):
         new_steps = ProgramEditor.update_substep(sample_steps, '1.01', actions_to_add=addition)
         new_command = new_steps[0][1].commands
         self.assertEquals(2, len(new_command))
-        self.assertEquals('say(I wish i knew...)', str(new_command[1]))
+        self.assertEquals('[say(I wish i knew...)]', str(new_command[1]))
+
+
+    def test_update_substep_add_conditions(self):
+        sample_steps = self.getSampleSteps()
+        # new_action = {"class": "say_command", "text":"I wish i knew..."}
+        new_condition = {"class": "button_press", "button": "A"}
+        new_condition_json = json.dumps(new_condition)
+        addition = [new_condition_json]
+
+        new_steps = ProgramEditor.update_substep(sample_steps, '3.00', conditions_to_add=addition)
+        new_substep = new_steps[2][0]
+        self.assertIsInstance(new_substep, ConditionSubStep)
+        self.assertEquals(1, len(new_substep.condition))
+        self.assertEquals('key[A]->', str(new_substep.condition[0]))
+
+        new_steps = ProgramEditor.update_substep(sample_steps, '1.00', conditions_to_add=addition)
+        new_substep = new_steps[0][0]
+        self.assertIsInstance(new_substep, ConditionSubStep)
+        self.assertEquals(2, len(new_substep.condition))
+        self.assertEquals('key[A]->', str(new_substep.condition[1]))
+
+
+    def test_update_step_mixed_change(self):
+        sample_steps = self.getSampleSteps()
+
+        # Add press A condition and cry action
+        new_action = {"class": "move_command", "name": "Cry"}
+        new_condition = {"class": "button_press", "button": "A"}
+        new_action_json = json.dumps(new_action)
+        new_condition_json = json.dumps(new_condition)
+        action_addition = [new_action_json]
+        condition_addition = [new_condition_json]
+
+        #Remove press z condition and dance action
+        remove_actions = [0]
+        remove_conditions = [0]
+
+        #Change a say action
+        change_action = {"text": "No"}
+        change_action_json = json.dumps(change_action)
+        change_actions = ["{}", change_action_json]
+
+        new_steps = ProgramEditor.update_substep(sample_steps, '4.00',
+                                                 actions_to_add=action_addition, conditions_to_add=condition_addition,
+                                                 actions_to_remove=remove_actions,conditions_to_remove=remove_conditions,
+                                                 change_actions=change_actions)
+
+        new_substep = new_steps[3][0]
+        self.assertIsInstance(new_substep, ConditionSubStep)
+        self.assertEquals(1, len(new_substep.condition))
+        self.assertEquals(2, len(new_substep.commands))
+        self.assertEquals('key[A]->', str(new_substep.condition[0]))
+        self.assertEquals('[say(No)]', str(new_substep.commands[0]))
+        self.assertEquals('Cry', str(new_substep.commands[1].params["name"]))

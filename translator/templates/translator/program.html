@@ -24,7 +24,7 @@
                 {% if substep.commands|length > 0 %}
                     {% for command in substep.commands %}
                         {% if command|get_class == 'move_command' %}
-                        <span class='program-box glyphicon glyphicon-move' title='{{command}}'></span>
+                        <span class='program-box glyphicon glyphicon-move' title='{{command.params.name}}'></span>
                         {% endif %}
 
                         {% if command|get_class == 'say_command' %}

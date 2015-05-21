@@ -63,14 +63,14 @@ def update_substep(steps_list, substep_id,
                 for condition in conditions_to_add:
                     condition_params = json.loads(condition)
                     condition_class_name = condition_params["class"]
-                    condition_class = globals()[condition_class_name]
+                    condition_class = class_for_name("translator.executables.nlp.components.robot_commands",condition_class_name)
                     condition_instance = condition_class()
                     condition_instance.load_params(condition_params)
 
-                    if not hasattr(substep, 'conditions'):
-                        substep.conditions = []
-                        substep.__class__ = ConditionSubStep
-                    substep.conditions.append(condition_instance)
+                    if not hasattr(substep, 'condition'):
+                        substep.condition = []
+                    substep.__class__ = ConditionSubStep
+                    substep.condition.append(condition_instance)
 
     return new_steps
 

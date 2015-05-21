@@ -38,7 +38,7 @@ class wait_command(command):
     tivipe_component_name = "CommandState2"
     command = "wait({ms})"
     default_params = {"ms": 0}
-    name="Wait"
+    name = "Wait"
 
     @classmethod
     def from_string(cls, string, index_in_text=0):
@@ -76,8 +76,8 @@ This command is a bit different from others. Here, text is checked not against c
 class move_command(command):
     tags = []
     regexp = r"(?!x)x"  # A regex that never matches
-    command = "[stiff (1, 500, 0)] & [posture({base_pose})] & [{move}] & [posture({base_pose})] & [stiff (0, 500, 0)]"
-    default_params = {"move": '', "base_pose": 'Crouch'}
+    command = "[[stiff (1, 500, 0)] & [posture({base_pose})] & [{move}] & [posture({base_pose})] & [stiff (0, 500, 0)]]"
+    default_params = {"name": "", "move": '', "base_pose": 'Crouch'}
 
     def from_string(self, string, index_in_text=0):
         ret = super().from_string(string, index_in_text)
