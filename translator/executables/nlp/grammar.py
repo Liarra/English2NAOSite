@@ -289,13 +289,19 @@ def go_through(components):
 def unite_csteps(steps):
     first_step_id = -1
 
+    disappearing_steps = []
     for step in steps:
         if isinstance(step, ConditionSubStep):
             if first_step_id == -1:
                 first_step_id = step.ID
 
             if step.ID != first_step_id:
+                disappearing_steps.append(step.ID)
                 step.ID = first_step_id
+
+    for step in steps:
+        if step.next_ID in disappearing_steps:
+            step.next_ID = -1
 
     return first_step_id
 
@@ -311,7 +317,7 @@ def get_new_list_with_ksteps(steps):
     new_list = []
 
     for step in steps:
-        if isinstance(step, ConditionSubStep) and len(step.conditions) > 0:
+        if isinstance(step, ConditionSubStep) and len(step.condition) > 0:
             orphan_step = select_key.add_cstep(step)
             select_key.ID = step.ID
 
