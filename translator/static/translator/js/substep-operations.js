@@ -38,7 +38,16 @@ function addAllNewActions(){
 
 function addNewActionTemplate(senderIcon){
     new_class=senderIcon.attr('command');
-    $(" <span class='program-box glyphicon glyphicon-move program-box-clickable new-action added-action'></span>").insertBefore("#empty-action-box");
+    class_glyphicon="glyphicon-question";
+
+    if (new_class=="say_command")
+    class_glyphicon="glyphicon-comment";
+    if (new_class=="move_command")
+    class_glyphicon="glyphicon-move";
+    if (new_class=="wait_command")
+    class_glyphicon="glyphicon-time";
+
+    $(" <span class='program-box glyphicon "+class_glyphicon+" program-box-clickable new-action added-action'></span>").insertBefore("#empty-action-box");
     $(".active-box").removeClass("active-box");
     $(".new-action").addClass("active-box");
     $(".new-action").removeClass("new-action");

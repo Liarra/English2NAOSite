@@ -21,18 +21,18 @@
 {% if class %}
 
 <div id="component-fields">
-    {% for key,value in component.default_params.items %}
+    {% for key,value in class.default_params.items %}
     <b>{{key}}</b>
     <br/>
     <input type="text" value="{{value}}">
-    {{component.default_params.key}}
+    {{class.default_params.key}}
     <br/>
     {% endfor %}
 </div>
 
 <div id="component-info">
-    <h4>{{component.name}}</h4>
-    {{component.summary}}
+    <h4>{{class.name}}</h4>
+    {{class.summary}}
 </div>
 
 
