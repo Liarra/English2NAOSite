@@ -8,19 +8,20 @@ class component(object):
     summary = ""
     text_index_start = 0
     command = ""
-    default_params={}
+    default_params = {}
 
     def __init__(self, **params):
         self.params = self.__class__.default_params.copy()
 
         self.load_params(params)
 
-    def load_params(self,params):
+    def load_params(self, params):
         if params is not None:
             for key, value in params.items():
                 # Ignore params that do not belong to the class.
                 if key in self.__class__.default_params.keys():
                     self.params[key] = value
+
     @classmethod
     def from_string(cls, string, index_in_text=0):
         string = string.strip()

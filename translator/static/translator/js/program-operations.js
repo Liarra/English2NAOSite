@@ -14,8 +14,9 @@ $(".btn-remove-substep").click(function() {
 
 $(".btn-edit-substep").click(function(){
  var substep_div = $(this).parent().parent();
- var substep_number=substep_div.children(".glyphicon-step").first().html()
- edit_substep(substep_div)
+ var substep_number=substep_div.children(".glyphicon-step").first().html();
+ changelist.clear();
+ edit_substep(substep_div);
 });
 }
 
@@ -102,6 +103,11 @@ function load_actions_library(){
             success: function( data ) {
                 $("#substep_editor_library").show();
                 $("#substep_editor_library").html(data);
+                $(".new-action-icon").click(
+                    function(){
+                    addNewActionTemplate($(this));
+                    }
+                );
             },
 
             fail:function(data){

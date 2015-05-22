@@ -1,7 +1,8 @@
-from functools import reduce
 import json
-import sys
+
+from translator.executables.nlp.commons import class_for_name
 from translator.executables.nlp.substep import ConditionSubStep, SubStep
+
 
 __author__ = 'NBUCHINA'
 
@@ -73,13 +74,3 @@ def update_substep(steps_list, substep_id,
                     substep.condition.append(condition_instance)
 
     return new_steps
-
-
-import importlib
-
-def class_for_name(module_name, class_name):
-    # load the module, will raise ImportError if module cannot be loaded
-    m = importlib.import_module(module_name)
-    # get the class, will raise AttributeError if class cannot be found
-    c = getattr(m, class_name)
-    return c

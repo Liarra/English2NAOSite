@@ -5,19 +5,19 @@
 
 <div class="component-icon">
                         {% if component|get_class == 'move_command' or component|str == 'move_command' %}
-                        <span class='program-box glyphicon glyphicon-move'></span>
+                        <span class='program-box glyphicon glyphicon-move new-action-icon' command="move_command"></span>
                         <div class="component-name-div">{{component.params.name}}</div>
 
                         {% endif %}
 
                         {% if component|get_class == 'say_command' or component|str == 'say_command' %}
-                        <span class='program-box glyphicon glyphicon-comment'></span>
+                        <span class='program-box glyphicon glyphicon-comment new-action-icon' command="say_command"></span>
                         <div class="component-name-div">{{component.name}}</div>
 
                         {% endif %}
 
                         {% if component|get_class == 'wait_command' or component|str == 'wait_command' %}
-                        <span class='program-box glyphicon glyphicon-time'></span>
+                        <span class='program-box glyphicon glyphicon-time new-action-icon' command="wait_command"></span>
                         <div class="component-name-div">{{component.name}}</div>
                         {% endif %}
 </div>

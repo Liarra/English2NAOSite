@@ -4,7 +4,7 @@ import pickle
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from translator.executables.nlp import translator
+from translator.executables.nlp import translator, commons
 from translator.models import *
 
 
@@ -141,6 +141,14 @@ def substep_editor_params(request):
                 action = substep.commands[action_index - 1]
 
     context = {'component': action}
+    return render(request, "translator/component_properties.html", context)
+
+
+def substep_editor_class_params(request):
+    class_name = request.POST['class_name'].strip()
+    class_class=commons.class_for_name("translator.executables.nlp.components.robot_commands",class_name)
+
+    context = {'class': class_class}
     return render(request, "translator/component_properties.html", context)
 
 

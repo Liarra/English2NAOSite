@@ -15,6 +15,25 @@
     {{component.summary}}
 </div>
 
-{% else %}
-Component not provided!
+
+{% endif %}
+
+{% if class %}
+
+<div id="component-fields">
+    {% for key,value in component.default_params.items %}
+    <b>{{key}}</b>
+    <br/>
+    <input type="text" value="{{value}}">
+    {{component.default_params.key}}
+    <br/>
+    {% endfor %}
+</div>
+
+<div id="component-info">
+    <h4>{{component.name}}</h4>
+    {{component.summary}}
+</div>
+
+
 {% endif %}
