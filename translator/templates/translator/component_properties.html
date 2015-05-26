@@ -4,7 +4,7 @@
     {% for key,value in component.params.items %}
     <b>{{key}}</b>
     <br/>
-    <input type="text" value="{{value}}">
+    <input type="text" name="{{key}}" value="{{value}}">
     {{component.params.key}}
     <br/>
     {% endfor %}
@@ -24,7 +24,7 @@
     {% for key,value in class.default_params.items %}
     <b>{{key}}</b>
     <br/>
-    <input type="text" value="{{value}}">
+    <input type="text" name="{{key}}" value="{{value}}">
     {{class.default_params.key}}
     <br/>
     {% endfor %}

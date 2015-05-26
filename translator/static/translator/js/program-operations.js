@@ -25,9 +25,17 @@ $(".program-box-clickable").click(
     function(){
     $(".active-box").removeClass("active-box");
     $(this).addClass("active-box");
-    substep_div=$(this).parent()
-    substepid=substep_div.children(".glyphicon-step").first().html()
-        load_component_params($(this).attr('about'), substepid)
+    substep_div=$(this).parent();
+    substepid=substep_div.children(".glyphicon-step").first().html();
+    load_component_params($(this).attr('about'), substepid,'s');
+    }
+);
+
+$(".added-action").click(
+    function(){
+    $(".active-box").removeClass("active-box");
+    $(this).addClass("active-box");
+    load_component_params($(this).attr('about'), 0,'');
     }
 );
 
@@ -38,6 +46,15 @@ $(".empty-program-box").click(
         load_actions_library();
     }
 );
+}
+
+function assignDoneButton(){
+    $(".btn-done").click(
+        function(){
+        collectAdditions();
+        collectModifications();
+        }
+    );
 }
 
 
@@ -81,11 +98,12 @@ function edit_substep(substep_div){
 
                     success: {
                       label: "Done!",
-                      className: "btn-success",
+                      className: "btn-done",
                     }
                  }
                 });
                 assign_substep_actions_icons();
+                assignDoneButton();
             },
 
             fail:function(data){
@@ -96,13 +114,22 @@ function edit_substep(substep_div){
 
 
 function load_actions_library(){
+
+     if($("#library").length ){
+        $(".action-params-div").hide();
+        $("#library").show();
+        return
+    }
+
     $.ajax({
             url: "/translator/editor-substep-actions/",
             type:"GET",
 
             success: function( data ) {
+                $(".action-params-div").hide();
+                new_div="<div class='action-params-div' id='library'>"+data+"</div>"
                 $("#substep_editor_library").show();
-                $("#substep_editor_library").html(data);
+                $("#substep_editor_library").append(new_div);
                 $(".new-action-icon").click(
                     function(){
                     addNewActionTemplate($(this));
@@ -117,7 +144,15 @@ function load_actions_library(){
 }
 
 
-function load_component_params(index, substepid){
+function load_component_params(index, substepid,letter){
+//If it's already there, just show it
+
+    if($("#"+letter+index).length ){
+        $(".action-params-div").hide();
+        $("#"+letter+index).show();
+        return
+    }
+
     $.ajax({
             url: "/translator/editor-substep-params/",
             type:"POST",
@@ -128,14 +163,56 @@ function load_component_params(index, substepid){
             },
 
             success: function( data ) {
+                $(".action-params-div").hide();
+                new_div="<div class='action-params-div' id='"+letter+index+"'>"+data+"</div>"
                 $("#substep_editor_library").show();
-                $("#substep_editor_library").html(data);
+                $("#substep_editor_library").append(new_div);
             },
 
             fail:function(data){
                 throw_exception;
             }
         });
+}
+
+function collectAdditions(){
+added_icons=$(".added-action");
+for (index = 0; index < added_icons.length; ++index) {
+    console.log(added_icons[index]);
+    var className=added_icons[index].attributes["command"].nodeValue;
+    var params_div_id=added_icons[index].attributes["about"].nodeValue;
+    var params_div=$("#"+params_div_id);
+    var param_textboxes=params_div.children("div").first().children("input");
+    var params = {};
+
+    for (jindex = 0; jindex < param_textboxes.length; ++jindex) {
+        name=param_textboxes[jindex].attributes["name"].nodeValue;
+        value=param_textboxes[jindex].value;
+        params[name]=value;
+    }
+
+    changelist.addAction(className,params);
+}
+}
+
+function collectModifications(){
+added_icons=$(".existing-action");
+for (index = 0; index < added_icons.length; ++index) {
+    console.log(added_icons[index]);
+    var params_div_id=added_icons[index].attributes["about"].nodeValue;
+    var params_div=$("#s"+params_div_id);
+    var param_textboxes=params_div.children("div").first().children("input");
+    var params = {};
+
+    for (jindex = 0; jindex < param_textboxes.length; ++jindex) {
+        name=param_textboxes[jindex].attributes["name"].nodeValue;
+        value=param_textboxes[jindex].value;
+        params[name]=value;
+    }
+
+    changelist.changeAction(index,params);
+}
+
 }
 
 function throw_exception(){
