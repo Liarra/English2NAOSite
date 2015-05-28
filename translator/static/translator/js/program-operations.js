@@ -53,6 +53,7 @@ function assignDoneButton(){
         function(){
         collectAdditions();
         collectModifications();
+        sendSubstepUpdate();
         }
     );
 }
@@ -215,8 +216,36 @@ for (index = 0; index < added_icons.length; ++index) {
 
 }
 
+function sendSubstepUpdate(){
+$.ajax({
+            url: "/translator/editor-substep-update/",
+            type:"POST",
+
+            data: {
+                substep_id: $("#current-substep-edit span").first().html(),
+                actions_to_add : JSON.stringify(changelist.actions_to_add),
+                conditions_to_add : JSON.stringify(changelist.conditions_to_add),
+                actions_to_remove: JSON.stringify(changelist.actions_to_remove),
+                conditions_to_remove: JSON.stringify(changelist.conditions_to_remove),
+                change_actions : JSON.stringify(changelist.change_in_actions),
+                change_conditions : JSON.stringify(changelist.change_in_conditions)
+            },
+
+            success: function( data ) {
+                $("#program" ).html(data);
+                assign_balloons();
+                alignTextWithProgram();
+                assign_remove_buttons();
+            },
+
+            fail:function(data){
+                throw_exception;
+            }
+        });
+}
+
 function throw_exception(){
-    alert("Nope, baby");
+    alert("Something went wrong");
 }
 
 assign_remove_buttons();

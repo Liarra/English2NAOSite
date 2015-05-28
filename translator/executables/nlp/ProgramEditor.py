@@ -35,11 +35,12 @@ def update_substep(steps_list, substep_id,
             if id == substep_id:
                 # First, change stuff
                 for i in range(0, len(change_actions)):
-                    action_params = json.loads(change_actions[i])
+                    action_params = change_actions[i]
                     substep.commands[i].load_params(action_params)
 
                 for i in range(0, len(change_conditions)):
-                    condition_params = json.loads(change_conditions[i])
+                    if not hasattr(substep, 'condition'): break
+                    condition_params = change_conditions[i]
                     substep.condition[i].load_params(condition_params)
 
                 # Then remove stuff
@@ -47,24 +48,27 @@ def update_substep(steps_list, substep_id,
                     del substep.commands[action_index]
 
                 for condition_index in conditions_to_remove:
+                    if not hasattr(substep, 'condition'): break
                     del substep.condition[condition_index]
                     if len(substep.condition) == 0:
                         substep.__class__ = SubStep
 
                 # Finally, add new stuff
                 for action in actions_to_add:
-                    action_params = json.loads(action)
+                    action_params = action
                     action_class_name = action_params["class"]
                     # action_class = globals()[action_class_name]
-                    action_class = class_for_name("translator.executables.nlp.components.robot_commands",action_class_name)
+                    action_class = class_for_name("translator.executables.nlp.components.robot_commands",
+                                                  action_class_name)
                     action_instance = action_class()
-                    action_instance.load_params(action_params)
+                    action_instance.load_params(action_params["params"])
                     substep.commands.append(action_instance)
 
                 for condition in conditions_to_add:
-                    condition_params = json.loads(condition)
+                    condition_params = condition
                     condition_class_name = condition_params["class"]
-                    condition_class = class_for_name("translator.executables.nlp.components.robot_commands",condition_class_name)
+                    condition_class = class_for_name("translator.executables.nlp.components.robot_commands",
+                                                     condition_class_name)
                     condition_instance = condition_class()
                     condition_instance.load_params(condition_params)
 

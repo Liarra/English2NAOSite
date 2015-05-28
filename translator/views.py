@@ -1,4 +1,5 @@
 from itertools import cycle
+import json
 import pickle
 
 from django.shortcuts import render
@@ -170,18 +171,20 @@ def update_substep(request):
 
     # TODO: Make a good JSON here.
     step_id = request.POST['substep_id'].strip()
-    actions_to_add = request.POST.getlist('actions_to_add[]')
-    conditions_to_add = request.POST.getlist('conditions_to_add[]')
-    actions_to_remove = request.POST.getlist('actions_to_remove[]')
-    conditions_to_remove = request.POST.getlist('conditions_to_remove[]')
-    change_actions = request.POST.getlist('change_actions[]')
-    change_conditions = request.POST.getlist('change_actions[]')
+    actions_to_add = json.loads(request.POST.get('actions_to_add'))
+    conditions_to_add = json.loads(request.POST.get('conditions_to_add'))
+    actions_to_remove = json.loads(request.POST.get('actions_to_remove'))
+    conditions_to_remove = json.loads(request.POST.get('conditions_to_remove'))
+    change_actions = json.loads(request.POST.get('change_actions'))
+    change_conditions = json.loads(request.POST.get('change_actions'))
 
     request.session["steps"] = ProgramEditor.update_substep(request.session["steps"], step_id,
                                                             actions_to_add, conditions_to_add,
                                                             actions_to_remove, conditions_to_remove,
                                                             change_actions, change_conditions)
-    return HttpResponse("OK")
+    steps=request.session["steps"]
+    context = {'steps_list': steps}
+    return render(request, 'translator/program.html', context)
 
 
 def load_components_from_db():
