@@ -2,9 +2,19 @@ function assign_remove_buttons(){
 $(".btn-remove-substep").click(function() {
 
     var substep_div = $(this).parent().parent();
-    var substep_number=substep_div.children(".glyphicon-step").first().html()
+    var substep_number=substep_div.children(".glyphicon-step").first().attr("uid");
+    var substep_name=substep_div.children(".glyphicon-step").first().html();
 
-    bootbox.confirm("Removing step "+substep_number+". Is it OK?", function(result) {
+    var conditions=substep_div.children(".condition-box");
+    if (conditions.length){
+    substep_name+=" ("
+        for (var i=0;i<conditions.length;i++){
+            substep_name+=conditions[i].innerHTML;
+        }
+        substep_name+=")"
+    }
+
+    bootbox.confirm("Removing step "+substep_name+". Is it OK?", function(result) {
         if(result){
             remove_substep(substep_div);
         }
@@ -14,7 +24,7 @@ $(".btn-remove-substep").click(function() {
 
 $(".btn-edit-substep").click(function(){
  var substep_div = $(this).parent().parent();
- var substep_number=substep_div.children(".glyphicon-step").first().html();
+ var substep_number=substep_div.children(".glyphicon-step").first().attr("uid");
  changelist.clear();
  edit_substep(substep_div);
 });
@@ -26,7 +36,7 @@ $(".program-box-clickable").click(
     $(".active-box").removeClass("active-box");
     $(this).addClass("active-box");
     substep_div=$(this).parent();
-    substepid=substep_div.children(".glyphicon-step").first().html();
+    substepid=substep_div.children(".glyphicon-step").first().attr("uid");
     load_component_params($(this).attr('about'), substepid,'s');
     }
 );
@@ -88,7 +98,7 @@ function edit_substep(substep_div){
             url: "/translator/editor-substep/",
             type:"POST",
             data: {
-                substep_id: substep_div.children(".glyphicon-step").first().html(),
+                substep_id: substep_div.children(".glyphicon-step").first().attr("uid"),
             },
 
             success: function( data ) {

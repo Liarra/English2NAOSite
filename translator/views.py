@@ -112,7 +112,13 @@ def substep_editor(request):
     step_for_display = None
     for step in steps:
         for substep in step:
-            if substep.ID == step_id:
+            id=None
+            if hasattr(substep,"uID"):
+                id=substep.uID
+            else:
+                id=substep.ID
+
+            if id == step_id:
                 step_for_display = substep
 
     context = {'substep': step_for_display}
@@ -138,7 +144,12 @@ def substep_editor_params(request):
     action = None
     for step in steps:
         for substep in step:
-            if substep.ID == step_id:
+            id=None
+            if hasattr(substep,"uID"):
+                id=substep.uID
+            else:
+                id=substep.ID
+            if id == step_id:
                 action = substep.commands[action_index - 1]
 
     context = {'component': action}
@@ -159,7 +170,12 @@ def remove_substep(request):
 
     for step in steps:
         for substep in step:
-            if substep.ID == step_id_for_removal:
+            id=None
+            if hasattr(substep,"uID"):
+                id=substep.uID
+            else:
+                id=substep.ID
+            if id == step_id_for_removal:
                 step.remove(substep)
 
     request.session['steps'] = steps
