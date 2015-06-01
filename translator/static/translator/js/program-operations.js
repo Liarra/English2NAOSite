@@ -232,7 +232,7 @@ $.ajax({
             type:"POST",
 
             data: {
-                substep_id: $("#current-substep-edit span").first().html(),
+                substep_id: $("#current-substep-edit span").first().attr("uid"),
                 actions_to_add : JSON.stringify(changelist.actions_to_add),
                 conditions_to_add : JSON.stringify(changelist.conditions_to_add),
                 actions_to_remove: JSON.stringify(changelist.actions_to_remove),

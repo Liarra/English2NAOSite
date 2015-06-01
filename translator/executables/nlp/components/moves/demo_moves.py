@@ -239,8 +239,8 @@ cry.params["move"] = """[movem (HeadYaw, -0.090527, 2000, -0.090527, 2000,HeadPi
        &ledoff(AllLeds) & ledfade(FaceLedsBottom,1,1000) &ledoff(AllLeds) & ledfade(FaceLedsBottom,1,1000) &ledoff(AllLeds) & ledfade(FaceLedsBottom,1,1000)
        &ledoff(AllLeds) & ledfade(FaceLedsBottom,1,1000) &ledoff(AllLeds) & ledfade(FaceLedsBottom,1,1000) &ledoff(AllLeds) & ledfade(FaceLedsBottom,1,1000)
        &ledoff(AllLeds) & ledfade(FaceLedsBottom,1,1000)]"""
-cry.tags = ["cry", "tears"]
-cry.regexp = r"cry(es?)|(ing)"
+cry.tags = ["cry", "crying", "cries", "tears"]
+cry.regexp = r"cr(y)|(ies)|(ying)"
 cry.params["base_pose"] = "Stand"
 
 dance = move_command()
@@ -406,7 +406,7 @@ RShoulderRoll,
 RWristYaw,
 -29.2,1000,-29.2,1240,-29.2,1160,-29.2,1400,-29.2,1360,
 -29.2,1400,-29.2,1520,-29.2,1520,-29.2,760)]]"""
-dance.tags = ["dance", "joy"]
-dance.regexp = r"dance(es?)|(ing)"
+dance.tags = ["dance", "dancing","dances", "joy"]
+dance.regexp = r"danc(es?)|(ing)"
 # dance.params["base_pose"] = "Stand"
 
