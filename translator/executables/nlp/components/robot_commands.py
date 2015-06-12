@@ -28,6 +28,8 @@ class say_command(command):
         if m is None:
             return
         say_what = m.group('what').replace(' ', '_')
+        say_what = say_what.replace(',', '')
+        say_what = say_what.replace('\'', '')
         ret.params["text"] = say_what
         return ret
 
@@ -93,8 +95,8 @@ class move_command(command):
 
 class button_press(condition):
     name = "Keyboard button press"
-    tags = ["press", "button"]
-    regexp = r"(press|type) ['\"]?(?P<button>.)['\"]?\W?$"
+    tags = ["press", "button", "key", "type"]
+    regexp = r"(?P<button_pre>.) ?.{0,10}(press|type).{0,4}['\"]?(?P<button_post>.)?['\"]?\W?$"
 
     default_params = {"button": ''}
     command = "key[{button}]->"
@@ -112,6 +114,7 @@ class button_press(condition):
         m = p.search(string)
         if m is None:
             return
-        button = m.group('button')
+
+        button = m.group('button_pre') if m.group('button_pre') else m.group('button_post')
         ret.params["button"] = button
         return ret
