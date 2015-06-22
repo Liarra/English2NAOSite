@@ -1,10 +1,12 @@
 from itertools import cycle
+import json
 import pickle
 
 from django.shortcuts import render
 from django.http import HttpResponse
 
 from translator.executables.nlp import translator, commons
+from translator.executables.nlp.components.robot_commands import button_press
 from translator.models import *
 
 
@@ -111,7 +113,13 @@ def substep_editor(request):
     step_for_display = None
     for step in steps:
         for substep in step:
-            if substep.ID == step_id:
+            id = None
+            if hasattr(substep, "uID"):
+                id = substep.uID
+            else:
+                id = substep.ID
+
+            if id == step_id:
                 step_for_display = substep
 
     context = {'substep': step_for_display}
@@ -125,7 +133,13 @@ def substep_editor_components_list(request):
     components = [say_command, wait_command,
                   wave, nod, handshake]
 
-    context = {'components_list': components}
+    conditions = [button_press]
+
+    if request.POST["components_type"] == "components":
+        context = {'components_list': components}
+    else:
+        context = {'components_list': conditions}
+
     return render(request, "translator/components_list.html", context)
 
 
@@ -137,7 +151,12 @@ def substep_editor_params(request):
     action = None
     for step in steps:
         for substep in step:
-            if substep.ID == step_id:
+            id = None
+            if hasattr(substep, "uID"):
+                id = substep.uID
+            else:
+                id = substep.ID
+            if id == step_id:
                 action = substep.commands[action_index - 1]
 
     context = {'component': action}
@@ -146,7 +165,7 @@ def substep_editor_params(request):
 
 def substep_editor_class_params(request):
     class_name = request.POST['class_name'].strip()
-    class_class=commons.class_for_name("translator.executables.nlp.components.robot_commands",class_name)
+    class_class = commons.class_for_name("translator.executables.nlp.components.robot_commands", class_name)
 
     context = {'class': class_class}
     return render(request, "translator/component_properties.html", context)
@@ -158,7 +177,12 @@ def remove_substep(request):
 
     for step in steps:
         for substep in step:
-            if substep.ID == step_id_for_removal:
+            id = None
+            if hasattr(substep, "uID"):
+                id = substep.uID
+            else:
+                id = substep.ID
+            if id == step_id_for_removal:
                 step.remove(substep)
 
     request.session['steps'] = steps
@@ -170,18 +194,20 @@ def update_substep(request):
 
     # TODO: Make a good JSON here.
     step_id = request.POST['substep_id'].strip()
-    actions_to_add = request.POST.getlist('actions_to_add[]')
-    conditions_to_add = request.POST.getlist('conditions_to_add[]')
-    actions_to_remove = request.POST.getlist('actions_to_remove[]')
-    conditions_to_remove = request.POST.getlist('conditions_to_remove[]')
-    change_actions = request.POST.getlist('change_actions[]')
-    change_conditions = request.POST.getlist('change_actions[]')
+    actions_to_add = json.loads(request.POST.get('actions_to_add'))
+    conditions_to_add = json.loads(request.POST.get('conditions_to_add'))
+    actions_to_remove = json.loads(request.POST.get('actions_to_remove'))
+    conditions_to_remove = json.loads(request.POST.get('conditions_to_remove'))
+    change_actions = json.loads(request.POST.get('change_actions'))
+    change_conditions = json.loads(request.POST.get('change_actions'))
 
     request.session["steps"] = ProgramEditor.update_substep(request.session["steps"], step_id,
                                                             actions_to_add, conditions_to_add,
                                                             actions_to_remove, conditions_to_remove,
                                                             change_actions, change_conditions)
-    return HttpResponse("OK")
+    steps = request.session["steps"]
+    context = {'steps_list': steps}
+    return render(request, 'translator/program.html', context)
 
 
 def load_components_from_db():

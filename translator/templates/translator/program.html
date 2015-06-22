@@ -8,12 +8,17 @@
         {% else %}
             {% for substep in step %}
                 <div class="substep-div">
-                <span class='program-box glyphicon glyphicon-step'> {{substep.ID}} </span>
+
+                {% if substep.uID %}
+                <span class='program-box glyphicon glyphicon-step' uid="{{substep.uID}}"> {{substep.ID}} </span>
+                {% else %}
+                <span class='program-box glyphicon glyphicon-step' uid="{{substep.ID}}"> {{substep.ID}} </span>
+                {% endif %}
 
                 <!--Conditions-->
                 {% if substep.condition|length > 0 %}
                     {% for condition in substep.condition %}
-                        <span class='program-box glyphicon glyphicon-button-input' title='{{condition}}'>{{condition.params.button}}</span>
+                        <span class='program-box glyphicon glyphicon-button-input condition-box' title='{{condition}}'>{{condition.params.button}}</span>
                     {% endfor %}
                 {% endif %}
 

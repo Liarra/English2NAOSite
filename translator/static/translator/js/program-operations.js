@@ -2,9 +2,19 @@ function assign_remove_buttons(){
 $(".btn-remove-substep").click(function() {
 
     var substep_div = $(this).parent().parent();
-    var substep_number=substep_div.children(".glyphicon-step").first().html()
+    var substep_number=substep_div.children(".glyphicon-step").first().attr("uid");
+    var substep_name=substep_div.children(".glyphicon-step").first().html();
 
-    bootbox.confirm("Removing step "+substep_number+". Is it OK?", function(result) {
+    var conditions=substep_div.children(".condition-box");
+    if (conditions.length){
+    substep_name+=" ("
+        for (var i=0;i<conditions.length;i++){
+            substep_name+=conditions[i].innerHTML;
+        }
+        substep_name+=")"
+    }
+
+    bootbox.confirm("Removing step "+substep_name+". Is it OK?", function(result) {
         if(result){
             remove_substep(substep_div);
         }
@@ -14,7 +24,7 @@ $(".btn-remove-substep").click(function() {
 
 $(".btn-edit-substep").click(function(){
  var substep_div = $(this).parent().parent();
- var substep_number=substep_div.children(".glyphicon-step").first().html();
+ var substep_number=substep_div.children(".glyphicon-step").first().attr("uid");
  changelist.clear();
  edit_substep(substep_div);
 });
@@ -26,10 +36,11 @@ $(".program-box-clickable").click(
     $(".active-box").removeClass("active-box");
     $(this).addClass("active-box");
     substep_div=$(this).parent();
-    substepid=substep_div.children(".glyphicon-step").first().html();
+    substepid=substep_div.children(".glyphicon-step").first().attr("uid");
     load_component_params($(this).attr('about'), substepid,'s');
     }
 );
+
 
 $(".added-action").click(
     function(){
@@ -39,11 +50,27 @@ $(".added-action").click(
     }
 );
 
-$(".empty-program-box").click(
+$(".added-condition").click(
+    function(){
+    $(".active-box").removeClass("active-box");
+    $(this).addClass("active-box");
+    load_component_params($(this).attr('about'), 0,'');
+    }
+);
+
+$("#empty-action-box").click(
     function(){
         $(".active-box").removeClass("active-box");
         $(this).addClass("active-box");
         load_actions_library();
+    }
+);
+
+$("#empty-condition-box").click(
+    function(){
+        $(".active-box").removeClass("active-box");
+        $(this).addClass("active-box");
+        load_conditions_library();
     }
 );
 }
@@ -52,7 +79,9 @@ function assignDoneButton(){
     $(".btn-done").click(
         function(){
         collectAdditions();
+        collectConditionsAdditions();
         collectModifications();
+        sendSubstepUpdate();
         }
     );
 }
@@ -87,7 +116,7 @@ function edit_substep(substep_div){
             url: "/translator/editor-substep/",
             type:"POST",
             data: {
-                substep_id: substep_div.children(".glyphicon-step").first().html(),
+                substep_id: substep_div.children(".glyphicon-step").first().attr("uid"),
             },
 
             success: function( data ) {
@@ -123,7 +152,10 @@ function load_actions_library(){
 
     $.ajax({
             url: "/translator/editor-substep-actions/",
-            type:"GET",
+            type:"POST",
+            data:{
+                components_type: "components",
+            },
 
             success: function( data ) {
                 $(".action-params-div").hide();
@@ -133,6 +165,39 @@ function load_actions_library(){
                 $(".new-action-icon").click(
                     function(){
                     addNewActionTemplate($(this));
+                    }
+                );
+            },
+
+            fail:function(data){
+                throw_exception;
+            }
+        });
+}
+
+function load_conditions_library(){
+
+     if($("#library_conditions").length ){
+        $(".action-params-div").hide();
+        $("#library_conditions").show();
+        return
+    }
+
+    $.ajax({
+            url: "/translator/editor-substep-actions/",
+            type:"POST",
+            data:{
+                components_type: "conditions",
+            },
+
+            success: function( data ) {
+                $(".action-params-div").hide();
+                new_div="<div class='action-params-div' id='library_conditions'>"+data+"</div>"
+                $("#substep_editor_library").show();
+                $("#substep_editor_library").append(new_div);
+                $(".new-condition-icon").click(
+                    function(){
+                    addNewConditionTemplate($(this));
                     }
                 );
             },
@@ -175,48 +240,8 @@ function load_component_params(index, substepid,letter){
         });
 }
 
-function collectAdditions(){
-added_icons=$(".added-action");
-for (index = 0; index < added_icons.length; ++index) {
-    console.log(added_icons[index]);
-    var className=added_icons[index].attributes["command"].nodeValue;
-    var params_div_id=added_icons[index].attributes["about"].nodeValue;
-    var params_div=$("#"+params_div_id);
-    var param_textboxes=params_div.children("div").first().children("input");
-    var params = {};
-
-    for (jindex = 0; jindex < param_textboxes.length; ++jindex) {
-        name=param_textboxes[jindex].attributes["name"].nodeValue;
-        value=param_textboxes[jindex].value;
-        params[name]=value;
-    }
-
-    changelist.addAction(className,params);
-}
-}
-
-function collectModifications(){
-added_icons=$(".existing-action");
-for (index = 0; index < added_icons.length; ++index) {
-    console.log(added_icons[index]);
-    var params_div_id=added_icons[index].attributes["about"].nodeValue;
-    var params_div=$("#s"+params_div_id);
-    var param_textboxes=params_div.children("div").first().children("input");
-    var params = {};
-
-    for (jindex = 0; jindex < param_textboxes.length; ++jindex) {
-        name=param_textboxes[jindex].attributes["name"].nodeValue;
-        value=param_textboxes[jindex].value;
-        params[name]=value;
-    }
-
-    changelist.changeAction(index,params);
-}
-
-}
-
 function throw_exception(){
-    alert("Nope, baby");
+    alert("Something went wrong");
 }
 
 assign_remove_buttons();
