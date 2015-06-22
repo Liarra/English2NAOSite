@@ -70,7 +70,7 @@ def update_substep(steps_list, substep_id,
                     condition_class = class_for_name("translator.executables.nlp.components.robot_commands",
                                                      condition_class_name)
                     condition_instance = condition_class()
-                    condition_instance.load_params(condition_params)
+                    condition_instance.load_params(condition_params["params"])
 
                     if not hasattr(substep, 'condition'):
                         substep.condition = []

@@ -41,6 +41,7 @@ $(".program-box-clickable").click(
     }
 );
 
+
 $(".added-action").click(
     function(){
     $(".active-box").removeClass("active-box");
@@ -49,11 +50,27 @@ $(".added-action").click(
     }
 );
 
-$(".empty-program-box").click(
+$(".added-condition").click(
+    function(){
+    $(".active-box").removeClass("active-box");
+    $(this).addClass("active-box");
+    load_component_params($(this).attr('about'), 0,'');
+    }
+);
+
+$("#empty-action-box").click(
     function(){
         $(".active-box").removeClass("active-box");
         $(this).addClass("active-box");
         load_actions_library();
+    }
+);
+
+$("#empty-condition-box").click(
+    function(){
+        $(".active-box").removeClass("active-box");
+        $(this).addClass("active-box");
+        load_conditions_library();
     }
 );
 }
@@ -62,6 +79,7 @@ function assignDoneButton(){
     $(".btn-done").click(
         function(){
         collectAdditions();
+        collectConditionsAdditions();
         collectModifications();
         sendSubstepUpdate();
         }
@@ -134,7 +152,10 @@ function load_actions_library(){
 
     $.ajax({
             url: "/translator/editor-substep-actions/",
-            type:"GET",
+            type:"POST",
+            data:{
+                components_type: "components",
+            },
 
             success: function( data ) {
                 $(".action-params-div").hide();
@@ -144,6 +165,39 @@ function load_actions_library(){
                 $(".new-action-icon").click(
                     function(){
                     addNewActionTemplate($(this));
+                    }
+                );
+            },
+
+            fail:function(data){
+                throw_exception;
+            }
+        });
+}
+
+function load_conditions_library(){
+
+     if($("#library_conditions").length ){
+        $(".action-params-div").hide();
+        $("#library_conditions").show();
+        return
+    }
+
+    $.ajax({
+            url: "/translator/editor-substep-actions/",
+            type:"POST",
+            data:{
+                components_type: "conditions",
+            },
+
+            success: function( data ) {
+                $(".action-params-div").hide();
+                new_div="<div class='action-params-div' id='library_conditions'>"+data+"</div>"
+                $("#substep_editor_library").show();
+                $("#substep_editor_library").append(new_div);
+                $(".new-condition-icon").click(
+                    function(){
+                    addNewConditionTemplate($(this));
                     }
                 );
             },
@@ -178,74 +232,6 @@ function load_component_params(index, substepid,letter){
                 new_div="<div class='action-params-div' id='"+letter+index+"'>"+data+"</div>"
                 $("#substep_editor_library").show();
                 $("#substep_editor_library").append(new_div);
-            },
-
-            fail:function(data){
-                throw_exception;
-            }
-        });
-}
-
-function collectAdditions(){
-added_icons=$(".added-action");
-for (index = 0; index < added_icons.length; ++index) {
-    console.log(added_icons[index]);
-    var className=added_icons[index].attributes["command"].nodeValue;
-    var params_div_id=added_icons[index].attributes["about"].nodeValue;
-    var params_div=$("#"+params_div_id);
-    var param_textboxes=params_div.children("div").first().children("input");
-    var params = {};
-
-    for (jindex = 0; jindex < param_textboxes.length; ++jindex) {
-        name=param_textboxes[jindex].attributes["name"].nodeValue;
-        value=param_textboxes[jindex].value;
-        params[name]=value;
-    }
-
-    changelist.addAction(className,params);
-}
-}
-
-function collectModifications(){
-added_icons=$(".existing-action");
-for (index = 0; index < added_icons.length; ++index) {
-    console.log(added_icons[index]);
-    var params_div_id=added_icons[index].attributes["about"].nodeValue;
-    var params_div=$("#s"+params_div_id);
-    var param_textboxes=params_div.children("div").first().children("input");
-    var params = {};
-
-    for (jindex = 0; jindex < param_textboxes.length; ++jindex) {
-        name=param_textboxes[jindex].attributes["name"].nodeValue;
-        value=param_textboxes[jindex].value;
-        params[name]=value;
-    }
-
-    changelist.changeAction(index,params);
-}
-
-}
-
-function sendSubstepUpdate(){
-$.ajax({
-            url: "/translator/editor-substep-update/",
-            type:"POST",
-
-            data: {
-                substep_id: $("#current-substep-edit span").first().attr("uid"),
-                actions_to_add : JSON.stringify(changelist.actions_to_add),
-                conditions_to_add : JSON.stringify(changelist.conditions_to_add),
-                actions_to_remove: JSON.stringify(changelist.actions_to_remove),
-                conditions_to_remove: JSON.stringify(changelist.conditions_to_remove),
-                change_actions : JSON.stringify(changelist.change_in_actions),
-                change_conditions : JSON.stringify(changelist.change_in_conditions)
-            },
-
-            success: function( data ) {
-                $("#program" ).html(data);
-                assign_balloons();
-                alignTextWithProgram();
-                assign_remove_buttons();
             },
 
             fail:function(data){

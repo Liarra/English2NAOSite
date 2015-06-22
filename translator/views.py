@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from translator.executables.nlp import translator, commons
+from translator.executables.nlp.components.robot_commands import button_press
 from translator.models import *
 
 
@@ -112,11 +113,11 @@ def substep_editor(request):
     step_for_display = None
     for step in steps:
         for substep in step:
-            id=None
-            if hasattr(substep,"uID"):
-                id=substep.uID
+            id = None
+            if hasattr(substep, "uID"):
+                id = substep.uID
             else:
-                id=substep.ID
+                id = substep.ID
 
             if id == step_id:
                 step_for_display = substep
@@ -132,7 +133,13 @@ def substep_editor_components_list(request):
     components = [say_command, wait_command,
                   wave, nod, handshake]
 
-    context = {'components_list': components}
+    conditions = [button_press]
+
+    if request.POST["components_type"] == "components":
+        context = {'components_list': components}
+    else:
+        context = {'components_list': conditions}
+
     return render(request, "translator/components_list.html", context)
 
 
@@ -144,11 +151,11 @@ def substep_editor_params(request):
     action = None
     for step in steps:
         for substep in step:
-            id=None
-            if hasattr(substep,"uID"):
-                id=substep.uID
+            id = None
+            if hasattr(substep, "uID"):
+                id = substep.uID
             else:
-                id=substep.ID
+                id = substep.ID
             if id == step_id:
                 action = substep.commands[action_index - 1]
 
@@ -158,7 +165,7 @@ def substep_editor_params(request):
 
 def substep_editor_class_params(request):
     class_name = request.POST['class_name'].strip()
-    class_class=commons.class_for_name("translator.executables.nlp.components.robot_commands",class_name)
+    class_class = commons.class_for_name("translator.executables.nlp.components.robot_commands", class_name)
 
     context = {'class': class_class}
     return render(request, "translator/component_properties.html", context)
@@ -170,11 +177,11 @@ def remove_substep(request):
 
     for step in steps:
         for substep in step:
-            id=None
-            if hasattr(substep,"uID"):
-                id=substep.uID
+            id = None
+            if hasattr(substep, "uID"):
+                id = substep.uID
             else:
-                id=substep.ID
+                id = substep.ID
             if id == step_id_for_removal:
                 step.remove(substep)
 
@@ -198,7 +205,7 @@ def update_substep(request):
                                                             actions_to_add, conditions_to_add,
                                                             actions_to_remove, conditions_to_remove,
                                                             change_actions, change_conditions)
-    steps=request.session["steps"]
+    steps = request.session["steps"]
     context = {'steps_list': steps}
     return render(request, 'translator/program.html', context)
 

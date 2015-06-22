@@ -20,6 +20,11 @@
                         <span class='program-box glyphicon glyphicon-time new-action-icon' command="wait_command"></span>
                         <div class="component-name-div">{{component.name}}</div>
                         {% endif %}
+
+                        {% if component|get_class == 'button_press' or component|str == 'button_press' %}
+                        <span class='program-box glyphicon glyphicon-button-input new-condition-icon' command="button_press" >A</span>
+                        <div class="component-name-div">{{component.name}}</div>
+                        {% endif %}
 </div>
 
 

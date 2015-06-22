@@ -11,11 +11,13 @@
                 <!--Conditions-->
                 {% if substep.condition|length > 0 %}
                     {% for condition in substep.condition %}
-                        <span class='program-box glyphicon glyphicon-button-input condition-box' title='{{condition}}'>{{condition.params.button}}</span>
+                        <span class='program-box glyphicon glyphicon-button-input condition-box program-box-clickable'
+                              title='{{condition}}' about="{{forloop.counter}}>{{condition.params.button}}</span>
                     {% endfor %}
-                {% endif %}
 
-                 <span class='program-box empty-program-box glyphicon' title='New condition' id="empty-condition-box">+</span>
+                {% else %}
+                <span class='program-box empty-program-box glyphicon' title='New condition' id="empty-condition-box">+</span>
+                {% endif %}
 
                 <!--Arrow-->
                 <span class='arrow-box glyphicon glyphicon-arrow-right'></span>
