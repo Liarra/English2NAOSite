@@ -15,7 +15,7 @@ def create(request):
 
 
 def edit(request, program_id):
-    program = RobotProgram.objects.get(id=program_id)
+    program = Scenario.objects.get(id=program_id)
     steps = pickle.loads(program.pickled_formal_description)
     saved_steps_descriptions = program.programstep_set.all()
     descriptions = []
@@ -53,7 +53,7 @@ def translate(request):
     request.session['step_descriptions'] = step_descriptions
 
     context = {'steps_list': steps}
-    return render(request, 'translator/program.html', context)
+    return render(request, 'translator/scenario.html', context)
 
 
 def save_program(request):
@@ -69,22 +69,22 @@ def save_program(request):
 
     pickled_steps = pickle.dumps(steps)
 
-    new_program = RobotProgram()
+    new_program = Scenario()
     new_program.pickled_formal_description = pickled_steps
     new_program.save()
 
     for heading, text in step_descriptions:
-        new_step = ProgramStep()
+        new_step = Step()
         new_step.step_description = text
         new_step.step_name = heading
-        new_step.program = new_program
+        new_step.scenario = new_program
         new_step.save()
 
     return view_scenarios(request)
 
 
 def view_scenarios(request):
-    scenarios_list = RobotProgram.objects.all()
+    scenarios_list = Scenario.objects.all()
     context = {'scenarios_list': scenarios_list}
 
     return render(request, 'translator/list.html', context)
@@ -207,7 +207,7 @@ def update_substep(request):
                                                             change_actions, change_conditions)
     steps = request.session["steps"]
     context = {'steps_list': steps}
-    return render(request, 'translator/program.html', context)
+    return render(request, 'translator/scenario.html', context)
 
 
 def load_components_from_db():
