@@ -85,7 +85,7 @@ function addNewConditionTemplate(senderIcon){
     class_glyphicon="glyphicon-button-input";
 
 
-    $(" <span class='program-box glyphicon "+class_glyphicon+" program-box-clickable new-condition added-condition' about='c"+i+"' command='"+new_class+"'>&nbsp;</span>").insertBefore("#empty-condition-box");
+    $(" <span class='program-box glyphicon "+class_glyphicon+" program-box-clickable new-condition added-condition' about='c"+i+"' command='"+new_class+"'>?</span>").insertBefore("#empty-condition-box");
     $("#empty-condition-box").hide();
     $(".active-box").removeClass("active-box");
     $(".new-condition").addClass("active-box");
