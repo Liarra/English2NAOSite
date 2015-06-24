@@ -1,7 +1,6 @@
 from translator.executables.nlp.components.execution import *
 from translator.executables.nlp.components.moves.demo_moves import *
 from translator.executables.nlp.encoders import encode2csv
-from translator.executables.nlp.encoders import encode2json
 from translator.executables.nlp.ranker import text_breaker
 from translator.executables.nlp.components.robot_commands import *
 from translator.executables.nlp import grammar
@@ -37,8 +36,6 @@ def translate(text, step_number=1, components_from_db=None):
     return components_from_text
 
 
-def get_json(steps):
-    return encode2json.EncodeStepsArrayToJSON(steps)
 
 
 def get_CSV_file_with_header():

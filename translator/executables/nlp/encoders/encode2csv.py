@@ -4,28 +4,29 @@ from io import StringIO
 __author__ = 'NBUCHINA'
 
 
-def writeCSVFromSteps(steps, csvfile):
-    step_writer = csv.writer(csvfile, delimiter=',',
+def writeCSVFromSteps(states, csvfile):
+    state_writer = csv.writer(csvfile, delimiter=',',
                              quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
-    for step in steps:
-        step_commands = "|".join([str(x) for x in step.commands])
-        ID = int(str(step.ID).replace(".", ""))
-        next_ID = int(str(step.next_ID).replace(".", ""))
-        if next_ID<0: next_ID=""
-        # next_ID = "" if float(step.next_ID) < 0 else int(round((float(step.next_ID) * 100)))
+    for state in states:
+        step_commands = "|".join([str(x) for x in state.commands])
+        state_id = int(str(state.ID).replace(".", ""))
+        next_state_id = int(str(state.next_ID).replace(".", ""))
+        if next_state_id < 0:
+            next_state_id = ""
 
-        step_writer.writerow(
-            [step.tivipe_component_name, '1', step.description, ID, step_commands.replace("\n","").replace("\r",""), next_ID])
-        # print(csvfile.getvalue())
+        state_writer.writerow(
+            [state.tivipe_component_name, '1', state.description, state_id,
+             step_commands.replace("\n", "").replace("\r", ""),
+             next_state_id])
 
 
 def initCSV():
-    csvfile=StringIO()
-    step_writer = csv.writer(csvfile, delimiter=',',
-                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    step_writer.writerow(['Component name', 'Dunno', 'Description', 'State ID', 'Command', 'Next ID'])
-    step_writer.writerow(
-            ["CommandStateSelectByKey", '1', "Press S to start the scenario", 10, "[][s][100]"])
+    csv_file = StringIO()
+    state_writer = csv.writer(csv_file, delimiter=',',
+                             quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    state_writer.writerow(['Component name', '--', 'Description', 'State ID', 'Robot command', 'Next state ID'])
+    state_writer.writerow(
+        ["CommandStateSelectByKey", '1', "Press S to start the scenario", 10, "[][s][100]"])
 
-    return csvfile
+    return csv_file
