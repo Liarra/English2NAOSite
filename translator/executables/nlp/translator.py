@@ -28,10 +28,10 @@ def translate(text, step_number=1, components_from_db=None):
         if component is not None:
             components_from_text.append(component)
 
-    grammar.step_counter = step_number
+    grammar.state_counter = step_number
     grammar.unrecognised_enabled = False
     components_from_text = grammar.go_through(components_from_text)
-    grammar.unite_csteps(components_from_text)
+    grammar.unite_condition_states(components_from_text)
 
     return components_from_text
 
@@ -43,5 +43,5 @@ def get_CSV_file_with_header():
 
 
 def get_csv(steps, csv_for_result):
-    steps_list = grammar.get_new_list_with_ksteps(steps)
+    steps_list = grammar.get_new_list_with_keypress_states(steps)
     encode2csv.writeCSVFromSteps(steps_list, csv_for_result)

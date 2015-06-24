@@ -1,11 +1,11 @@
-from unittest import *
+from unittest import TestCase
 
 from translator.executables.nlp import grammar
 from translator.executables.nlp.components.component import *
 from translator.executables.nlp.components.execution import parallel, sequence, goto
 from translator.executables.nlp.components.moves.demo_moves import *
 from translator.executables.nlp.components.robot_commands import say_command, move_command, button_press
-from translator.executables.nlp.substep import SubStep, ConditionSubStep
+from translator.executables.nlp.state import State, ConditionState
 
 
 __author__ = 'NBUCHINA'
@@ -23,7 +23,6 @@ class GrammarTests(TestCase):
         ]
 
         new_components = grammar.go_through(components)
-        # print(new_components)
         self.assertEquals(len(new_components), 1)
 
 
@@ -45,7 +44,7 @@ class GrammarTests(TestCase):
 
         for i in range(0, len(new_components)):
             print(new_components[i].description)
-            self.assertEquals(isinstance(new_components[i], SubStep), True)
+            self.assertEquals(isinstance(new_components[i], State), True)
 
 
     def test_go_through_conditions_and_unrecognised(self):
@@ -180,11 +179,11 @@ class GrammarTests(TestCase):
         print([x.description for x in new_components])
 
         for x in new_components:
-            if isinstance(x, ConditionSubStep):
+            if isinstance(x, ConditionState):
                 print([x.condition])
             print([x.commands])
         self.assertEquals(len(new_components), 5)
-        self.assertTrue(all([isinstance(x, SubStep) for x in new_components]))
+        self.assertTrue(all([isinstance(x, State) for x in new_components]))
 
 
     def test_many_ands(self):

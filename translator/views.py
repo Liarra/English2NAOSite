@@ -201,7 +201,7 @@ def update_substep(request):
     change_actions = json.loads(request.POST.get('change_actions'))
     change_conditions = json.loads(request.POST.get('change_actions'))
 
-    request.session["steps"] = ProgramEditor.update_substep(request.session["steps"], step_id,
+    request.session["steps"] = ProgramEditor.update_state(request.session["steps"], step_id,
                                                             actions_to_add, conditions_to_add,
                                                             actions_to_remove, conditions_to_remove,
                                                             change_actions, change_conditions)

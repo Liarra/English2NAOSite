@@ -1,13 +1,13 @@
 import json
 
 from translator.executables.nlp.commons import class_for_name
-from translator.executables.nlp.substep import ConditionSubStep, SubStep
+from translator.executables.nlp.state import ConditionState, State
 
 
 __author__ = 'NBUCHINA'
 
 
-def update_substep(steps_list, substep_id,
+def update_state(steps_list, substep_id,
                    actions_to_add=None, conditions_to_add=None,
                    actions_to_remove=None, conditions_to_remove=None,
                    change_actions=None, change_conditions=None):
@@ -26,13 +26,13 @@ def update_substep(steps_list, substep_id,
     new_steps = steps_list
     for step in new_steps:
         for substep in step:
-            id = -1
-            if (hasattr(substep, 'uID')):
-                id = substep.uID
+            state_unique_id = -1
+            if hasattr(substep, 'uID'):
+                state_unique_id = substep.uID
             else:
-                id = substep.ID
+                state_unique_id = substep.ID
 
-            if id == substep_id:
+            if state_unique_id == substep_id:
                 # First, change stuff
                 for i in range(0, len(change_actions)):
                     action_params = change_actions[i]
@@ -51,7 +51,7 @@ def update_substep(steps_list, substep_id,
                     if not hasattr(substep, 'condition'): break
                     del substep.condition[condition_index]
                     if len(substep.condition) == 0:
-                        substep.__class__ = SubStep
+                        substep.__class__ = State
 
                 # Finally, add new stuff
                 for action in actions_to_add:
@@ -74,7 +74,7 @@ def update_substep(steps_list, substep_id,
 
                     if not hasattr(substep, 'condition'):
                         substep.condition = []
-                    substep.__class__ = ConditionSubStep
+                    substep.__class__ = ConditionState
                     substep.condition.append(condition_instance)
 
     return new_steps
