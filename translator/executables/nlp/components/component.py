@@ -19,7 +19,7 @@ class component(object):
         if params is not None:
             for key, value in params.items():
                 # Ignore params that do not belong to the class.
-                if key in self.__class__.default_params.keys():
+                if key in self.__class__.default_params.keys() or key in self.params:
                     self.params[key] = value
 
     @classmethod
