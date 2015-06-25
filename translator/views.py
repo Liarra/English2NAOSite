@@ -54,7 +54,7 @@ def translate(request):
     request.session['step_descriptions'] = step_descriptions
 
     context = {'steps_list': steps}
-    return render(request, 'translator/scenario.html', context)
+    return render(request, 'translator/formal_description.html', context)
 
 
 def save_program(request):
