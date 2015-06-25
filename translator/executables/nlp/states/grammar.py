@@ -1,7 +1,7 @@
 from translator.executables.nlp.components.component import *
 from translator.executables.nlp.components.execution import *
 from translator.executables.nlp.components.robot_commands import command
-from translator.executables.nlp.state import State, ConditionState, SelectByKeyState
+from translator.executables.nlp.states.state import State, ConditionState, SelectByKeyState
 
 __author__ = 'NBUCHINA'
 

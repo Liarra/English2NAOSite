@@ -1,7 +1,10 @@
-import json
 from unittest import TestCase
-from translator.executables.nlp import translator, ProgramEditor
-from translator.executables.nlp.state import State, ConditionState
+
+from translator.executables.nlp.states import ProgramEditor
+
+from translator.executables.nlp.translation import translator
+from translator.executables.nlp.states.state import State, ConditionState
+
 
 __author__ = 'NBUCHINA'
 

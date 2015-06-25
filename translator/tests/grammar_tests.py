@@ -1,11 +1,11 @@
 from unittest import TestCase
 
-from translator.executables.nlp import grammar
 from translator.executables.nlp.components.component import *
 from translator.executables.nlp.components.execution import parallel, sequence, goto
 from translator.executables.nlp.components.moves.demo_moves import *
 from translator.executables.nlp.components.robot_commands import say_command, move_command, button_press
-from translator.executables.nlp.state import State, ConditionState
+from translator.executables.nlp.states import grammar
+from translator.executables.nlp.states.state import State, ConditionState
 
 
 __author__ = 'NBUCHINA'

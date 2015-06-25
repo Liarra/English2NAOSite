@@ -1,4 +1,4 @@
-from translator.executables.nlp import longestpath
+from translator.executables.nlp.translation import longestpath
 from translator.executables.nlp.components.component import unrecognised_component
 
 

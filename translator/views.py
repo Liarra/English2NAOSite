@@ -5,7 +5,8 @@ import pickle
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from translator.executables.nlp import translator, commons
+from translator.executables.nlp import commons
+from translator.executables.nlp.translation import translator
 from translator.executables.nlp.components.robot_commands import button_press
 from translator.models import *
 
@@ -190,7 +191,7 @@ def remove_substep(request):
 
 
 def update_substep(request):
-    from translator.executables.nlp import ProgramEditor
+    from translator.executables.nlp.states import ProgramEditor
 
     # TODO: Make a good JSON here.
     step_id = request.POST['substep_id'].strip()

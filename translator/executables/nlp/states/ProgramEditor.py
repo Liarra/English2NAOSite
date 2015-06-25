@@ -1,7 +1,5 @@
-import json
-
 from translator.executables.nlp.commons import class_for_name
-from translator.executables.nlp.state import ConditionState, State
+from translator.executables.nlp.states.state import ConditionState, State
 
 
 __author__ = 'NBUCHINA'

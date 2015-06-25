@@ -1,9 +1,9 @@
 from translator.executables.nlp.components.execution import *
 from translator.executables.nlp.components.moves.demo_moves import *
 from translator.executables.nlp.encoders import encode2csv
-from translator.executables.nlp.ranker import text_breaker
+from translator.executables.nlp.translation.ranker import text_breaker
 from translator.executables.nlp.components.robot_commands import *
-from translator.executables.nlp import grammar
+from translator.executables.nlp.states import grammar
 
 __author__ = 'NBUCHINA'
 
