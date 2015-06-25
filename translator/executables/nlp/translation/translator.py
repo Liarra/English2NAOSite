@@ -37,9 +37,9 @@ def translate(text, step_number=1, components_from_db=None):
 
 
 def get_csv_file_with_header():
-    return encode2csv.initCSV()
+    return encode2csv.init_csv()
 
 
 def get_csv(steps, csv_for_result):
     steps_list = grammar.get_new_list_with_keypress_states(steps)
-    encode2csv.writeCSVFromSteps(steps_list, csv_for_result)
+    encode2csv.write_csv_from_steps(steps_list, csv_for_result)
