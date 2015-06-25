@@ -42,7 +42,7 @@ class text_breaker(object):
                     component_rank = self.ranker.rank_component(self.text[edge_start: edge_end], component)
                     new_rank = component_rank + self.ranker.rank_chunk(self.text[edge_start: edge_end])
                     if new_rank > old_rank:
-                        
+
                         self.graph[edge_start][edge_end] = new_rank
                         old_rank = new_rank
                         if component_rank > 0:
