@@ -2,16 +2,16 @@ from translator.executables.nlp.translation import longestpath
 from translator.executables.nlp.components.component import unrecognised_component
 
 
-class text_breaker(object):
+class TextBreaker(object):
     def __init__(self, text):
         self.text = text.replace("\n", " ")
         self.graph = self._build_graph_for_text_(self.text)
         self.components_mapping = {}
-        self.ranker = ranker()
+        self.ranker = Ranker()
 
     def get_components(self, components):
         components_mapping = (self._map_components_to_graph_(components))
-        maxdist, maxpath = longestpath.longestpathDAG(self.graph, 0, len(self.text))
+        maxdist, maxpath = longestpath.longest_path_DAG(self.graph, 0, len(self.text))
 
         text_to_components = []
         for i in range(0, len(maxpath) - 1):
@@ -27,7 +27,6 @@ class text_breaker(object):
             text_to_components.append((text_piece, component_object))
 
         return text_to_components
-
 
     def _map_components_to_graph_(self, components):
         edges_to_components = {}
@@ -51,7 +50,8 @@ class text_breaker(object):
         self.components_mapping = edges_to_components
         return edges_to_components
 
-    def _build_graph_for_text_(self, text):
+    @staticmethod
+    def _build_graph_for_text_(text):
         edges = [0]
         i = 0
         for c in text:
@@ -71,7 +71,7 @@ class text_breaker(object):
         return graph
 
 
-class ranker(object):
+class Ranker(object):
     price_for_tag = 5
     price_for_regexp = 15
     price_for_length = -5
@@ -79,27 +79,27 @@ class ranker(object):
 
     def rank_chunk(self, text):
         rank = 0
-        rank += self.rankLength(text)
-        rank += self.rankPunctuation(text)
+        rank += self.rank_length(text)
+        rank += self.rank_punctuation(text)
 
         return rank
 
     def rank_component(self, text, component):
         rank = 0
-        rank += self.rankTags(text, component)
-        rank += self.rankRegexp(text, component)
+        rank += self.rank_tags(text, component)
+        rank += self.rank_regexp(text, component)
         return rank
 
-    def rankTags(self, text, component):
+    def rank_tags(self, text, component):
         text = text.lower()
-        sum = 0
+        tags_sum = 0
         for tag in component.tags:
             if tag in text:
-                sum += self.price_for_tag
-        rank = sum
+                tags_sum += self.price_for_tag
+        rank = tags_sum
         return rank
 
-    def rankRegexp(self, text, component):
+    def rank_regexp(self, text, component):
         import re
 
         p = re.compile(component.regexp, re.IGNORECASE)
@@ -108,17 +108,18 @@ class ranker(object):
             return self.price_for_regexp
         return 0
 
-    def rankLength(self, text):
+    def rank_length(self, text):
         shortest = 3
         longest = 500
         if len(text) > longest or len(text) < shortest:
             return self.price_for_length
         return 0
 
-    def rankPunctuation(self, text):
+    def rank_punctuation(self, text):
         signs = ['.', ',']
         text = text.rstrip()
-        if len(text) < 1: return 0
+        if len(text) < 1:
+            return 0
         if text[len(text) - 1] in signs:
             return self.price_for_punctuation
         return 0

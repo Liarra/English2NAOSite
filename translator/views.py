@@ -93,7 +93,7 @@ def view_scenarios(request):
 
 def csv(request):
     steps = request.session['steps']
-    csvfile = translator.get_CSV_file_with_header()
+    csvfile = translator.get_csv_file_with_header()
     for step in steps:
         if step != {}:
             translator.get_csv(step, csvfile)

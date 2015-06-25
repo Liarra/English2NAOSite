@@ -1,7 +1,7 @@
 from translator.executables.nlp.components.execution import *
 from translator.executables.nlp.components.moves.demo_moves import *
 from translator.executables.nlp.encoders import encode2csv
-from translator.executables.nlp.translation.ranker import text_breaker
+from translator.executables.nlp.translation.ranker import TextBreaker
 from translator.executables.nlp.components.robot_commands import *
 from translator.executables.nlp.states import grammar
 
@@ -9,24 +9,24 @@ __author__ = 'NBUCHINA'
 
 
 def translate(text, step_number=1, components_from_db=None):
-    if not components_from_db:
-        components_from_db = []
     components = [say_command, wait_command,
-                  wave, nod, handshake, stand, cry, crouch,dance,
+                  wave, nod, handshake, stand, cry, crouch, dance,
                   button_press,
                   sequence, parallel, goto]
 
+    if not components_from_db:
+        components_from_db = []
+
     components.extend(components_from_db)
 
-    ranker1 = text_breaker(text)
-    components_mapping = ranker1.get_components(components)
+    text_ranker = TextBreaker(text)
+    components_mapping = text_ranker.get_components(components)
 
-    result = []
     components_from_text = []
 
-    for text, component in components_mapping:
-        if component is not None:
-            components_from_text.append(component)
+    for text, found_component in components_mapping:
+        if found_component is not None:
+            components_from_text.append(found_component)
 
     grammar.state_counter = step_number
     grammar.unrecognised_enabled = False
@@ -36,9 +36,7 @@ def translate(text, step_number=1, components_from_db=None):
     return components_from_text
 
 
-
-
-def get_CSV_file_with_header():
+def get_csv_file_with_header():
     return encode2csv.initCSV()
 
 
