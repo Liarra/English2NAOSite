@@ -16,14 +16,14 @@ def create(request):
 
 
 def edit(request, program_id):
-    program = Scenario.objects.get(id=program_id)
-    steps = pickle.loads(program.pickled_formal_description)
-    saved_steps_descriptions = program.programstep_set.all()
+    scenario = Scenario.objects.get(id=program_id)
+    steps = pickle.loads(scenario.pickled_formal_description)
+    saved_textual_descriptions = scenario.step_set.all()
     descriptions = []
-    for saved_description in saved_steps_descriptions:
+    for saved_description in saved_textual_descriptions:
         descriptions.append([saved_description.step_name, saved_description.step_description])
 
-    context = {'steps_list': steps, 'descriptions_list': saved_steps_descriptions}
+    context = {'steps_list': steps, 'descriptions_list': saved_textual_descriptions}
     request.session['steps'] = steps
     request.session['step_descriptions'] = descriptions
 
@@ -208,7 +208,7 @@ def update_substep(request):
                                                             change_actions, change_conditions)
     steps = request.session["steps"]
     context = {'steps_list': steps}
-    return render(request, 'translator/scenario.html', context)
+    return render(request, 'translator/formal_description.html', context)
 
 
 def load_components_from_db():
