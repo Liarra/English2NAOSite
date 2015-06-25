@@ -1,4 +1,4 @@
-class component(object):
+class Component(object):
     tags = []
     regexp = ""
 
@@ -37,11 +37,11 @@ class component(object):
         return self.command.format(**self.params)
 
 
-class condition(component):
+class Condition(Component):
     pass
 
 
-class unrecognised_component(component):
+class UnrecognisedComponent(Component):
     params = {"unrecognised_text": ''}
     tags = []
     regexp = ""

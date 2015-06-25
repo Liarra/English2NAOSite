@@ -12,7 +12,7 @@ def translate(text, step_number=1, components_from_db=None):
     components = [say_command, wait_command,
                   wave, nod, handshake, stand, cry, crouch, dance,
                   button_press,
-                  sequence, parallel, goto]
+                  Sequence, Parallel, GoTo]
 
     if not components_from_db:
         components_from_db = []

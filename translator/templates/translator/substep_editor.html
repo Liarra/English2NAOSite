@@ -40,9 +40,9 @@
                               title='{{command}}' about="{{forloop.counter}}" command="wait_command"></span>
                         {% endif %}
 
-                        {% if command|get_class == 'unrecognised_component' %}
+                        {% if command|get_class == 'UnrecognisedComponent' %}
                         <span class='program-box glyphicon glyphicon-question-sign program-box-clickable existing-action'
-                              title='{{command}}' about="{{forloop.counter}}" command="unrecognised_component"></span>
+                              title='{{command}}' about="{{forloop.counter}}" command="UnrecognisedComponent"></span>
                         {% endif %}
                     {% endfor %}
                 {% endif %}

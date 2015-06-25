@@ -1,6 +1,6 @@
 from translator.executables.nlp.components.component import *
 from translator.executables.nlp.components.execution import *
-from translator.executables.nlp.components.robot_commands import command
+from translator.executables.nlp.components.robot_commands import Command
 from translator.executables.nlp.states.state import State, ConditionState, SelectByKeyState
 
 __author__ = 'NBUCHINA'
@@ -26,7 +26,7 @@ def go_through(components_list):
         i += 1
 
         # Remove unrecognised if not allowed
-        if (not unrecognised_enabled) and isinstance(components_list[i], unrecognised_component):
+        if (not unrecognised_enabled) and isinstance(components_list[i], UnrecognisedComponent):
             gone_through = False
             new_list.extend(components_list[i + 1:])
             break
@@ -35,9 +35,9 @@ def go_through(components_list):
         # 3-tuple #
         if i < len(components_list) - 2:
 
-            if isinstance(components_list[i], command) \
-                    and isinstance(components_list[i + 1], parallel) \
-                    and isinstance(components_list[i + 2], command):
+            if isinstance(components_list[i], Command) \
+                    and isinstance(components_list[i + 1], Parallel) \
+                    and isinstance(components_list[i + 2], Command):
                 new_state = State()
                 new_state.text_index_start = components_list[i].text_index_start
                 new_state.tivipe_component_name = components_list[i].tivipe_component_name
@@ -54,8 +54,8 @@ def go_through(components_list):
                 break
 
             elif isinstance(components_list[i], State) \
-                    and isinstance(components_list[i + 1], parallel) \
-                    and isinstance(components_list[i + 2], command):
+                    and isinstance(components_list[i + 1], Parallel) \
+                    and isinstance(components_list[i + 2], Command):
                 new_state = components_list[i]
                 new_state.description = components_list[i].description + " " + components_list[i + 2].description
                 new_state.commands.append(components_list[i + 2])
@@ -66,8 +66,8 @@ def go_through(components_list):
                 new_list.extend(components_list[i + 3:])
                 break
 
-            elif isinstance(components_list[i], command) \
-                    and isinstance(components_list[i + 1], parallel) \
+            elif isinstance(components_list[i], Command) \
+                    and isinstance(components_list[i + 1], Parallel) \
                     and isinstance(components_list[i + 2], State):
                 new_state = components_list[i + 2]
                 new_state.text_index_start = components_list[i].text_index_start
@@ -82,7 +82,7 @@ def go_through(components_list):
                 break
 
             elif isinstance(components_list[i], State) \
-                    and isinstance(components_list[i + 1], parallel) \
+                    and isinstance(components_list[i + 1], Parallel) \
                     and isinstance(components_list[i + 2], State):
                 new_state = State()
                 new_state.text_index_start = components_list[i].text_index_start
@@ -99,7 +99,7 @@ def go_through(components_list):
                 break
 
             elif isinstance(components_list[i], State) \
-                    and isinstance(components_list[i + 1], sequence) \
+                    and isinstance(components_list[i + 1], Sequence) \
                     and isinstance(components_list[i + 2], State):
                 step1 = components_list[i]
                 step2 = components_list[i + 2]
@@ -116,34 +116,34 @@ def go_through(components_list):
         # ==== 2-tuple ===== #
         if i < len(components_list) - 1:
 
-            if isinstance(components_list[i], parallel) and isinstance(components_list[i + 1], sequence):
+            if isinstance(components_list[i], Parallel) and isinstance(components_list[i + 1], Sequence):
                 new_list.append(components_list[i + 1])
 
                 gone_through = False
                 new_list.extend(components_list[i + 2:])
                 break
 
-            elif (isinstance(components_list[i], parallel) or isinstance(components_list[i], sequence)) \
-                    and isinstance(components_list[i + 1], goto):
+            elif (isinstance(components_list[i], Parallel) or isinstance(components_list[i], Sequence)) \
+                    and isinstance(components_list[i + 1], GoTo):
                 new_list.append(components_list[i + 1])
 
                 gone_through = False
                 new_list.extend(components_list[i + 2:])
                 break
 
-            elif isinstance(components_list[i], unrecognised_component) \
-                    and isinstance(components_list[i + 1], unrecognised_component):
+            elif isinstance(components_list[i], UnrecognisedComponent) \
+                    and isinstance(components_list[i + 1], UnrecognisedComponent):
                 unrec1 = components_list[i]
                 unrec2 = components_list[i + 1]
                 new_list.append(
-                    unrecognised_component.from_string(unrec1.description + " " + unrec2.description,
+                    UnrecognisedComponent.from_string(unrec1.description + " " + unrec2.description,
                                                        unrec1.text_index_start))
 
                 gone_through = False
                 new_list.extend(components_list[i + 2:])
                 break
 
-            elif isinstance(components_list[i], condition) and isinstance(components_list[i + 1], goto):
+            elif isinstance(components_list[i], Condition) and isinstance(components_list[i + 1], GoTo):
                 new_state = ConditionState()
                 new_state.text_index_start = components_list[i].text_index_start
                 new_state.tivipe_component_name = components_list[i].tivipe_component_name
@@ -160,7 +160,7 @@ def go_through(components_list):
                 new_list.extend(components_list[i + 2:])
                 break
 
-            elif isinstance(components_list[i], State) and isinstance(components_list[i + 1], goto):
+            elif isinstance(components_list[i], State) and isinstance(components_list[i + 1], GoTo):
                 new_state = components_list[i]
                 goto_pointer = components_list[i + 1]
 
@@ -171,7 +171,7 @@ def go_through(components_list):
                 new_list.extend(components_list[i + 2:])
                 break
 
-            elif isinstance(components_list[i], condition) and isinstance(components_list[i + 1], command):
+            elif isinstance(components_list[i], Condition) and isinstance(components_list[i + 1], Command):
                 cond = components_list[i]
                 action = components_list[i + 1]
 
@@ -191,7 +191,7 @@ def go_through(components_list):
                 new_list.extend(components_list[i + 2:])
                 break
 
-            elif isinstance(components_list[i], condition) and isinstance(components_list[i + 1], State):
+            elif isinstance(components_list[i], Condition) and isinstance(components_list[i + 1], State):
                 cond = components_list[i]
                 action = components_list[i + 1]
 
@@ -227,7 +227,7 @@ def go_through(components_list):
                 break
 
         # ==== 1-tuple ==== #
-        if isinstance(components_list[i], command):
+        if isinstance(components_list[i], Command):
             new_state = State()
             new_state.text_index_start = components_list[i].text_index_start
             new_state.tivipe_component_name = components_list[i].tivipe_component_name
@@ -243,8 +243,8 @@ def go_through(components_list):
             new_list.extend(components_list[i + 1:])
             break
 
-        if isinstance(components_list[i], unrecognised_component):
-            if (i > 0 and not isinstance(components_list[i - 1], unrecognised_component)) or i == 0:
+        if isinstance(components_list[i], UnrecognisedComponent):
+            if (i > 0 and not isinstance(components_list[i - 1], UnrecognisedComponent)) or i == 0:
                 new_state = State()
                 new_state.text_index_start = components_list[i].text_index_start
                 new_state.tivipe_component_name = components_list[i].tivipe_component_name
@@ -271,7 +271,7 @@ def go_through(components_list):
         # Remove orphan controls, then go through once again
         orphans = 0
         for item in new_list:
-            if not (isinstance(item, parallel) or isinstance(item, sequence)):
+            if not (isinstance(item, Parallel) or isinstance(item, Sequence)):
                 new_new_list.append(item)
             else:
                 orphans += 1

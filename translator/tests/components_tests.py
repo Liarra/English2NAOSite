@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from translator.executables.nlp.components.execution import goto
+from translator.executables.nlp.components.execution import GoTo
 from translator.executables.nlp.components.robot_commands import *
 from translator.executables.nlp.components.robot_commands import button_press
 
@@ -55,8 +55,8 @@ class ComponentsTests(TestCase):
 
 
     def test_create_goto(self):
-        goto_params = goto(where=2.00)
-        goto_text = goto.from_string("Go to state 2")
+        goto_params = GoTo(where=2.00)
+        goto_text = GoTo.from_string("Go to state 2")
 
         self.assertEquals(2.00, goto_params.params["where"])
         self.assertEquals(2.00, goto_text.params["where"])

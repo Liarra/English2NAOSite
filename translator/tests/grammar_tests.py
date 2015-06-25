@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from translator.executables.nlp.components.component import *
-from translator.executables.nlp.components.execution import parallel, sequence, goto
+from translator.executables.nlp.components.execution import Parallel, Sequence, GoTo
 from translator.executables.nlp.components.moves.demo_moves import *
 from translator.executables.nlp.components.robot_commands import say_command, move_command, button_press
 from translator.executables.nlp.states import grammar
@@ -14,12 +14,12 @@ __author__ = 'NBUCHINA'
 class GrammarTests(TestCase):
     def test_go_through_many_unrecognised(self):
         components = [
-            unrecognised_component.from_string("This is not recognised"),
-            unrecognised_component.from_string("This too"),
-            unrecognised_component.from_string("NOPE"),
-            unrecognised_component.from_string("NOPE"),
-            unrecognised_component.from_string("hahaha almost there"),
-            unrecognised_component.from_string("Man, this recognition function really sucks"),
+            UnrecognisedComponent.from_string("This is not recognised"),
+            UnrecognisedComponent.from_string("This too"),
+            UnrecognisedComponent.from_string("NOPE"),
+            UnrecognisedComponent.from_string("NOPE"),
+            UnrecognisedComponent.from_string("hahaha almost there"),
+            UnrecognisedComponent.from_string("Man, this recognition function really sucks"),
         ]
 
         new_components = grammar.go_through(components)
@@ -52,14 +52,14 @@ class GrammarTests(TestCase):
             button_press(button="A"),
             say_command(text="say 'hello'"),
 
-            unrecognised_component(unrecognised_text="This is not recognised"),
-            unrecognised_component(unrecognised_text="This too"),
-            unrecognised_component.from_string("This too"),
+            UnrecognisedComponent(unrecognised_text="This is not recognised"),
+            UnrecognisedComponent(unrecognised_text="This too"),
+            UnrecognisedComponent.from_string("This too"),
 
             button_press(button="B"),
             say_command(text="say 'bye'"),
 
-            unrecognised_component.from_string("hahaha almost there"),
+            UnrecognisedComponent.from_string("hahaha almost there"),
 
             button_press.from_string("press C"),
             say_command.from_string("say 'OMG'")
@@ -73,11 +73,11 @@ class GrammarTests(TestCase):
     def test_go_through_many_parallel(self):
         components = [
             say_command(text="say 'hello'"),
-            parallel(),
+            Parallel(),
             say_command.from_string("say 'OMG'"),
-            parallel(),
+            Parallel(),
             say_command.from_string("say 'OooooIoooooooo'"),
-            parallel(),
+            Parallel(),
             say_command.from_string("say 'Owow'")
         ]
 
@@ -99,7 +99,7 @@ class GrammarTests(TestCase):
     def test_handshake_and_nice_to_meet_you(self):
         components = [
             handshake.from_string("handshake"),
-            parallel(),
+            Parallel(),
             say_command.from_string("say 'OooooIoooooooo'"),
         ]
 
@@ -110,10 +110,10 @@ class GrammarTests(TestCase):
     def test_goto(self):
         components = [
             handshake.from_string("handshake"),
-            parallel(),
+            Parallel(),
             say_command.from_string("say 'OooooIoooooooo'"),
-            sequence.from_string("then"),
-            goto.from_string("go to state 3")
+            Sequence.from_string("then"),
+            GoTo.from_string("go to state 3")
         ]
 
         new_components = grammar.go_through(components)
@@ -125,8 +125,8 @@ class GrammarTests(TestCase):
 
     def test_go_through_order_of_nonrecognised(self):
         components = [
-            unrecognised_component.from_string("Cry"),
-            unrecognised_component.from_string("again."),
+            UnrecognisedComponent.from_string("Cry"),
+            UnrecognisedComponent.from_string("again."),
             say_command.from_string("say 'Life has no meaning'"),
         ]
 
@@ -136,7 +136,7 @@ class GrammarTests(TestCase):
     def test_go_through_keypress_goto(self):
         components = [
             button_press.from_string("press Y"),
-            goto.from_string("Go to step 3.01"),
+            GoTo.from_string("Go to step 3.01"),
         ]
 
         new_components = grammar.go_through(components)
@@ -150,28 +150,28 @@ class GrammarTests(TestCase):
             button_press(button="A"),
             say_command.from_string("say 'hello'"),
 
-            parallel(),
-            parallel(),
-            parallel(),
-            sequence(),
+            Parallel(),
+            Parallel(),
+            Parallel(),
+            Sequence(),
 
-            unrecognised_component.from_string("This is not recognised"),
-            unrecognised_component.from_string("This too"),
-            unrecognised_component.from_string("This too"),
+            UnrecognisedComponent.from_string("This is not recognised"),
+            UnrecognisedComponent.from_string("This too"),
+            UnrecognisedComponent.from_string("This too"),
 
             button_press(button="B"),
-            parallel(),
-            sequence(),
-            sequence(),
-            sequence(),
-            sequence(),
+            Parallel(),
+            Sequence(),
+            Sequence(),
+            Sequence(),
+            Sequence(),
             say_command.from_string("say 'bye'"),
 
-            unrecognised_component.from_string("hahaha almost there"),
+            UnrecognisedComponent.from_string("hahaha almost there"),
 
             button_press(button="C"),
-            sequence(),
-            sequence.from_string("then"),
+            Sequence(),
+            Sequence.from_string("then"),
             say_command.from_string("say 'OMG'")
         ]
 
@@ -189,11 +189,11 @@ class GrammarTests(TestCase):
     def test_many_ands(self):
         components = [
             wave,
-            parallel(),
+            Parallel(),
             nod,
-            parallel(),
+            Parallel(),
             handshake,
-            parallel(),
+            Parallel(),
             wave,
         ]
 

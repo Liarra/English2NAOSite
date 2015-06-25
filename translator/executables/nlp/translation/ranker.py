@@ -1,5 +1,5 @@
 from translator.executables.nlp.translation import longestpath
-from translator.executables.nlp.components.component import unrecognised_component
+from translator.executables.nlp.components.component import UnrecognisedComponent
 
 
 class TextBreaker(object):
@@ -22,7 +22,7 @@ class TextBreaker(object):
             if component is not None:
                 component_object = component.from_string(text_piece)
             else:
-                component_object = unrecognised_component.from_string(text_piece)
+                component_object = UnrecognisedComponent.from_string(text_piece)
 
             text_to_components.append((text_piece, component_object))
 
