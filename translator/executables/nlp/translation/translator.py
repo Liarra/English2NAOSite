@@ -19,7 +19,7 @@ def translate(text, step_number=1, components_from_db=None):
     components.extend(components_from_db)
 
     ranker1 = text_breaker(text)
-    components_mapping = ranker1.map_components_to_text(components)
+    components_mapping = ranker1.get_components(components)
 
     result = []
     components_from_text = []

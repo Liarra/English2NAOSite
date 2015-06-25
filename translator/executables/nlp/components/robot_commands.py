@@ -71,8 +71,6 @@ class wait_command(command):
 """
 This command is a bit different from others. Here, text is checked not against class, but against the instance.
 """
-
-
 class move_command(command):
     tags = []
     regexp = r"(?!x)x"  # A regex that never matches

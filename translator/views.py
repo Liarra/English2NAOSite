@@ -191,7 +191,7 @@ def remove_substep(request):
 
 
 def update_substep(request):
-    from translator.executables.nlp.states import ProgramEditor
+    from translator.executables.nlp.states import program_editor
 
     # TODO: Make a good JSON here.
     step_id = request.POST['substep_id'].strip()
@@ -202,7 +202,7 @@ def update_substep(request):
     change_actions = json.loads(request.POST.get('change_actions'))
     change_conditions = json.loads(request.POST.get('change_actions'))
 
-    request.session["steps"] = ProgramEditor.update_state(request.session["steps"], step_id,
+    request.session["steps"] = program_editor.update_state(request.session["steps"], step_id,
                                                             actions_to_add, conditions_to_add,
                                                             actions_to_remove, conditions_to_remove,
                                                             change_actions, change_conditions)
