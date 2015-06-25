@@ -53,7 +53,8 @@ class SelectByKeyState(State):
                 new_cstep.ID) + 0.001
             new_commands_step.ID = "%.3f" % new_commands_step_id
             new_commands_step.description = ". ".join([x.description for x in commands])
-            if float(state) > 0: new_commands_step.next_ID = state
+            if float(state) > 0:
+                new_commands_step.next_ID = state
             state = new_commands_step_id
 
         self.keys.append(key)
@@ -61,7 +62,6 @@ class SelectByKeyState(State):
         self.reconstruct_description()
 
         return new_commands_step
-
 
     def reconstruct_description(self):
         if len(self.keys) == 1:

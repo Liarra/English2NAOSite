@@ -5,10 +5,10 @@ from translator.executables.nlp.states.state import ConditionState, State
 __author__ = 'NBUCHINA'
 
 
-def update_state(steps_list, substep_id,
-                   actions_to_add=None, conditions_to_add=None,
-                   actions_to_remove=None, conditions_to_remove=None,
-                   change_actions=None, change_conditions=None):
+def update_state(steps_list, state_id,
+                 actions_to_add=None, conditions_to_add=None,
+                 actions_to_remove=None, conditions_to_remove=None,
+                 change_actions=None, change_conditions=None):
     if not conditions_to_remove:
         conditions_to_remove = []
     if not change_actions:
@@ -24,20 +24,20 @@ def update_state(steps_list, substep_id,
     new_steps = steps_list
     for step in new_steps:
         for substep in step:
-            state_unique_id = -1
             if hasattr(substep, 'uID'):
                 state_unique_id = substep.uID
             else:
                 state_unique_id = substep.ID
 
-            if state_unique_id == substep_id:
+            if state_unique_id == state_id:
                 # First, change stuff
                 for i in range(0, len(change_actions)):
                     action_params = change_actions[i]
                     substep.commands[i].load_params(action_params)
 
                 for i in range(0, len(change_conditions)):
-                    if not hasattr(substep, 'condition'): break
+                    if not hasattr(substep, 'condition'):
+                        break
                     condition_params = change_conditions[i]
                     substep.condition[i].load_params(condition_params)
 
@@ -46,7 +46,8 @@ def update_state(steps_list, substep_id,
                     del substep.commands[action_index]
 
                 for condition_index in conditions_to_remove:
-                    if not hasattr(substep, 'condition'): break
+                    if not hasattr(substep, 'condition'):
+                        break
                     del substep.condition[condition_index]
                     if len(substep.condition) == 0:
                         substep.__class__ = State
@@ -55,7 +56,6 @@ def update_state(steps_list, substep_id,
                 for action in actions_to_add:
                     action_params = action
                     action_class_name = action_params["class"]
-                    # action_class = globals()[action_class_name]
                     action_class = class_for_name("translator.executables.nlp.components.robot_commands",
                                                   action_class_name)
                     action_instance = action_class()

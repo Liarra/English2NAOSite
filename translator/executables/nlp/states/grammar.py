@@ -31,7 +31,7 @@ def go_through(components_list):
             new_list.extend(components_list[i + 1:])
             break
 
-        ####### Grammar rules start here ############
+        # ========  Grammar rules start here =======  #
         # 3-tuple #
         if i < len(components_list) - 2:
 
@@ -113,7 +113,7 @@ def go_through(components_list):
                 new_list.extend(components_list[i + 3:])
                 break
 
-        # 2-tuple #
+        # ==== 2-tuple ===== #
         if i < len(components_list) - 1:
 
             if isinstance(components_list[i], parallel) and isinstance(components_list[i + 1], sequence):
@@ -226,7 +226,7 @@ def go_through(components_list):
                 new_list.extend(components_list[i + 2:])
                 break
 
-        # 1-tuple #
+        # ==== 1-tuple ==== #
         if isinstance(components_list[i], command):
             new_state = State()
             new_state.text_index_start = components_list[i].text_index_start
@@ -261,7 +261,7 @@ def go_through(components_list):
                 break
 
         new_list.append(components_list[i])
-    ####### Grammar rules end here ############
+    # ======== Grammar rules end here ======== #
 
     if gone_through:
         state_counter = 1
