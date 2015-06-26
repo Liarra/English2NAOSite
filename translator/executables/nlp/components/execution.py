@@ -1,9 +1,9 @@
-from translator.executables.nlp.components.component import component
+from translator.executables.nlp.components.component import Component
 
 __author__ = 'NBUCHINA'
 
 
-class sequence(component):
+class Sequence(Component):
     tags = ["after", "then", "next"]
     regexp = r"(then|next)$"
     command = " & "
@@ -14,7 +14,7 @@ class sequence(component):
         return ret
 
 
-class parallel(component):
+class Parallel(Component):
     tags = ["same time"]
     regexp = r"^\ ?(and|while)$"
     command = " | "
@@ -25,7 +25,7 @@ class parallel(component):
         return ret
 
 
-class goto(component):
+class GoTo(Component):
     tags = []
     regexp = r"go to ((sub)?(step|state|point)) (?P<number>\d{1,5}\.?\d{0,2})"
     where = float(-1)

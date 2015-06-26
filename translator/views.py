@@ -5,7 +5,8 @@ import pickle
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from translator.executables.nlp import translator, commons
+from translator.executables.nlp import commons
+from translator.executables.nlp.translation import translator
 from translator.executables.nlp.components.robot_commands import button_press
 from translator.models import *
 
@@ -15,14 +16,14 @@ def create(request):
 
 
 def edit(request, program_id):
-    program = RobotProgram.objects.get(id=program_id)
-    steps = pickle.loads(program.pickled_formal_description)
-    saved_steps_descriptions = program.programstep_set.all()
+    scenario = Scenario.objects.get(id=program_id)
+    steps = pickle.loads(scenario.pickled_formal_description)
+    saved_textual_descriptions = scenario.step_set.all()
     descriptions = []
-    for saved_description in saved_steps_descriptions:
+    for saved_description in saved_textual_descriptions:
         descriptions.append([saved_description.step_name, saved_description.step_description])
 
-    context = {'steps_list': steps, 'descriptions_list': saved_steps_descriptions}
+    context = {'steps_list': steps, 'descriptions_list': saved_textual_descriptions}
     request.session['steps'] = steps
     request.session['step_descriptions'] = descriptions
 
@@ -53,7 +54,7 @@ def translate(request):
     request.session['step_descriptions'] = step_descriptions
 
     context = {'steps_list': steps}
-    return render(request, 'translator/program.html', context)
+    return render(request, 'translator/formal_description.html', context)
 
 
 def save_program(request):
@@ -69,22 +70,22 @@ def save_program(request):
 
     pickled_steps = pickle.dumps(steps)
 
-    new_program = RobotProgram()
+    new_program = Scenario()
     new_program.pickled_formal_description = pickled_steps
     new_program.save()
 
     for heading, text in step_descriptions:
-        new_step = ProgramStep()
+        new_step = Step()
         new_step.step_description = text
         new_step.step_name = heading
-        new_step.program = new_program
+        new_step.scenario = new_program
         new_step.save()
 
     return view_scenarios(request)
 
 
 def view_scenarios(request):
-    scenarios_list = RobotProgram.objects.all()
+    scenarios_list = Scenario.objects.all()
     context = {'scenarios_list': scenarios_list}
 
     return render(request, 'translator/list.html', context)
@@ -92,7 +93,7 @@ def view_scenarios(request):
 
 def csv(request):
     steps = request.session['steps']
-    csvfile = translator.get_CSV_file_with_header()
+    csvfile = translator.get_csv_file_with_header()
     for step in steps:
         if step != {}:
             translator.get_csv(step, csvfile)
@@ -190,7 +191,7 @@ def remove_substep(request):
 
 
 def update_substep(request):
-    from translator.executables.nlp import ProgramEditor
+    from translator.executables.nlp.states import program_editor
 
     # TODO: Make a good JSON here.
     step_id = request.POST['substep_id'].strip()
@@ -201,13 +202,13 @@ def update_substep(request):
     change_actions = json.loads(request.POST.get('change_actions'))
     change_conditions = json.loads(request.POST.get('change_actions'))
 
-    request.session["steps"] = ProgramEditor.update_substep(request.session["steps"], step_id,
+    request.session["steps"] = program_editor.update_state(request.session["steps"], step_id,
                                                             actions_to_add, conditions_to_add,
                                                             actions_to_remove, conditions_to_remove,
                                                             change_actions, change_conditions)
     steps = request.session["steps"]
     context = {'steps_list': steps}
-    return render(request, 'translator/program.html', context)
+    return render(request, 'translator/formal_description.html', context)
 
 
 def load_components_from_db():

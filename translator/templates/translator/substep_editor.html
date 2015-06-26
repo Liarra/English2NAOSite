@@ -12,7 +12,7 @@
                 {% if substep.condition|length > 0 %}
                     {% for condition in substep.condition %}
                         <span class='program-box glyphicon glyphicon-button-input condition-box program-box-clickable'
-                              title='{{condition}}' about="{{forloop.counter}}>{{condition.params.button}}</span>
+                              title='{{condition}}' about="{{forloop.counter}}">{{condition.params.button}}</span>
                     {% endfor %}
 
                 {% else %}
@@ -40,9 +40,9 @@
                               title='{{command}}' about="{{forloop.counter}}" command="wait_command"></span>
                         {% endif %}
 
-                        {% if command|get_class == 'unrecognised_component' %}
+                        {% if command|get_class == 'UnrecognisedComponent' %}
                         <span class='program-box glyphicon glyphicon-question-sign program-box-clickable existing-action'
-                              title='{{command}}' about="{{forloop.counter}}" command="unrecognised_component"></span>
+                              title='{{command}}' about="{{forloop.counter}}" command="UnrecognisedComponent"></span>
                         {% endif %}
                     {% endfor %}
                 {% endif %}

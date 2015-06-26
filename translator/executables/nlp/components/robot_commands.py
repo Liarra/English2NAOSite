@@ -1,11 +1,11 @@
-from translator.executables.nlp.components.component import component, condition
+from translator.executables.nlp.components.component import Component, Condition
 
 
-class command(component):
+class Command(Component):
     pass
 
 
-class say_command(command):
+class say_command(Command):
     tags = ["say", "tell", "ask"]
     regexp = r"(say|tell|ask)(s|ing)? ['\"“](?P<what>.+)['\"”]"
     default_params = {"text": ''}
@@ -34,7 +34,7 @@ class say_command(command):
         return ret
 
 
-class wait_command(command):
+class wait_command(Command):
     tags = ["wait"]
     regexp = r"waits?.* (?P<number>\d{1,3}) (?P<units>second|minute|ms|sec|min|millisecond)s?"
     tivipe_component_name = "CommandState2"
@@ -73,9 +73,7 @@ class wait_command(command):
 """
 This command is a bit different from others. Here, text is checked not against class, but against the instance.
 """
-
-
-class move_command(command):
+class move_command(Command):
     tags = []
     regexp = r"(?!x)x"  # A regex that never matches
     command = "[[stiff (1, 500, 0)] & [posture({base_pose})] & [{move}] & [posture({base_pose})] & [stiff (0, 500, 0)]]"
@@ -93,7 +91,7 @@ class move_command(command):
         return ret
 
 
-class button_press(condition):
+class button_press(Condition):
     name = "Keyboard button press"
     tags = ["press", "button", "key", "type"]
     regexp = r"(?P<button_pre>.) ?.{0,10}(press|type).{0,4}['\"]?(?P<button_post>.)?['\"]?\W?$"

@@ -40,7 +40,7 @@
                         <span class='program-box glyphicon glyphicon-time' title='{{command}}'></span>
                         {% endif %}
 
-                        {% if command|get_class == 'unrecognised_component' %}
+                        {% if command|get_class == 'UnrecognisedComponent' %}
                         <span class='program-box glyphicon glyphicon-question-sign' title='{{command}}'></span>
                         {% endif %}
                     {% endfor %}

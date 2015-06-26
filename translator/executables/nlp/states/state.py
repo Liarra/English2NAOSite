@@ -1,7 +1,7 @@
 __author__ = 'NBUCHINA'
 
 
-class SubStep(object):
+class State(object):
     tivipe_component_name = ""
     commands = []
 
@@ -22,14 +22,14 @@ class SubStep(object):
         self.next_ID = -1
 
 
-class ConditionSubStep(SubStep):
+class ConditionState(State):
     def __init__(self):
         super().__init__()
         self.condition = []
         self.uID = -1
 
 
-class SelectByKeyState(SubStep):
+class SelectByKeyState(State):
     keys = []
     states = []
     tivipe_component_name = "CommandStateSelectByKey"
@@ -46,14 +46,15 @@ class SelectByKeyState(SubStep):
         new_commands_step = None
 
         if len(commands) > 0:
-            new_commands_step = SubStep()
+            new_commands_step = State()
             new_commands_step.commands = commands
             new_commands_step.tivipe_component_name = "CommandState2"
             new_commands_step_id = float((self.states[-1] + 1) / 1000) if len(self.states) > 0 else float(
                 new_cstep.ID) + 0.001
             new_commands_step.ID = "%.3f" % new_commands_step_id
             new_commands_step.description = ". ".join([x.description for x in commands])
-            if float(state) > 0: new_commands_step.next_ID = state
+            if float(state) > 0:
+                new_commands_step.next_ID = state
             state = new_commands_step_id
 
         self.keys.append(key)
@@ -61,7 +62,6 @@ class SelectByKeyState(SubStep):
         self.reconstruct_description()
 
         return new_commands_step
-
 
     def reconstruct_description(self):
         if len(self.keys) == 1:

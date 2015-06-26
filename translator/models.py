@@ -5,13 +5,13 @@ from django.db import models
 from django.db.models import Model
 
 
-class RobotProgram(models.Model):
+class Scenario(models.Model):
     pickled_formal_description = models.BinaryField()
     # user = models.ForeignKey(User)
 
 
-class ProgramStep(models.Model):
-    program = models.ForeignKey(RobotProgram)
+class Step(models.Model):
+    scenario = models.ForeignKey(Scenario)
     step_name = models.CharField(max_length=100)
     step_description = models.TextField()
 
@@ -29,5 +29,5 @@ class AtomicActionComponent(ActionComponent):
 
 
 class UserActionComponent(ActionComponent):
-    program = models.ForeignKey(RobotProgram)
+    program = models.ForeignKey(Scenario)
     icon = models.ImageField()
