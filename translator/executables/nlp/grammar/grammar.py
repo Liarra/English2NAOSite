@@ -31,7 +31,7 @@ class GrammarRule:
 
         new_items = self.transformation(**argument_dict)
         new_list.extend(new_items)
-        new_list.extend(object_list[index + len(self.names):])
+        new_list.extend(object_list[index:])
 
         return new_list
 
@@ -55,14 +55,16 @@ class Grammar:
         working_list = objects_list[:]
 
         while not went_through:
-
-            for i in range(0, len(working_list)):
+            i = 0
+            while i < len(working_list):
                 for rule in self.rules:
                     if rule.is_applicable(working_list, i):
                         went_through = False
                         new_list = rule.apply(working_list, i)
                         working_list = new_list
+                        i = -1
                         break
                     went_through = True
+                i += 1
 
         return working_list

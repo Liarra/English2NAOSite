@@ -5,8 +5,7 @@ modifier = 0.1
 base_id = 1.0
 
 
-def get_float_id():
-    global base_id
+def get_float_id(base_id):
     global counter
     global modifier
 

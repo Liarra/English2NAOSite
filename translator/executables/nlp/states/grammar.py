@@ -1,291 +1,199 @@
 from translator.executables.nlp.components.component import *
 from translator.executables.nlp.components.execution import *
 from translator.executables.nlp.components.robot_commands import Command
+from translator.executables.nlp.grammar import id_pool
+from translator.executables.nlp.grammar.grammar import Grammar
 from translator.executables.nlp.states.state import State, ConditionState, SelectByKeyState
 
 __author__ = 'NBUCHINA'
 
-gone_through = False
 state_counter = 1
-state_modifier = 0.01
 unrecognised_enabled = True
 
 
-def go_through(components_list):
-    global state_counter
-    global state_modifier
-    global gone_through
-    global unrecognised_enabled
-    # unrecognised_enabled = False
+def remove_unrecognised(unrecognised):
+    return []
 
+
+def parallel_commands(c1, p, c2):
+    new_state = State()
+    new_state.text_index_start = c1.text_index_start
+    new_state.tivipe_component_name = c1.tivipe_component_name
+    new_state.description = c1.description + ", " + c2.description
+    new_state.ID = "%.2f" % id_pool.get_float_id(state_counter)
+    new_state.commands.append(c1)
+    new_state.commands.append(c2)
+
+    return [new_state]
+
+
+def command_parallel_state(c1, p, s2):
+    new_state = s2
+    new_state.text_index_start = c1.text_index_start
+    new_state.tivipe_component_name = c1.tivipe_component_name
+    new_state.description = c1.description + " " + s2.description
+    new_state.commands.append(c1)
+
+    return [new_state]
+
+
+def state_parallel_command(s1, p, c2):
+    new_state = s1
+    new_state.description = s1.description + ", " + c2.description
+    new_state.commands.append(c2)
+
+    return [new_state]
+
+
+def state_parallel_state(s1, p, s2):
+    new_state = State()
+    new_state.text_index_start = s1.text_index_start
+    new_state.tivipe_component_name = s1.tivipe_component_name
+    new_state.description = s1.description + ", " + s2.description
+    new_state.ID = s1.ID
+    new_state.commands.extend(s1.commands)
+    new_state.commands.extend(s2.commands)
+
+    return [new_state]
+
+
+def state_sequence_state(s1, s, s2):
+    step1 = s1
+    step2 = s2
+
+    step1.next_ID = step2.ID
+
+    return [step1, step2]
+
+
+def parallel_sequence(p, s):
+    return [s]
+
+
+def parallel_goto(p, g):
+    return [g]
+
+
+def define_two_unrecognised(u1, u2):
+    return [UnrecognisedComponent.from_string(u1.description + ", " + u2.description, u1.text_index_start)]
+
+
+def condition_goto(c, g):
+    new_state = ConditionState()
+    new_state.text_index_start = c.text_index_start
+    new_state.tivipe_component_name = c.tivipe_component_name
+    new_state.description = c.description + ", " + g.description
+    new_state.ID = new_state.uID = "%.2f" % id_pool.get_float_id(state_counter)
+    new_state.next_ID = "%.2f" % g.params["where"]
+    new_state.condition.append(c)
+
+    return [new_state]
+
+
+def state_goto(s, g):
+    new_state = s
+    new_state.next_ID = "%.2f" % g.params["where"]
+
+    return [new_state]
+
+
+def condition_command(cnd, c):
+    new_state = ConditionState()
+    new_state.text_index_start = cnd.text_index_start
+    new_state.tivipe_component_name = cnd.tivipe_component_name
+    new_state.description = cnd.description + ", " + c.description
+    new_state.ID = new_state.uID = "%.2f" % id_pool.get_float_id(state_counter)
+    new_state.commands.append(c)
+    new_state.condition.append(cnd)
+
+    return [new_state]
+
+
+def condition_state(cnd, s):
+    new_state = ConditionState()
+    new_state.text_index_start = cnd.text_index_start
+    new_state.tivipe_component_name = cnd.tivipe_component_name
+    new_state.description = cnd.description + ", " + s.description
+    new_state.ID = s.ID
+    new_state.uID = s.ID
+    new_state.commands.extend(s.commands)
+    new_state.condition.append(cnd)
+
+    return [new_state]
+
+
+def command(c):
+    new_state = State()
+    new_state.text_index_start = c.text_index_start
+    new_state.tivipe_component_name = c.tivipe_component_name
+    new_state.description = c.description
+    new_state.ID = "%.2f" % state_counter
+    new_state.commands.append(c)
+
+    return [new_state]
+
+
+def transform(components_list):
+    ret_list = grammar_transform(components_list)
+    ret_list = remove_orphans(ret_list)
+    arrange_identifiers(ret_list)
+
+    return ret_list
+
+
+def grammar_transform(components_list):
+    gr = Grammar()
+    gr.append_rule(input=[("c1", Command), ("p", Parallel), ("c2", Command)], transformation=parallel_commands)
+    gr.append_rule(input=[("c1", Command), ("p", Parallel), ("s2", State)], transformation=command_parallel_state)
+    gr.append_rule(input=[("s1", State), ("p", Parallel), ("c2", Command)], transformation=state_parallel_command)
+    gr.append_rule(input=[("s1", State), ("p", Parallel), ("s2", State)], transformation=state_parallel_state)
+
+    gr.append_rule(input=[("s1", State), ("s", Sequence), ("s2", State)], transformation=state_sequence_state)
+    gr.append_rule(input=[("s1", State), ("s", Sequence), ("s2", State)], transformation=state_sequence_state)
+    gr.append_rule(input=[("p", Parallel), ("s", Sequence)], transformation=parallel_sequence)
+
+    gr.append_rule(input=[("p", Parallel), ("g", GoTo)], transformation=parallel_goto)
+    gr.append_rule(input=[("c", Condition), ("g", GoTo)], transformation=condition_goto)
+    gr.append_rule(input=[("s", State), ("g", GoTo)], transformation=state_goto)
+
+    gr.append_rule(input=[("cnd", Condition), ("c", Command)], transformation=condition_command)
+    gr.append_rule(input=[("cnd", Condition), ("s", State)], transformation=condition_state)
+    gr.append_rule(input=[("c", Command)], transformation=command)
+
+    gr.append_rule(input=[("u1", UnrecognisedComponent), ("u2", UnrecognisedComponent)],
+                   transformation=define_two_unrecognised)
+    gr.append_rule(input=[("c", UnrecognisedComponent)], transformation=command)
+
+    new_states_list = gr.process(components_list)
+
+    return new_states_list
+
+
+def remove_orphans(states_list):
     new_list = []
-    gone_through = True
 
-    i = -1
-    while i < len(components_list) - 1:
-        i += 1
-
-        # Remove unrecognised if not allowed
-        if (not unrecognised_enabled) and isinstance(components_list[i], UnrecognisedComponent):
-            gone_through = False
-            new_list.extend(components_list[i + 1:])
-            break
-
-        # ========  Grammar rules start here =======  #
-        # 3-tuple #
-        if i < len(components_list) - 2:
-
-            if isinstance(components_list[i], Command) \
-                    and isinstance(components_list[i + 1], Parallel) \
-                    and isinstance(components_list[i + 2], Command):
-                new_state = State()
-                new_state.text_index_start = components_list[i].text_index_start
-                new_state.tivipe_component_name = components_list[i].tivipe_component_name
-                new_state.description = components_list[i].description + " " + components_list[i + 2].description
-                new_state.ID = "%.2f" % state_counter
-                new_state.commands.append(components_list[i])
-                new_state.commands.append(components_list[i + 2])
-
-                state_counter += state_modifier
-                new_list.append(new_state)
-
-                gone_through = False
-                new_list.extend(components_list[i + 3:])
-                break
-
-            elif isinstance(components_list[i], State) \
-                    and isinstance(components_list[i + 1], Parallel) \
-                    and isinstance(components_list[i + 2], Command):
-                new_state = components_list[i]
-                new_state.description = components_list[i].description + " " + components_list[i + 2].description
-                new_state.commands.append(components_list[i + 2])
-
-                new_list.append(new_state)
-
-                gone_through = False
-                new_list.extend(components_list[i + 3:])
-                break
-
-            elif isinstance(components_list[i], Command) \
-                    and isinstance(components_list[i + 1], Parallel) \
-                    and isinstance(components_list[i + 2], State):
-                new_state = components_list[i + 2]
-                new_state.text_index_start = components_list[i].text_index_start
-                new_state.tivipe_component_name = components_list[i].tivipe_component_name
-                new_state.description = components_list[i].description + " " + components_list[i + 2].description
-                new_state.commands.append(components_list[i])
-
-                new_list.append(new_state)
-
-                gone_through = False
-                new_list.extend(components_list[i + 3:])
-                break
-
-            elif isinstance(components_list[i], State) \
-                    and isinstance(components_list[i + 1], Parallel) \
-                    and isinstance(components_list[i + 2], State):
-                new_state = State()
-                new_state.text_index_start = components_list[i].text_index_start
-                new_state.tivipe_component_name = components_list[i].tivipe_component_name
-                new_state.description = components_list[i].description + " " + components_list[i + 2].description
-                new_state.ID = components_list[i].ID
-                new_state.commands.extend(components_list[i].commands)
-                new_state.commands.extend(components_list[i + 2].commands)
-
-                new_list.append(new_state)
-
-                gone_through = False
-                new_list.extend(components_list[i + 3:])
-                break
-
-            elif isinstance(components_list[i], State) \
-                    and isinstance(components_list[i + 1], Sequence) \
-                    and isinstance(components_list[i + 2], State):
-                step1 = components_list[i]
-                step2 = components_list[i + 2]
-
-                step1.next_ID = step2.ID
-
-                new_list.append(step1)
-                new_list.append(step2)
-
-                gone_through = False
-                new_list.extend(components_list[i + 3:])
-                break
-
-        # ==== 2-tuple ===== #
-        if i < len(components_list) - 1:
-
-            if isinstance(components_list[i], Parallel) and isinstance(components_list[i + 1], Sequence):
-                new_list.append(components_list[i + 1])
-
-                gone_through = False
-                new_list.extend(components_list[i + 2:])
-                break
-
-            elif (isinstance(components_list[i], Parallel) or isinstance(components_list[i], Sequence)) \
-                    and isinstance(components_list[i + 1], GoTo):
-                new_list.append(components_list[i + 1])
-
-                gone_through = False
-                new_list.extend(components_list[i + 2:])
-                break
-
-            elif isinstance(components_list[i], UnrecognisedComponent) \
-                    and isinstance(components_list[i + 1], UnrecognisedComponent):
-                unrec1 = components_list[i]
-                unrec2 = components_list[i + 1]
-                new_list.append(
-                    UnrecognisedComponent.from_string(unrec1.description + " " + unrec2.description,
-                                                       unrec1.text_index_start))
-
-                gone_through = False
-                new_list.extend(components_list[i + 2:])
-                break
-
-            elif isinstance(components_list[i], Condition) and isinstance(components_list[i + 1], GoTo):
-                new_state = ConditionState()
-                new_state.text_index_start = components_list[i].text_index_start
-                new_state.tivipe_component_name = components_list[i].tivipe_component_name
-                new_state.description = components_list[i].description + " " + components_list[i + 1].description
-                new_state.ID = "%.2f" % state_counter
-                new_state.uID = "%.2f" % state_counter
-                new_state.next_ID = "%.2f" % components_list[i + 1].params["where"]
-                new_state.condition.append(components_list[i])
-
-                state_counter += state_modifier
-                new_list.append(new_state)
-
-                gone_through = False
-                new_list.extend(components_list[i + 2:])
-                break
-
-            elif isinstance(components_list[i], State) and isinstance(components_list[i + 1], GoTo):
-                new_state = components_list[i]
-                goto_pointer = components_list[i + 1]
-
-                new_state.next_ID = "%.2f" % goto_pointer.params["where"]
-                new_list.append(new_state)
-
-                gone_through = False
-                new_list.extend(components_list[i + 2:])
-                break
-
-            elif isinstance(components_list[i], Condition) and isinstance(components_list[i + 1], Command):
-                cond = components_list[i]
-                action = components_list[i + 1]
-
-                new_state = ConditionState()
-                new_state.text_index_start = cond.text_index_start
-                new_state.tivipe_component_name = cond.tivipe_component_name
-                new_state.description = cond.description + " " + action.description
-                new_state.ID = "%.2f" % state_counter
-                new_state.uID = "%.2f" % state_counter
-                new_state.commands.append(action)
-                new_state.condition.append(cond)
-
-                state_counter += state_modifier
-                new_list.append(new_state)
-
-                gone_through = False
-                new_list.extend(components_list[i + 2:])
-                break
-
-            elif isinstance(components_list[i], Condition) and isinstance(components_list[i + 1], State):
-                cond = components_list[i]
-                action = components_list[i + 1]
-
-                new_state = ConditionState()
-                new_state.text_index_start = cond.text_index_start
-                new_state.tivipe_component_name = cond.tivipe_component_name
-                new_state.description = cond.description + " " + action.description
-                new_state.ID = action.ID
-                new_state.uID = action.ID
-                new_state.commands.extend(action.commands)
-                new_state.condition.append(cond)
-
-                new_list.append(new_state)
-
-                gone_through = False
-                new_list.extend(components_list[i + 2:])
-                break
-
-            elif (isinstance(components_list[i], State)
-                  and isinstance(components_list[i + 1], State)) \
-                    and components_list[i].next_ID == -1:
-
-                step1 = components_list[i]
-                step2 = components_list[i + 1]
-
-                step1.next_ID = step2.ID
-
-                new_list.append(step1)
-                new_list.append(step2)
-
-                gone_through = False
-                new_list.extend(components_list[i + 2:])
-                break
-
-        # ==== 1-tuple ==== #
-        if isinstance(components_list[i], Command):
-            new_state = State()
-            new_state.text_index_start = components_list[i].text_index_start
-            new_state.tivipe_component_name = components_list[i].tivipe_component_name
-            new_state.description = components_list[i].description
-            new_state.ID = "%.2f" % state_counter
-            new_state.commands.append(components_list[i])
-
-            state_counter += state_modifier
-            new_list.append(new_state)
-
-            gone_through = False
-
-            new_list.extend(components_list[i + 1:])
-            break
-
-        if isinstance(components_list[i], UnrecognisedComponent):
-            if (i > 0 and not isinstance(components_list[i - 1], UnrecognisedComponent)) or i == 0:
-                new_state = State()
-                new_state.text_index_start = components_list[i].text_index_start
-                new_state.tivipe_component_name = components_list[i].tivipe_component_name
-                new_state.description = components_list[i].description
-                new_state.ID = "%.2f" % state_counter
-                new_state.commands.append(components_list[i])
-
-                state_counter += state_modifier
-                new_list.append(new_state)
-
-                gone_through = False
-
-                new_list.extend(components_list[i + 1:])
-                break
-
-        new_list.append(components_list[i])
-    # ======== Grammar rules end here ======== #
-
-    if gone_through:
-        state_counter = 1
-
-        new_new_list = []
-
-        # Remove orphan controls, then go through once again
-        orphans = 0
-        for item in new_list:
-            if not (isinstance(item, Parallel) or isinstance(item, Sequence)):
-                new_new_list.append(item)
-            else:
-                orphans += 1
-
-        if orphans > 0:
-            return go_through(new_new_list)
+    # Remove orphan controls, then go through once again
+    orphans = 0
+    for item in states_list:
+        if not (isinstance(item, Parallel) or isinstance(item, Sequence)):
+            new_list.append(item)
         else:
-            return new_new_list
+            orphans += 1
 
+    # If there are orphans - go through the grammar again
+    if orphans > 0:
+        return grammar_transform(new_list)
     else:
-        return go_through(new_list)
+        return new_list
 
 
-# TODO: Only unite keys?
+def arrange_identifiers(states_list):
+    for i in range(0, len(states_list) - 1):
+        if isinstance(states_list[i], State) and isinstance(states_list[i + 1], State) and states_list[i].next_ID == -1:
+            states_list[i].next_ID = states_list[i + 1].ID
+
+
+
 def unite_condition_states(states_list):
     first_condition_state_id = -1
 
