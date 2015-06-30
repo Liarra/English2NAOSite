@@ -13,3 +13,7 @@ def get_float_id(base_id):
     counter += modifier
 
     return ret
+
+def reset():
+    global counter
+    counter=0.0

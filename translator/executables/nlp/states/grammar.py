@@ -127,13 +127,15 @@ def command(c):
     new_state.text_index_start = c.text_index_start
     new_state.tivipe_component_name = c.tivipe_component_name
     new_state.description = c.description
-    new_state.ID = "%.2f" % state_counter
+    new_state.ID = "%.2f" % id_pool.get_float_id(state_counter)
     new_state.commands.append(c)
 
     return [new_state]
 
 
 def transform(components_list):
+    id_pool.reset()
+
     ret_list = grammar_transform(components_list)
     ret_list = remove_orphans(ret_list)
     arrange_identifiers(ret_list)

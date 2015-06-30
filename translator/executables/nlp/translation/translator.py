@@ -30,7 +30,7 @@ def translate(text, step_number=1, components_from_db=None):
 
     grammar.state_counter = step_number
     grammar.unrecognised_enabled = False
-    components_from_text = grammar.go_through(components_from_text)
+    components_from_text = grammar.transform(components_from_text)
     grammar.unite_condition_states(components_from_text)
 
     return components_from_text
