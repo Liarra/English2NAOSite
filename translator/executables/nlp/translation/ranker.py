@@ -16,11 +16,14 @@ class TextBreaker(object):
         text_to_components = []
         for i in range(0, len(maxpath) - 1):
             text_piece = self.text[maxpath[i]: maxpath[i + 1]]
-            text_piece = text_piece.strip()
+            text_piece = text_piece.strip(' .,')
             component = components_mapping[maxpath[i]][maxpath[i + 1]]
 
             if component is not None:
                 component_object = component.from_string(text_piece)
+                # If failed to initialise the component
+                if component_object is None:
+                    component_object = UnrecognisedComponent.from_string(text_piece)
             else:
                 component_object = UnrecognisedComponent.from_string(text_piece)
 
@@ -79,6 +82,7 @@ class Ranker(object):
 
     def rank_chunk(self, text):
         rank = 0
+        text = text.strip(',. ')
         rank += self.rank_length(text)
         rank += self.rank_punctuation(text)
 
@@ -86,6 +90,7 @@ class Ranker(object):
 
     def rank_component(self, text, component):
         rank = 0
+        text = text.strip(',. ')
         rank += self.rank_tags(text, component)
         rank += self.rank_regexp(text, component)
         return rank
