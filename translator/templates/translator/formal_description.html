@@ -1,23 +1,23 @@
 {% load extras %}
 
-{% if steps_list %}
-{% for step in steps_list %}
+{% if states_list %}
+{% for states_for_step in states_list %}
     <div class='program-step'>
-        {% if step|length < 1 %}
+        {% if states_for_step|length < 1 %}
         <center>(EMPTY STEP)</center>
         {% else %}
-            {% for substep in step %}
+            {% for state in states_for_step %}
                 <div class="substep-div">
 
-                {% if substep.uID %}
-                <span class='program-box glyphicon glyphicon-step' uid="{{substep.uID}}"> {{substep.ID}} </span>
+                {% if state.uID %}
+                <span class='program-box glyphicon glyphicon-step' uid="{{state.uID}}"> {{state.ID}} </span>
                 {% else %}
-                <span class='program-box glyphicon glyphicon-step' uid="{{substep.ID}}"> {{substep.ID}} </span>
+                <span class='program-box glyphicon glyphicon-step' uid="{{state.ID}}"> {{state.ID}} </span>
                 {% endif %}
 
                 <!--Conditions-->
-                {% if substep.condition|length > 0 %}
-                    {% for condition in substep.condition %}
+                {% if state.condition|length > 0 %}
+                    {% for condition in state.condition %}
                         <span class='program-box glyphicon glyphicon-button-input condition-box' title='{{condition}}'>{{condition.params.button}}</span>
                     {% endfor %}
                 {% endif %}
@@ -26,8 +26,8 @@
                 <span class='arrow-box glyphicon glyphicon-arrow-right'></span>
 
                 <!--Commands-->
-                {% if substep.commands|length > 0 %}
-                    {% for command in substep.commands %}
+                {% if state.commands|length > 0 %}
+                    {% for command in state.commands %}
                         {% if command|get_class == 'move_command' %}
                         <span class='program-box glyphicon glyphicon-move' title='{{command.params.name}}'></span>
                         {% endif %}
@@ -46,15 +46,15 @@
                     {% endfor %}
                 {% endif %}
 
-                {% if substep.next_ID != -1 %}
+                {% if state.next_ID != -1 %}
                 <span class='arrow-box glyphicon glyphicon-arrow-right'></span>
-                <span class='program-box glyphicon glyphicon-step'>{{substep.next_ID}}</span>
+                <span class='program-box glyphicon glyphicon-step'>{{state.next_ID}}</span>
                 {% endif %}
 
 
                     <div class="substep-buttons">
-                        <button type="button" class="btn btn-edit-substep" title="Edit this substep">...</button>
-                        <button type="button" class="btn btn-remove-substep" title="Remove this substep">X</button>
+                        <button type="button" class="btn btn-edit-substep" title="Edit this state">...</button>
+                        <button type="button" class="btn btn-remove-substep" title="Remove this state">X</button>
                     </div>
                 </div>
             {% endfor %}

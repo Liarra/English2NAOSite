@@ -24,7 +24,7 @@ def edit(request, program_id):
     for saved_description in saved_textual_descriptions:
         descriptions.append([saved_description.step_name, saved_description.step_description])
 
-    context = {'steps_list': states, 'descriptions_list': saved_textual_descriptions}
+    context = {'states_list': states, 'descriptions_list': saved_textual_descriptions}
     request.session['states'] = states
     request.session['step_descriptions'] = descriptions
 
@@ -36,7 +36,6 @@ def translate(request):
     header_list = request.POST.getlist('headers[]')
     i = 1
 
-    # ret_dictionary = {}
     states = []
     step_descriptions = []
 
@@ -54,7 +53,7 @@ def translate(request):
     request.session['states'] = states
     request.session['step_descriptions'] = step_descriptions
 
-    context = {'steps_list': states}
+    context = {'states_list': states}
     return render(request, 'translator/formal_description.html', context)
 
 
@@ -132,7 +131,7 @@ def state_editor(request):
             if id == state_id:
                 state_to_display = state
 
-    context = {'substep': state_to_display}
+    context = {'state': state_to_display}
     return render(request, 'translator/state_editor.html', context)
 
 
