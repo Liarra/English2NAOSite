@@ -124,7 +124,7 @@ def substep_editor(request):
                 step_for_display = substep
 
     context = {'substep': step_for_display}
-    return render(request, 'translator/substep_editor.html', context)
+    return render(request, 'translator/state_editor.html', context)
 
 
 def substep_editor_components_list(request):
