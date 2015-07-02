@@ -5,7 +5,7 @@ from operator import attrgetter
 __author__ = 'NBUCHINA'
 
 
-def write_csv_from_steps(states, csv_file):
+def write_csv_from_states(states, csv_file):
     state_writer = csv.writer(csv_file, delimiter=',',
                               quotechar='"', quoting=csv.QUOTE_MINIMAL)
 

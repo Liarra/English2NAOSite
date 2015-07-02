@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from translator.executables.nlp import commons
+from translator.executables.nlp.components.component import UnrecognisedComponent
 from translator.executables.nlp.translation import translator
 from translator.executables.nlp.components.robot_commands import button_press
 from translator.models import *
@@ -17,61 +18,61 @@ def create(request):
 
 def edit(request, program_id):
     scenario = Scenario.objects.get(id=program_id)
-    steps = pickle.loads(scenario.pickled_formal_description)
+    states = pickle.loads(scenario.pickled_formal_description)
     saved_textual_descriptions = scenario.step_set.all()
     descriptions = []
     for saved_description in saved_textual_descriptions:
         descriptions.append([saved_description.step_name, saved_description.step_description])
 
-    context = {'steps_list': steps, 'descriptions_list': saved_textual_descriptions}
-    request.session['steps'] = steps
+    context = {'steps_list': states, 'descriptions_list': saved_textual_descriptions}
+    request.session['states'] = states
     request.session['step_descriptions'] = descriptions
 
     return render(request, 'translator/create.html', context)
 
 
 def translate(request):
-    textlist = request.POST.getlist('text[]')
-    headerlist = request.POST.getlist('headers[]')
+    text_list = request.POST.getlist('text[]')
+    header_list = request.POST.getlist('headers[]')
     i = 1
 
     # ret_dictionary = {}
-    steps = []
+    states = []
     step_descriptions = []
 
-    header_cycle = cycle(headerlist)
-    for text in textlist:
+    header_cycle = cycle(header_list)
+    for text in text_list:
         step_descriptions.append([next(header_cycle), text])
 
         if text == "":
-            steps.append({})
+            states.append({})
         else:
             result = translator.translate(text, i)
-            steps.append(result)
+            states.append(result)
         i += 1
 
-    request.session['steps'] = steps
+    request.session['states'] = states
     request.session['step_descriptions'] = step_descriptions
 
-    context = {'steps_list': steps}
+    context = {'steps_list': states}
     return render(request, 'translator/formal_description.html', context)
 
 
 def save_program(request):
-    textlist = request.POST.getlist('text[]')
-    headerlist = request.POST.getlist('headers[]')
+    text_list = request.POST.getlist('text[]')
+    header_list = request.POST.getlist('headers[]')
     step_descriptions = []
 
-    header_cycle = cycle(headerlist)
-    for text in textlist:
+    header_cycle = cycle(header_list)
+    for text in text_list:
         step_descriptions.append([next(header_cycle), text])
 
-    steps = request.session['steps']
+    states = request.session['states']
 
-    pickled_steps = pickle.dumps(steps)
+    pickled_states = pickle.dumps(states)
 
     new_program = Scenario()
-    new_program.pickled_formal_description = pickled_steps
+    new_program.pickled_formal_description = pickled_states
     new_program.save()
 
     for heading, text in step_descriptions:
@@ -92,42 +93,50 @@ def view_scenarios(request):
 
 
 def csv(request):
-    steps = request.session['steps']
-    csvfile = translator.get_csv_file_with_header()
-    for step in steps:
-        if step != {}:
-            translator.get_csv(step, csvfile)
+    states = request.session['states']
 
-    string = csvfile.getvalue()
-    print(string)
-    response = HttpResponse(csvfile.getvalue(), content_type='application/csv')
+    #remove unrecognised parts, if any
+    for states_for_step in states:
+        for state in states_for_step:
+            for command in state.commands:
+                if isinstance(command, UnrecognisedComponent):
+                    state.commands.remove(command)
+                    if len(state.commands) == 0:
+                        states_for_step.remove(state)
+
+    csv_file = translator.get_csv_file_with_header_and_first_state(states[0])
+    for states_for_step in states:
+        if states_for_step != {}:
+            translator.write_csv(states_for_step, csv_file)
+
+    response = HttpResponse(csv_file.getvalue(), content_type='application/csv')
     response['Content-Disposition'] = 'attachment; filename=scenario.csv'
-    response['Content-Length'] = csvfile.tell()
-    csvfile.close()
+    response['Content-Length'] = csv_file.tell()
+    csv_file.close()
     return response
 
 
-def substep_editor(request):
-    steps = request.session['steps']
-    step_id = request.POST['substep_id'].strip()
+def state_editor(request):
+    states = request.session['states']
+    state_id = request.POST['substep_id'].strip()
 
-    step_for_display = None
-    for step in steps:
-        for substep in step:
+    state_to_display = None
+    for states_for_step in states:
+        for state in states_for_step:
             id = None
-            if hasattr(substep, "uID"):
-                id = substep.uID
+            if hasattr(state, "uID"):
+                id = state.uID
             else:
-                id = substep.ID
+                id = state.ID
 
-            if id == step_id:
-                step_for_display = substep
+            if id == state_id:
+                state_to_display = state
 
-    context = {'substep': step_for_display}
+    context = {'substep': state_to_display}
     return render(request, 'translator/state_editor.html', context)
 
 
-def substep_editor_components_list(request):
+def get_components_list(request):
     from translator.executables.nlp.components.robot_commands import say_command, wait_command
     from translator.executables.nlp.components.moves.demo_moves import wave, nod, handshake
 
@@ -144,9 +153,9 @@ def substep_editor_components_list(request):
     return render(request, "translator/components_list.html", context)
 
 
-def substep_editor_params(request):
-    steps = request.session['steps']
-    step_id = request.POST['substep_id'].strip()
+def get_component_params(request):
+    states = request.session['states']
+    state_id = request.POST['substep_id'].strip()
 
     action_index = None
     condition_index = None
@@ -157,24 +166,24 @@ def substep_editor_params(request):
         condition_index = int(request.POST['substep_condition_index'].strip())
 
     action = None
-    for step in steps:
-        for substep in step:
+    for states_for_step in states:
+        for state in states_for_step:
             id = None
-            if hasattr(substep, "uID"):
-                id = substep.uID
+            if hasattr(state, "uID"):
+                id = state.uID
             else:
-                id = substep.ID
-            if id == step_id:
+                id = state.ID
+            if id == state_id:
                 if action_index:
-                    action = substep.commands[action_index - 1]
+                    action = state.commands[action_index - 1]
                 elif condition_index:
-                    action = substep.condition[condition_index - 1]
+                    action = state.condition[condition_index - 1]
 
     context = {'component': action}
     return render(request, "translator/component_properties.html", context)
 
 
-def substep_editor_class_params(request):
+def get_component_class_params(request):
     class_name = request.POST['class_name'].strip()
     class_class = commons.class_for_name("translator.executables.nlp.components.robot_commands", class_name)
 
@@ -182,29 +191,29 @@ def substep_editor_class_params(request):
     return render(request, "translator/component_properties.html", context)
 
 
-def remove_substep(request):
-    steps = request.session['steps']
-    step_id_for_removal = request.POST['substep_id'].strip()
+def remove_state(request):
+    states = request.session['states']
+    state_id_for_removal = request.POST['substep_id'].strip()
 
-    for step in steps:
-        for substep in step:
+    for states_for_step in states:
+        for state in states_for_step:
             id = None
-            if hasattr(substep, "uID"):
-                id = substep.uID
+            if hasattr(state, "uID"):
+                id = state.uID
             else:
-                id = substep.ID
-            if id == step_id_for_removal:
-                step.remove(substep)
+                id = state.ID
+            if id == state_id_for_removal:
+                states_for_step.remove(state)
 
-    request.session['steps'] = steps
+    request.session['states'] = states
     return HttpResponse("OK")
 
 
-def update_substep(request):
+def update_state(request):
     from translator.executables.nlp.states import program_editor
 
     # TODO: Make a good JSON here.
-    step_id = request.POST['substep_id'].strip()
+    state_id = request.POST['substep_id'].strip()
     actions_to_add = json.loads(request.POST.get('actions_to_add'))
     conditions_to_add = json.loads(request.POST.get('conditions_to_add'))
     actions_to_remove = json.loads(request.POST.get('actions_to_remove'))
@@ -212,12 +221,12 @@ def update_substep(request):
     change_actions = json.loads(request.POST.get('change_actions'))
     change_conditions = json.loads(request.POST.get('change_actions'))
 
-    request.session["steps"] = program_editor.update_state(request.session["steps"], step_id,
+    request.session["states"] = program_editor.update_state(request.session["states"], state_id,
                                                            actions_to_add, conditions_to_add,
                                                            actions_to_remove, conditions_to_remove,
                                                            change_actions, change_conditions)
-    steps = request.session["steps"]
-    context = {'steps_list': steps}
+    states = request.session["states"]
+    context = {'steps_list': states}
     return render(request, 'translator/formal_description.html', context)
 
 

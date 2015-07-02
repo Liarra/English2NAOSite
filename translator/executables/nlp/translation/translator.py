@@ -36,11 +36,13 @@ def translate(text, step_number=1, components_from_db=None):
     return components_from_text
 
 
-def get_csv_file_with_header():
-    return encode2csv.init_csv()
+def get_csv_file_with_header_and_first_state(first_states):
+    csv_for_result= encode2csv.init_csv()
+    states_list = grammar.get_new_list_with_keypress_states(first_states)
+    encode2csv.write_first_csv_line(states_list, csv_for_result)
 
+    return csv_for_result
 
-def get_csv(steps, csv_for_result):
-    steps_list = grammar.get_new_list_with_keypress_states(steps)
-    encode2csv.write_first_csv_line(steps_list, csv_for_result)
-    encode2csv.write_csv_from_steps(steps_list, csv_for_result)
+def write_csv(states, csv_for_result):
+    states_list = grammar.get_new_list_with_keypress_states(states)
+    encode2csv.write_csv_from_states(states_list, csv_for_result)
