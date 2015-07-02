@@ -78,10 +78,15 @@ font-family:sans-serif;
 background:#CCFFCC;
 }
 
-.substep-buttons{
+.substep-buttons, .component-buttons{
 display:inline-block;
 vertical-align:bottom;
 visibility:hidden;
+}
+
+.component-buttons{
+visibility:visible;
+vertical-align:top;
 }
 
 .btn-edit-substep, .btn-remove-substep{
@@ -90,6 +95,17 @@ margin-bottom:5px;
 height:20px;
 width:20px;
 display:block;
+}
+
+.btn-remove-component{
+padding:0 1px;
+margin:10px 0 15px -10px;
+height:15px;
+width:15px;
+display:block;
+font-size:x-small;
+border:1px grey solid;
+vertical-align:middle;
 }
 
 .substep-div:hover .substep-buttons {

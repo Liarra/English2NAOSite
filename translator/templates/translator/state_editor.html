@@ -13,6 +13,9 @@
                     {% for condition in state.condition %}
                         <span class='program-box glyphicon glyphicon-button-input condition-box'
                               title='{{condition}}' about="{{forloop.counter}}">{{condition.params.button}}</span>
+                        <div class="component-buttons">
+                            <button type="button" class="btn btn-remove-component" title="Remove this condition">x</button>
+                        </div>
                     {% endfor %}
 
                 {% else %}
@@ -44,6 +47,9 @@
                         <span class='program-box glyphicon glyphicon-question-sign program-box-clickable existing-action'
                               title='{{command}}' about="{{forloop.counter}}" command="UnrecognisedComponent"></span>
                         {% endif %}
+                        <div class="component-buttons">
+                            <button type="button" class="btn btn-remove-component" title="Remove this action">x</button>
+                        </div>
                     {% endfor %}
                 {% endif %}
 
@@ -53,12 +59,13 @@
                 {% if state.next_ID != -1 %}
 
                 <span class='program-box glyphicon glyphicon-step'>{{state.next_ID}}</span>
+                <div class="component-buttons">
+                    <button type="button" class="btn btn-remove-component" title="Remove">x</button>
+                </div>
 
                 {% else %}
                 <span class='program-box empty-program-box glyphicon' title='New'>+</span>
                 {% endif %}
-
-
 
                 </div>
 

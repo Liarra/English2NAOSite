@@ -31,12 +31,20 @@ var changelist={
         this.change_in_actions[index]=new_params;
     },
 
+    changeCondition:function(index,new_params){
+        this.change_in_conditions[index]=new_params;
+    },
+
+    removeAction:function(index){
+        this.actions_to_remove.push(index);
+    },
+
+    removeCondition:function(index){
+        this.conditions_to_remove.push(index);
+    },
 }
 
 var i=0
-function addAllNewActions(){
-}
-
 
 
 function assign_substep_actions_icons(){
