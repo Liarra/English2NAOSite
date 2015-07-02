@@ -11,7 +11,7 @@
                 <!--Conditions-->
                 {% if substep.condition|length > 0 %}
                     {% for condition in substep.condition %}
-                        <span class='program-box glyphicon glyphicon-button-input condition-box program-box-clickable'
+                        <span class='program-box glyphicon glyphicon-button-input condition-box'
                               title='{{condition}}' about="{{forloop.counter}}">{{condition.params.button}}</span>
                     {% endfor %}
 

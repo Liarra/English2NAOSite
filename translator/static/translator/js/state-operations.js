@@ -44,9 +44,19 @@ function assign_substep_actions_icons(){
         function(){
         $(".active-box").removeClass("active-box");
         $(this).addClass("active-box");
-        substep_div=$(this).parent();
-        substepid=substep_div.children(".glyphicon-step").first().attr("uid");
-        load_component_params($(this).attr('about'), substepid,'s');
+        state_div=$(this).parent();
+        state_id=state_div.children(".glyphicon-step").first().attr("uid");
+        load_component_params($(this).attr('about'), state_id,'a');
+        }
+    );
+
+    $(".condition-box").click(
+        function(){
+        $(".active-box").removeClass("active-box");
+        $(this).addClass("active-box");
+        state_div=$(this).parent();
+        state_id=state_div.children(".glyphicon-step").first().attr("uid");
+        load_component_params($(this).attr('about'), state_id,'c');
         }
     );
 
@@ -159,14 +169,23 @@ function load_component_params(index, state_id, letter){
         return
     }
 
+    if (letter=='a'){
+        ajax_data={
+            substep_id: state_id,
+            substep_action_index: index,
+        }
+    }
+    else{
+        ajax_data={
+            substep_id: state_id,
+            substep_condition_index: index
+        }
+    }
     $.ajax({
             url: "/translator/editor-substep-params/",
             type:"POST",
 
-            data: {
-                substep_id: state_id,
-                substep_action_index: index,
-            },
+            data: ajax_data,
 
             success: function( data ) {
                 $(".action-params-div").hide();

@@ -147,7 +147,14 @@ def substep_editor_components_list(request):
 def substep_editor_params(request):
     steps = request.session['steps']
     step_id = request.POST['substep_id'].strip()
-    action_index = int(request.POST['substep_action_index'].strip())
+
+    action_index = None
+    condition_index = None
+
+    if 'substep_action_index' in request.POST:
+        action_index = int(request.POST['substep_action_index'].strip())
+    elif 'substep_condition_index' in request.POST:
+        condition_index = int(request.POST['substep_condition_index'].strip())
 
     action = None
     for step in steps:
@@ -158,7 +165,10 @@ def substep_editor_params(request):
             else:
                 id = substep.ID
             if id == step_id:
-                action = substep.commands[action_index - 1]
+                if action_index:
+                    action = substep.commands[action_index - 1]
+                elif condition_index:
+                    action = substep.condition[condition_index - 1]
 
     context = {'component': action}
     return render(request, "translator/component_properties.html", context)
@@ -203,9 +213,9 @@ def update_substep(request):
     change_conditions = json.loads(request.POST.get('change_actions'))
 
     request.session["steps"] = program_editor.update_state(request.session["steps"], step_id,
-                                                            actions_to_add, conditions_to_add,
-                                                            actions_to_remove, conditions_to_remove,
-                                                            change_actions, change_conditions)
+                                                           actions_to_add, conditions_to_add,
+                                                           actions_to_remove, conditions_to_remove,
+                                                           change_actions, change_conditions)
     steps = request.session["steps"]
     context = {'steps_list': steps}
     return render(request, 'translator/formal_description.html', context)
