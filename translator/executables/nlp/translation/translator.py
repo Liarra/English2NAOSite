@@ -42,4 +42,5 @@ def get_csv_file_with_header():
 
 def get_csv(steps, csv_for_result):
     steps_list = grammar.get_new_list_with_keypress_states(steps)
+    encode2csv.write_first_csv_line(steps_list, csv_for_result)
     encode2csv.write_csv_from_steps(steps_list, csv_for_result)
