@@ -111,3 +111,7 @@ vertical-align:middle;
 .substep-div:hover .substep-buttons {
     visibility:visible;
 }
+
+.component{
+display:inline-block;
+}

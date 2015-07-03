@@ -100,6 +100,27 @@ function assign_substep_actions_icons(){
             load_conditions_library();
         }
     );
+
+    $(".btn-remove-component").click(
+        function(){
+         var component = $(this).parent().parent().children(".program-box").first();
+         var component_index=component.attr("about");
+
+         component.parent().remove();
+
+         //If component was added in this dialogue, just remove the icon
+         if (component.hasClass("added-action") || component.hasClass("added-condition")){
+            return;
+         }
+
+        else {
+            if (component.hasClass("condition-box"))
+                changelist.removeCondition(component_index);
+            else if (component.hasClass("existing-action"))
+                changelist.removeAction(component_index);
+        }
+        }
+    );
 }
 
 function load_actions_library(){
@@ -221,7 +242,10 @@ function addNewActionTemplate(senderIcon){
     if (new_class=="wait_command")
     class_glyphicon="glyphicon-time";
 
-    $(" <span class='program-box glyphicon "+class_glyphicon+" program-box-clickable new-action added-action' about='a"+i+"' command='"+new_class+"'></span>").insertBefore("#empty-action-box");
+    $(" <div class='component'>"+
+    "<span class='program-box glyphicon "+class_glyphicon+" program-box-clickable new-action added-action' about='a"+i+"' command='"+new_class+"'>"+
+    "</span><div class='component-buttons'><button type='button' class='btn btn-remove-component' title='Remove this action'>x</button></div></div>").insertBefore("#empty-action-box");
+
     $(".active-box").removeClass("active-box");
     $(".new-action").addClass("active-box");
     $(".new-action").removeClass("new-action");
@@ -256,7 +280,9 @@ function addNewConditionTemplate(senderIcon){
     class_glyphicon="glyphicon-button-input";
 
 
-    $(" <span class='program-box glyphicon "+class_glyphicon+" program-box-clickable new-condition added-condition' about='c"+i+"' command='"+new_class+"'>?</span>").insertBefore("#empty-condition-box");
+    $(" <div class='component'>"+
+    " <span class='program-box glyphicon "+class_glyphicon+" program-box-clickable new-condition added-condition' about='c"+i+"' command='"+new_class+"'>?</span>"+
+    "<div class='component-buttons'><button type='button' class='btn btn-remove-component' title='Remove this condition'>x</button></div></div>").insertBefore("#empty-condition-box");
     $("#empty-condition-box").hide();
     $(".active-box").removeClass("active-box");
     $(".new-condition").addClass("active-box");

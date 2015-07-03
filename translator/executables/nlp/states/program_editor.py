@@ -43,11 +43,13 @@ def update_state(steps_list, state_id,
 
                 # Then remove stuff
                 for action_index in actions_to_remove:
+                    action_index = int(action_index)-1
                     del substep.commands[action_index]
 
                 for condition_index in conditions_to_remove:
                     if not hasattr(substep, 'condition'):
                         break
+                    condition_index = int(condition_index)-1
                     del substep.condition[condition_index]
                     if len(substep.condition) == 0:
                         substep.__class__ = State

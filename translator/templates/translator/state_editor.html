@@ -11,10 +11,12 @@
                 <!--Conditions-->
                 {% if state.condition|length > 0 %}
                     {% for condition in state.condition %}
-                        <span class='program-box glyphicon glyphicon-button-input condition-box'
-                              title='{{condition}}' about="{{forloop.counter}}">{{condition.params.button}}</span>
-                        <div class="component-buttons">
-                            <button type="button" class="btn btn-remove-component" title="Remove this condition">x</button>
+                        <div class="component">
+                            <span class='program-box glyphicon glyphicon-button-input condition-box'
+                                  title='{{condition}}' about="{{forloop.counter}}">{{condition.params.button}}</span>
+                            <div class="component-buttons">
+                                <button type="button" class="btn btn-remove-component" title="Remove this condition">x</button>
+                            </div>
                         </div>
                     {% endfor %}
 
@@ -28,6 +30,7 @@
                 <!--Commands-->
                 {% if state.commands|length > 0 %}
                     {% for command in state.commands %}
+                        <div class="component">
                         {% if command|get_class == 'move_command' %}
                         <span class='program-box glyphicon glyphicon-move program-box-clickable existing-action'
                               title='{{command.params.name}}' about="{{forloop.counter}}" command="move_command"></span>
@@ -50,6 +53,7 @@
                         <div class="component-buttons">
                             <button type="button" class="btn btn-remove-component" title="Remove this action">x</button>
                         </div>
+                        </div>
                     {% endfor %}
                 {% endif %}
 
@@ -57,10 +61,11 @@
 
                 <span class='arrow-box glyphicon glyphicon-arrow-right'></span>
                 {% if state.next_ID != -1 %}
-
+                <div class="component">
                 <span class='program-box glyphicon glyphicon-step'>{{state.next_ID}}</span>
                 <div class="component-buttons">
                     <button type="button" class="btn btn-remove-component" title="Remove">x</button>
+                </div>
                 </div>
 
                 {% else %}

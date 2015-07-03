@@ -225,7 +225,7 @@ def update_state(request):
                                                            actions_to_remove, conditions_to_remove,
                                                            change_actions, change_conditions)
     states = request.session["states"]
-    context = {'steps_list': states}
+    context = {'states_list': states}
     return render(request, 'translator/formal_description.html', context)
 
 
