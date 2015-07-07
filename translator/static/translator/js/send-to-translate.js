@@ -163,11 +163,13 @@ function alignTextWithProgram(){
         if (difference>0){
             difference=difference+61;
             TextItem.css({"margin-bottom":difference+"px"});
+            ProgramItem.css({"margin-bottom":"30px"});
         }
 
         else{
             difference=-1*difference;
             ProgramItem.css({"margin-bottom":difference+"px"});
+            TextItem.css({"margin-bottom":"20px"});
         }
 
 
