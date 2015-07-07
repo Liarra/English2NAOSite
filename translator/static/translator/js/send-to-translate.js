@@ -93,7 +93,7 @@ $(document).ready(function(){
             success: function( data ) {
 //                var json_data=jQuery.parseJSON(data);
 //                $("#program" ).html(make_program(json_data));
-                $("#program" ).html(data);
+                $("#program").html(data);
                 assign_balloons();
                 alignTextWithProgram();
                 assign_remove_buttons();
@@ -156,11 +156,20 @@ function alignTextWithProgram(){
     var textItems=$('.step-div')
 
     for(var i=0;i<numItems;i++){
-        ProgramItem=programItems.eq(i)
-        TextItem=textItems.eq(i)
+        ProgramItem=programItems.eq(i);
+        TextItem=textItems.eq(i);
 
-        difference=ProgramItem.height()-TextItem.height()+61
+        difference=ProgramItem.height()-TextItem.height();
+        if (difference>0){
+            difference=difference+61;
+            TextItem.css({"margin-bottom":difference+"px"});
+        }
 
-        TextItem.css({"margin-bottom":difference+"px"});
+        else{
+            difference=-1*difference;
+            ProgramItem.css({"margin-bottom":difference+"px"});
+        }
+
+
     }
 }

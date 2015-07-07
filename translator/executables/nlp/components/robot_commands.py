@@ -94,7 +94,7 @@ class move_command(Command):
 class button_press(Condition):
     name = "Keyboard button press"
     tags = ["press", "button", "key", "type"]
-    regexp = r"(['\"](?P<button_pre>.)['\"] .{0,10})?(press|type)(.{0,10}['\"](?P<button_post>.)['\"])$"
+    regexp = r"(['\"](?P<button_pre>.)['\"] .{0,10})?(press|type)(e?d|ing)?(.{0,10}['\"](?P<button_post>.)['\"])?$"
 
     default_params = {"button": ''}
     command = "key[{button}]->"

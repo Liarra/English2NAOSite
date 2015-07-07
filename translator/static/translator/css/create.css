@@ -27,6 +27,7 @@ padding:1px 3px;
 
 .step-description{
     margin-top:5px;
+    min-height:2em;
 }
 
 .program-step{

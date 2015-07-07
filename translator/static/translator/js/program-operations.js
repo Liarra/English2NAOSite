@@ -97,7 +97,15 @@ function edit_substep(substep_div){
 }
 
 
+function h(e) {
+  $(e).css({'height':'auto','overflow-y':'hidden'}).height(e.scrollHeight);
+}
 
+$('textarea').each(function () {
+  h(this);
+}).on('input', function () {
+  h(this);
+});
 
 function throw_exception(){
     alert("Something went wrong");

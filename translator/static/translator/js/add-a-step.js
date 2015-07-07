@@ -8,7 +8,7 @@ $("#steps-column")
         newRow.find("input:first").val("");
         newRow.find("textarea:first").html("");
 
-        newRow.css({"margin-bottom":"3px"});
+        newRow.css({"margin-bottom":"20px"});
 
         newRow.appendTo("#steps-column");
 
