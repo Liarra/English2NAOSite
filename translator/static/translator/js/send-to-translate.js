@@ -154,21 +154,22 @@ function alignTextWithProgram(){
     var numItems = $('.program-step').length
     var programItems = $('.program-step')
     var textItems=$('.step-div')
-    var nameHeight=textItems.children("row").first().height();
+
 
     for(var i=0;i<numItems;i++){
         ProgramItem=programItems.eq(i);
         TextItem=textItems.eq(i);
+        var nameHeight=TextItem.children(".row").first().height()+4;
 
         difference=ProgramItem.height()-TextItem.height();
         if (difference>0){
-            difference=difference+nameHeight-2;
+            difference=difference+62;
             TextItem.css({"margin-bottom":difference+"px"});
             ProgramItem.css({"margin-bottom":"30px"});
         }
 
         else{
-            difference=-1*difference-2;
+            difference=-1*difference;
             ProgramItem.css({"margin-bottom":difference+"px"});
             TextItem.css({"margin-bottom":"20px"});
         }
