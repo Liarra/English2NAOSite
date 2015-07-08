@@ -68,7 +68,7 @@ class TextBreaker(object):
         for i in range(0, len(edges)):
             connections = {}
             for j in range(i + 1, min(len(edges), i + 100)):
-                connections[edges[j]] = 0
+                connections[edges[j]] = 0.0000001
             graph[edges[i]] = connections
 
         return graph
@@ -110,6 +110,12 @@ class Ranker(object):
         p = re.compile(component.regexp, re.IGNORECASE)
         text = text.strip()
         if p.match(text):
+            match=p.match(text)
+            groupdict=match.groupdict()
+            if len(groupdict) > 0:
+                if all(groupdict[k] is None for k in groupdict):
+                    return 0
+
             return self.price_for_regexp
         return 0
 
