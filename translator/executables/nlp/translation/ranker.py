@@ -77,7 +77,7 @@ class TextBreaker(object):
 class Ranker(object):
     price_for_tag = 5
     price_for_regexp = 15
-    price_for_length = -5
+    price_for_length = -2
     price_for_punctuation = 5
 
     def rank_chunk(self, text):
@@ -97,10 +97,12 @@ class Ranker(object):
 
     def rank_tags(self, text, component):
         text = text.lower()
+        text_words = text.split(" .,!:;?()")
         tags_sum = 0
         for tag in component.tags:
-            if tag in text:
-                tags_sum += self.price_for_tag
+            for word in text_words:
+                if tag == word:
+                    tags_sum += self.price_for_tag
         rank = tags_sum
         return rank
 
@@ -110,8 +112,8 @@ class Ranker(object):
         p = re.compile(component.regexp, re.IGNORECASE)
         text = text.strip()
         if p.match(text):
-            match=p.match(text)
-            groupdict=match.groupdict()
+            match = p.match(text)
+            groupdict = match.groupdict()
             if len(groupdict) > 0:
                 if all(groupdict[k] is None for k in groupdict):
                     return 0

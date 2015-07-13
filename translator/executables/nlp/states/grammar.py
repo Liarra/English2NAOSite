@@ -145,6 +145,8 @@ def transform(components_list):
 
 def grammar_transform(components_list):
     gr = Grammar()
+    gr.append_rule(input=[("unrecognised", IgnoredComponent)], transformation=remove_unrecognised)
+
     gr.append_rule(input=[("c1", Command), ("p", Parallel), ("c2", Command)], transformation=parallel_commands)
     gr.append_rule(input=[("c1", Command), ("p", Parallel), ("s2", State)], transformation=command_parallel_state)
     gr.append_rule(input=[("s1", State), ("p", Parallel), ("c2", Command)], transformation=state_parallel_command)
