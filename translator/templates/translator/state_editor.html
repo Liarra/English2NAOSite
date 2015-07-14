@@ -62,14 +62,14 @@
                 <span class='arrow-box glyphicon glyphicon-arrow-right'></span>
                 {% if state.next_ID != -1 %}
                 <div class="component">
-                <span class='program-box glyphicon glyphicon-step'>{{state.next_ID}}</span>
+                <span class='program-box glyphicon glyphicon-step state-id-clickable existing-next'>{{state.next_ID}}</span>
                 <div class="component-buttons">
                     <button type="button" class="btn btn-remove-component" title="Remove">x</button>
                 </div>
                 </div>
 
                 {% else %}
-                <span class='program-box empty-program-box glyphicon' title='New'>+</span>
+                <span class='program-box empty-program-box glyphicon' title='New' id="empty-next-box">+</span>
                 {% endif %}
 
                 </div>

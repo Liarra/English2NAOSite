@@ -7,6 +7,8 @@ var changelist={
     conditions_to_remove:[],
     change_in_conditions:[],
 
+    next_id:0,
+
     clear:function(){
         this.actions_to_add=[];
         this.actions_to_remove=[];
@@ -14,6 +16,7 @@ var changelist={
         this.conditions_to_add=[];
         this.conditions_to_remove=[];
         this.change_in_conditions=[];
+        this.next_id=0;
     },
 
 
@@ -42,6 +45,10 @@ var changelist={
     removeCondition:function(index){
         this.conditions_to_remove.push(index);
     },
+
+    setNext:function(nextID){
+        this.next_id=nextID;
+    }
 }
 
 var i=0
@@ -52,7 +59,7 @@ function assign_substep_actions_icons(){
         function(){
         $(".active-box").removeClass("active-box");
         $(this).addClass("active-box");
-        state_div=$(this).parent();
+        state_div=$(this).parent().parent();
         state_id=state_div.children(".glyphicon-step").first().attr("uid");
         load_component_params($(this).attr('about'), state_id,'a');
         }
@@ -62,12 +69,19 @@ function assign_substep_actions_icons(){
         function(){
         $(".active-box").removeClass("active-box");
         $(this).addClass("active-box");
-        state_div=$(this).parent();
+        state_div=$(this).parent().parent();
         state_id=state_div.children(".glyphicon-step").first().attr("uid");
         load_component_params($(this).attr('about'), state_id,'c');
         }
     );
 
+    $(".state-id-clickable").click(
+        function(){
+        $(".active-box").removeClass("active-box");
+        $(this).addClass("active-box");
+        load_next_params($(this));
+        }
+    );
 
     $(".added-action").click(
         function(){
@@ -85,6 +99,14 @@ function assign_substep_actions_icons(){
         }
     );
 
+    $(".added-next").click(
+        function(){
+        $(".active-box").removeClass("active-box");
+        $(this).addClass("active-box");
+        load_next_params($(this));
+        }
+    );
+
     $("#empty-action-box").click(
         function(){
             $(".active-box").removeClass("active-box");
@@ -98,6 +120,14 @@ function assign_substep_actions_icons(){
             $(".active-box").removeClass("active-box");
             $(this).addClass("active-box");
             load_conditions_library();
+        }
+    );
+
+     $("#empty-next-box").click(
+        function(){
+            $(".active-box").removeClass("active-box");
+            $(this).addClass("active-box");
+            load_next_params(null);
         }
     );
 
@@ -118,6 +148,8 @@ function assign_substep_actions_icons(){
                 changelist.removeCondition(component_index);
             else if (component.hasClass("existing-action"))
                 changelist.removeAction(component_index);
+            else if (component.hasClass("existing-next"))
+                changelist.setNext(-1);
         }
         }
     );
@@ -229,6 +261,46 @@ function load_component_params(index, state_id, letter){
         });
 }
 
+function load_next_params(senderIcon){
+
+    //If it's already there, just show it
+
+    if($("#n").length ){
+        $(".action-params-div").hide();
+        $("#n").show();
+        return
+    }
+
+    if (senderIcon)
+    next_id=senderIcon.html();
+    else
+    {
+    $(" <div class='component'>"+
+    " <span class='program-box glyphicon glyphicon-step new-next added-next' about='n'>?</span>"+
+    "<div class='component-buttons'><button type='button' class='btn btn-remove-component' title='Remove'>x</button></div></div>").insertBefore("#empty-next-box");
+    $("#empty-next-box").hide();
+    $(".active-box").removeClass("active-box");
+    $(".new-condition").addClass("active-box");
+
+    senderIcon=$(".new-next").first();
+    $(".new-next").removeClass("new-next");
+    }
+
+    next_id="";
+
+    data="<b>Next ID</b><br/><input type='text' name='next_id' id='next_id' value="+next_id+">"
+
+    $(".action-params-div").hide();
+    new_div="<div class='action-params-div' id='n'>"+data+"</div>"
+
+    $("#substep_editor_library").show();
+    $("#substep_editor_library").append(new_div);
+
+    $("#next_id").on("input propertychange paste",function(){
+        senderIcon.html($("#next_id").val());
+    });
+
+}
 
 function addNewActionTemplate(senderIcon){
     i=i+1;
@@ -367,6 +439,9 @@ for (index = 0; index < added_icons.length; ++index) {
     changelist.changeAction(index,params);
 }
 
+next_id_field=$("#next_id");
+if (next_id_field.length)
+    changelist.setNext(next_id_field.val());
 }
 
 function sendSubstepUpdate(){
@@ -381,7 +456,8 @@ $.ajax({
                 actions_to_remove: JSON.stringify(changelist.actions_to_remove),
                 conditions_to_remove: JSON.stringify(changelist.conditions_to_remove),
                 change_actions : JSON.stringify(changelist.change_in_actions),
-                change_conditions : JSON.stringify(changelist.change_in_conditions)
+                change_conditions : JSON.stringify(changelist.change_in_conditions),
+                change_next_id: JSON.stringify(changelist.next_id),
             },
 
             success: function( data ) {

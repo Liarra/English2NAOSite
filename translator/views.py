@@ -219,11 +219,13 @@ def update_state(request):
     conditions_to_remove = json.loads(request.POST.get('conditions_to_remove'))
     change_actions = json.loads(request.POST.get('change_actions'))
     change_conditions = json.loads(request.POST.get('change_actions'))
+    change_next_id = json.loads(request.POST.get('change_next_id'))
 
     request.session["states"] = program_editor.update_state(request.session["states"], state_id,
                                                            actions_to_add, conditions_to_add,
                                                            actions_to_remove, conditions_to_remove,
-                                                           change_actions, change_conditions)
+                                                           change_actions, change_conditions,
+                                                           change_next_id)
     states = request.session["states"]
     context = {'states_list': states}
     return render(request, 'translator/formal_description.html', context)

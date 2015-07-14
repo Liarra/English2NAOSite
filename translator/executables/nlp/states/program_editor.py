@@ -5,10 +5,8 @@ from translator.executables.nlp.states.state import ConditionState, State
 __author__ = 'NBUCHINA'
 
 
-def update_state(steps_list, state_id,
-                 actions_to_add=None, conditions_to_add=None,
-                 actions_to_remove=None, conditions_to_remove=None,
-                 change_actions=None, change_conditions=None):
+def update_state(states_list, state_id, actions_to_add=None, conditions_to_add=None, actions_to_remove=None,
+                 conditions_to_remove=None, change_actions=None, change_conditions=None, change_next_id=None):
     if not conditions_to_remove:
         conditions_to_remove = []
     if not change_actions:
@@ -21,38 +19,41 @@ def update_state(steps_list, state_id,
         conditions_to_add = []
     if not change_conditions:
         change_conditions = []
-    new_steps = steps_list
-    for step in new_steps:
-        for substep in step:
-            if hasattr(substep, 'uID'):
-                state_unique_id = substep.uID
+    new_states = states_list
+    for states_for_step in new_states:
+        for state in states_for_step:
+            if hasattr(state, 'uID'):
+                state_unique_id = state.uID
             else:
-                state_unique_id = substep.ID
+                state_unique_id = state.ID
 
             if state_unique_id == state_id:
                 # First, change stuff
                 for i in range(0, len(change_actions)):
                     action_params = change_actions[i]
-                    substep.commands[i].load_params(action_params)
+                    state.commands[i].load_params(action_params)
 
                 for i in range(0, len(change_conditions)):
-                    if not hasattr(substep, 'condition'):
+                    if not hasattr(state, 'condition'):
                         break
                     condition_params = change_conditions[i]
-                    substep.condition[i].load_params(condition_params)
+                    state.condition[i].load_params(condition_params)
+
+                if change_next_id and not change_next_id == 0:
+                    state.next_ID = change_next_id
 
                 # Then remove stuff
                 for action_index in actions_to_remove:
-                    action_index = int(action_index)-1
-                    del substep.commands[action_index]
+                    action_index = int(action_index) - 1
+                    del state.commands[action_index]
 
                 for condition_index in conditions_to_remove:
-                    if not hasattr(substep, 'condition'):
+                    if not hasattr(state, 'condition'):
                         break
-                    condition_index = int(condition_index)-1
-                    del substep.condition[condition_index]
-                    if len(substep.condition) == 0:
-                        substep.__class__ = State
+                    condition_index = int(condition_index) - 1
+                    del state.condition[condition_index]
+                    if len(state.condition) == 0:
+                        state.__class__ = State
 
                 # Finally, add new stuff
                 for action in actions_to_add:
@@ -62,7 +63,7 @@ def update_state(steps_list, state_id,
                                                   action_class_name)
                     action_instance = action_class()
                     action_instance.load_params(action_params["params"])
-                    substep.commands.append(action_instance)
+                    state.commands.append(action_instance)
 
                 for condition in conditions_to_add:
                     condition_params = condition
@@ -72,9 +73,9 @@ def update_state(steps_list, state_id,
                     condition_instance = condition_class()
                     condition_instance.load_params(condition_params["params"])
 
-                    if not hasattr(substep, 'condition'):
-                        substep.condition = []
-                    substep.__class__ = ConditionState
-                    substep.condition.append(condition_instance)
+                    if not hasattr(state, 'condition'):
+                        state.condition = []
+                    state.__class__ = ConditionState
+                    state.condition.append(condition_instance)
 
-    return new_steps
+    return new_states
