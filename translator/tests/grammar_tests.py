@@ -31,7 +31,7 @@ class GrammarTests(TestCase):
             button_press(button="A"),
             say_command(text="say 'hello'"),
 
-            button_press.from_string("press B"),
+            button_press.from_string("press 'B'"),
             # button_press(button='B'),
             say_command.from_string("say 'bye'"),
 

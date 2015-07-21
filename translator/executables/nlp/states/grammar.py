@@ -1,8 +1,8 @@
 from translator.executables.nlp.components.component import *
 from translator.executables.nlp.components.execution import *
 from translator.executables.nlp.components.robot_commands import Command
-from translator.executables.nlp.grammar import id_pool
-from translator.executables.nlp.grammar.grammar import Grammar
+from translator.executables.nlp.states import id_pool
+from translator.executables.nlp.Type0py.grammar import Grammar
 from translator.executables.nlp.states.state import State, ConditionState, SelectByKeyState
 
 __author__ = 'NBUCHINA'
