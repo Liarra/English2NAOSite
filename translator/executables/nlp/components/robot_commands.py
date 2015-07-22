@@ -41,6 +41,7 @@ class wait_command(Command):
     command = "wait({ms})"
     default_params = {"ms": 0, 'body_part': 'timer'}
     name = "Wait"
+    summary = "Makes the robot wait for specified number of milliseconds (1 second=1000 milliseconds)"
 
     @classmethod
     def from_string(cls, string, index_in_text=0):
@@ -95,12 +96,15 @@ class move_command(Command):
 
 class button_press(Condition):
     name = "Keyboard button press"
+    summary = "The action is performed when a button on the keyboard is pressed"
+
     tags = ["press", "button", "key", "type"]
     regexp = r"(['\"](?P<button_pre>.)['\"] .{0,10})?(press|type)(e?d|ing)?(.{0,10}['\"](?P<button_post>.)['\"])?$"
 
     default_params = {"button": '', 'body_part': 'keyboard'}
     command = "key[{button}]->"
     tivipe_component_name = "CommandStateSelectByKey"
+
 
     @classmethod
     def from_string(cls, string, index_in_text=0):

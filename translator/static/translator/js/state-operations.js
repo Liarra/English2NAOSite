@@ -55,7 +55,7 @@ var i=0
 
 
 function assign_substep_actions_icons(){
-    $(".program-box-clickable").click(
+    $(".existing-action").click(
         function(){
         $(".active-box").removeClass("active-box");
         $(this).addClass("active-box");

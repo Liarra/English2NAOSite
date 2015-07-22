@@ -4,6 +4,8 @@ __author__ = 'NBUCHINA'
 
 wave = move_command()
 wave.params["name"] = "Wave"
+wave.name = "Wave"
+wave.summary = "The robot waves with its hand"
 wave.params["body_part"] = "stand-arm"
 wave.params["move"] = """movem (
 LHand, 0, 1000, 57, 1000, 0, 1000,
@@ -13,6 +15,8 @@ wave.regexp = r"waves? .{0,20} (hand)?"
 
 nod = move_command()
 nod.params["name"] = "Nod"
+nod.name = "Nod"
+nod.summary = "The robot nods with its head several times"
 nod.params["body_part"] = "stand-head"
 nod.params["move"] = """[[ledon(FaceLeds) & wait (500) & ledoff(FaceLeds)
 & wait (500) & ledon(FaceLeds) & wait (500) & ledoff(FaceLeds)
@@ -102,6 +106,8 @@ nod.regexp = r"nodes? .{0,20} (head)?"
 
 handshake = move_command()
 handshake.params["name"] = "Handshake"
+handshake.name = "Handshake"
+handshake.summary = "The robot stretches its arm and shakes it several times"
 handshake.params["move"] = """movem (
 HeadPitch,
 25.1,1000,25.1,600,25.1,440,25.1,600,25.1,240,
@@ -213,6 +219,8 @@ handshake.regexp = r"(shak(es?)|(ing).{0,20}( hand)?)|(mak(es?|ing).{0,20} hands
 stand = move_command()
 stand.params["body_part"] = "stand"
 stand.params["name"] = "Stand"
+stand.name = "Stand"
+stand.summary = "The robot stands up."
 stand.params[
     "move"] = """wait(3000)& ledoff(FaceLeds) & wait (500) & ledon(FaceLeds) & wait (500) & ledoff(FaceLeds) & wait (500) & ledon(FaceLeds)"""
 stand.tags = ["stand", "up"]
@@ -222,6 +230,8 @@ stand.params["base_pose"] = "Stand"
 crouch = move_command()
 crouch.params["body_part"] = "crouch"
 crouch.params["name"] = "Crouch"
+crouch.name = "Crouch"
+crouch.summary = "The robot sits on its knees."
 crouch.params[
     "move"] = """wait(3000)& ledoff(FaceLeds) & wait (500) & ledon(FaceLeds) & wait (500) & ledoff(FaceLeds) & wait (500) & ledon(FaceLeds)"""
 crouch.tags = ["crouch", "down", "kneel"]
@@ -230,6 +240,8 @@ crouch.regexp = r"(crouch|kneel)(s?)|(ing).{0,20}(down)?"
 cry = move_command()
 cry.params["body_part"] = "stand-head"
 cry.params["name"] = "Cry"
+cry.name = "Cry"
+cry.summary = "The robot stands up and quietly cries with its head low."
 cry.params["move"] = """[movem (HeadYaw, -0.090527, 2000, -0.090527, 2000,HeadPitch, 29.265538, 2000, 29.265538, 2000,LShoulderPitch,
      89.295472, 2000, 89.295472, 2000,LShoulderRoll, 8.698645, 2000, 8.698645, 2000,LElbowYaw, -85.433164, 2000,
      -85.433164, 2000,LElbowRoll, -17.927276, 2000, -17.927276, 2000,LWristYaw, -9.055025, 2000, -9.055025, 2000,LHand,
@@ -251,6 +263,8 @@ cry.params["base_pose"] = "Stand"
 dance = move_command()
 dance.params["body_part"] = "crouch"
 dance.params["name"] = "Dance"
+dance.name = "Dance"
+dance.summary = "The robot cheers with its arms while sitting on its knees"
 dance.params["move"] = """[[movem (
 HeadPitch,
 5.6,1600,5.6,2400,5.6,1400,5.6,1360,5.6,1400,
@@ -412,7 +426,7 @@ RShoulderRoll,
 RWristYaw,
 -29.2,1000,-29.2,1240,-29.2,1160,-29.2,1400,-29.2,1360,
 -29.2,1400,-29.2,1520,-29.2,1520,-29.2,760)]]"""
-dance.tags = ["dance", "dancing","dances", "joy"]
+dance.tags = ["dance", "dancing", "dances", "joy"]
 dance.regexp = r"danc(es?)|(ing)"
 # dance.params["base_pose"] = "Stand"
 
