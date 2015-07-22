@@ -5,24 +5,24 @@
 
 <div class="component-icon">
                         {% if component|get_class == 'move_command' or component|str == 'move_command' %}
-                        <span class='program-box glyphicon glyphicon-move new-action-icon' command="move_command"></span>
+                        <span class='program-box glyphicon  new-action-icon' style="background-image: url({{component|icon}})" command="move_command">&nbsp;</span>
                         <div class="component-name-div">{{component.params.name}}</div>
 
                         {% endif %}
 
                         {% if component|get_class == 'say_command' or component|str == 'say_command' %}
-                        <span class='program-box glyphicon glyphicon-comment new-action-icon' command="say_command"></span>
+                        <span class='program-box glyphicon  new-action-icon' style="background-image: url({{component|icon}})" command="say_command">&nbsp;</span>
                         <div class="component-name-div">{{component.name}}</div>
 
                         {% endif %}
 
                         {% if component|get_class == 'wait_command' or component|str == 'wait_command' %}
-                        <span class='program-box glyphicon glyphicon-time new-action-icon' command="wait_command"></span>
+                        <span class='program-box glyphicon glyphicon-time new-action-icon' style="background-image:url({{component|icon}})" command="wait_command"></span>
                         <div class="component-name-div">{{component.name}}</div>
                         {% endif %}
 
                         {% if component|get_class == 'button_press' or component|str == 'button_press' %}
-                        <span class='program-box glyphicon glyphicon-button-input new-condition-icon' command="button_press" >A</span>
+                        <span class='program-box glyphicon glyphicon-button-input new-condition-icon' style="background-image:url({{component|icon}})" command="button_press" >A</span>
                         <div class="component-name-div">{{component.name}}</div>
                         {% endif %}
 </div>

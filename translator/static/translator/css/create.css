@@ -45,9 +45,14 @@ min-height:60px;
     font-size:32px;
     min-width:32px;
     margin:5px;
+    margin-top:10px;
     padding:5px;
     border-radius:5px;
     border: 1px solid grey;
+    min-width:42px;
+    min-height:42px;
+    background-size: contain;
+    display: inline-block;
 }
 
 .arrow-box{

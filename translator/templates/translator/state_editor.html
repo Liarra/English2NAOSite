@@ -32,13 +32,13 @@
                     {% for command in state.commands %}
                         <div class="component">
                         {% if command|get_class == 'move_command' %}
-                        <span class='program-box glyphicon glyphicon-move program-box-clickable existing-action'
-                              title='{{command.params.name}}' about="{{forloop.counter}}" command="move_command"></span>
+                        <span class='program-box glyphicon program-box-clickable existing-action'  style="background-image: url({{command|icon}})"
+                              title='{{command.params.name}}' about="{{forloop.counter}}" command="move_command">&nbsp;</span>
                         {% endif %}
 
                         {% if command|get_class == 'say_command' %}
-                        <span class='program-box glyphicon glyphicon-comment program-box-clickable existing-action'
-                              title='{{command}}' about="{{forloop.counter}}" command="say_command"></span>
+                        <span class='program-box glyphicon program-box-clickable existing-action'  style="background-image: url({{command|icon}})"
+                              title='{{command}}' about="{{forloop.counter}}" command="say_command">&nbsp;</span>
                         {% endif %}
 
                         {% if command|get_class == 'wait_command' %}

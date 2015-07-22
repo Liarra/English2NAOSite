@@ -11,7 +11,7 @@ class Component(object):
     default_params = {}
 
     def __init__(self, **params):
-        self.params = self.__class__.default_params.copy()
+        self.params = self.default_params.copy()
 
         self.load_params(params)
 
