@@ -7,8 +7,9 @@ from django.http import HttpResponse
 
 from translator.executables.nlp import commons
 from translator.executables.nlp.components.component import UnrecognisedComponent
+from translator.executables.nlp.components.moves.demo_moves import *
 from translator.executables.nlp.translation import translator
-from translator.executables.nlp.components.robot_commands import button_press
+from translator.executables.nlp.components.robot_commands import *
 from translator.models import *
 
 
@@ -39,6 +40,8 @@ def translate(request):
     states = []
     step_descriptions = []
 
+    components=load_actions_from_db()+load_conditions_from_db()
+
     header_cycle = cycle(header_list)
     for text in text_list:
         step_descriptions.append([next(header_cycle), text])
@@ -46,7 +49,7 @@ def translate(request):
         if text == "":
             states.append({})
         else:
-            result = translator.translate(text, i)
+            result = translator.translate(text, i, components)
             states.append(result)
         i += 1
 
@@ -136,13 +139,8 @@ def state_editor(request):
 
 
 def get_components_list(request):
-    from translator.executables.nlp.components.robot_commands import say_command, wait_command
-    from translator.executables.nlp.components.moves.demo_moves import wave, nod, handshake
-
-    components = [say_command, wait_command,
-                  wave, nod, handshake]
-
-    conditions = [button_press]
+    components = load_actions_from_db()
+    conditions = load_conditions_from_db()
 
     if request.POST["components_type"] == "components":
         context = {'components_list': components}
@@ -231,8 +229,25 @@ def update_state(request):
     return render(request, 'translator/formal_description.html', context)
 
 
-def load_components_from_db():
+def load_actions_from_db():
+    components = [say_command, wait_command,
+                  wave, nod, handshake, stand, cry, crouch, dance]
+
     atomic_components = AtomicActionComponent.objects.all()
-    # TODO: Rather select components from the user's library
     user_components = UserActionComponent.objects.all()
+
+    return components
+
+def load_conditions_from_db():
+    conditions=[button_press]
+
+    atomic_components = AtomicActionComponent.objects.all()
+    user_components = UserActionComponent.objects.all()
+
+    return conditions
+
+def load_user_selected_actions_from_db():
+    pass
+
+def load_user_selected_conditions_from_db():
     pass

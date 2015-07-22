@@ -10,10 +10,7 @@ __author__ = 'NBUCHINA'
 
 
 def translate(text, step_number=1, components_from_db=None):
-    components = [say_command, wait_command,
-                  wave, nod, handshake, stand, cry, crouch, dance,
-                  button_press,
-                  Sequence, Parallel, GoTo,
+    components = [Sequence, Parallel, GoTo,
                   IgnoredComponent]
 
     if not components_from_db:
