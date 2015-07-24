@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'translator',
+    "taggit",
 )
 
 MIDDLEWARE_CLASSES = (

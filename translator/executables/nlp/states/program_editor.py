@@ -1,3 +1,4 @@
+from translator.executables.nlp import commons
 from translator.executables.nlp.commons import class_for_name
 from translator.executables.nlp.states.state import ConditionState, State
 
@@ -59,12 +60,11 @@ def update_state(states_list, state_id, actions_to_add=None, conditions_to_add=N
                 for action in actions_to_add:
                     action_params = action
                     action_class_name = action_params["class"]
-                    action_class = class_for_name("translator.executables.nlp.components.robot_commands",
-                                                  action_class_name)
-                    action_instance = action_class()
+                    action_instance = commons.get_component_by_ref_id(action_class_name)
                     action_instance.load_params(action_params["params"])
                     state.commands.append(action_instance)
 
+#TODO: Same for conditions
                 for condition in conditions_to_add:
                     condition_params = condition
                     condition_class_name = condition_params["class"]

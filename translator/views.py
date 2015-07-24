@@ -13,6 +13,7 @@ from translator.executables.nlp.components.robot_commands import *
 from translator.models import *
 
 
+
 def create(request):
     return render(request, 'translator/create.html')
 
@@ -40,7 +41,7 @@ def translate(request):
     states = []
     step_descriptions = []
 
-    components=load_actions_from_db()+load_conditions_from_db()
+    components = load_actions_from_db() + load_conditions_from_db()
 
     header_cycle = cycle(header_list)
     for text in text_list:
@@ -97,7 +98,7 @@ def view_scenarios(request):
 def csv(request):
     states = request.session['states']
 
-    #remove unrecognised parts, if any
+    # remove unrecognised parts, if any
     for states_for_step in states:
         for state in states_for_step:
             for command in state.commands:
@@ -181,10 +182,11 @@ def get_component_params(request):
 
 
 def get_component_class_params(request):
-    class_name = request.POST['class_name'].strip()
-    class_class = commons.class_for_name("translator.executables.nlp.components.robot_commands", class_name)
+    ref_id = int(request.POST['ref_id'].strip())
 
-    context = {'class': class_class}
+    component = commons.get_component_by_ref_id(ref_id)
+
+    context = {'component': component}
     return render(request, "translator/component_properties.html", context)
 
 
@@ -220,34 +222,41 @@ def update_state(request):
     change_next_id = json.loads(request.POST.get('change_next_id'))
 
     request.session["states"] = program_editor.update_state(request.session["states"], state_id,
-                                                           actions_to_add, conditions_to_add,
-                                                           actions_to_remove, conditions_to_remove,
-                                                           change_actions, change_conditions,
-                                                           change_next_id)
+                                                            actions_to_add, conditions_to_add,
+                                                            actions_to_remove, conditions_to_remove,
+                                                            change_actions, change_conditions,
+                                                            change_next_id)
     states = request.session["states"]
     context = {'states_list': states}
     return render(request, 'translator/formal_description.html', context)
 
 
 def load_actions_from_db():
-    components = [say_command, wait_command,
-                  wave, nod, handshake, stand, cry, crouch, dance]
+    # components = [say_command, wait_command,
+    # wave, nod, handshake, stand, cry, crouch, dance]
 
-    atomic_components = AtomicActionComponent.objects.all()
+    components = []
+
+    atomic_components = commons.getAllAtomicActionComponents()
     user_components = UserActionComponent.objects.all()
+
+    components.extend(atomic_components)
 
     return components
 
+
 def load_conditions_from_db():
-    conditions=[button_press]
+    conditions = [button_press]
 
     atomic_components = AtomicActionComponent.objects.all()
     user_components = UserActionComponent.objects.all()
 
     return conditions
 
+
 def load_user_selected_actions_from_db():
     pass
+
 
 def load_user_selected_conditions_from_db():
     pass

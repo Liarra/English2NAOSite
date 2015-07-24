@@ -305,18 +305,11 @@ function load_next_params(senderIcon){
 function addNewActionTemplate(senderIcon){
     i=i+1;
     new_class=senderIcon.attr('command');
-    class_glyphicon="glyphicon-question";
-
-    if (new_class=="say_command")
-    class_glyphicon="glyphicon-comment";
-    if (new_class=="move_command")
-    class_glyphicon="glyphicon-move";
-    if (new_class=="wait_command")
-    class_glyphicon="glyphicon-time";
+    new_back=senderIcon.css('background-image');
 
     $(" <div class='component'>"+
-    "<span class='program-box glyphicon "+class_glyphicon+" program-box-clickable new-action added-action' about='a"+i+"' command='"+new_class+"'>"+
-    "</span><div class='component-buttons'><button type='button' class='btn btn-remove-component' title='Remove this action'>x</button></div></div>").insertBefore("#empty-action-box");
+    "<span class='program-box glyphicon program-box-clickable new-action added-action' about='a"+i+"' command='"+new_class+"' style='background-image:"+new_back+"'>"+
+    "&nbsp;</span><div class='component-buttons'><button type='button' class='btn btn-remove-component' title='Remove this action'>x</button></div></div>").insertBefore("#empty-action-box");
 
     $(".active-box").removeClass("active-box");
     $(".new-action").addClass("active-box");
@@ -326,7 +319,7 @@ function addNewActionTemplate(senderIcon){
             url: "/translator/editor-class-params/",
             type:"POST",
             data: {
-                class_name: new_class
+                ref_id: new_class
             },
 
             success: function( data ) {

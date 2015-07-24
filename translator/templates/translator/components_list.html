@@ -5,19 +5,19 @@
 
 <div class="component-icon">
                         {% if component|get_class == 'move_command' or component|str == 'move_command' %}
-                        <span class='program-box glyphicon  new-action-icon' style="background-image: url({{component|icon}})" command="move_command">&nbsp;</span>
+                        <span class='program-box glyphicon  new-action-icon' style="background-image: url({{component|icon}})" command="{{component.ref_id}}">&nbsp;</span>
                         <div class="component-name-div">{{component.params.name}}</div>
 
                         {% endif %}
 
                         {% if component|get_class == 'say_command' or component|str == 'say_command' %}
-                        <span class='program-box glyphicon  new-action-icon' style="background-image: url({{component|icon}})" command="say_command">&nbsp;</span>
+                        <span class='program-box glyphicon  new-action-icon' style="background-image: url({{component|icon}})" command="{{component.ref_id}}">&nbsp;</span>
                         <div class="component-name-div">{{component.name}}</div>
 
                         {% endif %}
 
                         {% if component|get_class == 'wait_command' or component|str == 'wait_command' %}
-                        <span class='program-box glyphicon glyphicon-time new-action-icon' style="background-image:url({{component|icon}})" command="wait_command"></span>
+                        <span class='program-box glyphicon glyphicon-time new-action-icon' style="background-image:url({{component|icon}})" command="{{component.ref_id}}"></span>
                         <div class="component-name-div">{{component.name}}</div>
                         {% endif %}
 

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from taggit.managers import TaggableManager
 
 # Create your models here.
 from django.db.models import Model
@@ -16,18 +17,22 @@ class Step(models.Model):
     step_description = models.TextField()
 
 
-class ActionComponent(models.Model):
-    tags = models.TextField()
+class Component(models.Model):
+    tags = TaggableManager()
     regex = models.CharField(max_length=500)
     name = models.CharField(max_length=200)
     summary = models.TextField()
     params = models.TextField()
 
+class ActionComponent(Component):
+    pass
 
 class AtomicActionComponent(ActionComponent):
     command = models.TextField()
+    component_class=models.CharField(max_length=500, default="Component")
 
 
 class UserActionComponent(ActionComponent):
     program = models.ForeignKey(Scenario)
     icon = models.ImageField()
+    tags = TaggableManager()
