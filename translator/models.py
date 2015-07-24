@@ -24,12 +24,14 @@ class Component(models.Model):
     summary = models.TextField()
     params = models.TextField()
 
+
 class ActionComponent(Component):
     pass
 
+
 class AtomicActionComponent(ActionComponent):
-    command = models.TextField()
-    component_class=models.CharField(max_length=500, default="Component")
+    command = models.TextField(default="")
+    component_class = models.CharField(max_length=500, default="Component")
 
 
 class UserActionComponent(ActionComponent):

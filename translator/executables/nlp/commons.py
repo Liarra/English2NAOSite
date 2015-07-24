@@ -22,13 +22,19 @@ def getComponentFromModel(model):
         component_class = class_for_name("translator.executables.nlp.components.robot_commands", component_class_name)
 
         new_component = component_class()
-        new_component.regexp = model.regex
-        new_component.name = model.name
-        new_component.summary = model.summary
-        new_component.command = model.command
+        if len(model.regex) > 0:
+            new_component.regexp = model.regex
+        if len(model.name) > 0:
+            new_component.name = model.name
+        if len(model.summary) > 0:
+            new_component.summary = model.summary
+        if len(model.command) > 0:
+            new_component.command = model.command
 
-        new_component.load_params(json.loads(model.params))
-        new_component.tags = []
+        chars_to_remove = ["\r", "\n", "\b", "\f", "\t"]
+        dd = {ord(c): None for c in chars_to_remove}
+        new_params_string = model.params.translate(dd)
+        new_component.load_params(json.loads(new_params_string))
         new_component.tags.extend(model.tags.names())
 
         new_component.ref_id = model.id

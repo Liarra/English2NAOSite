@@ -70,9 +70,11 @@ $(document).ready(function(){
         });
     });
 
-
     $(".btn-translate").click(function(){
-        $("#btn-save").addClass("btn-info");
+
+        bootbox.confirm("Doing this will replace an existing program on the left with a translation. Any changes you made to the program will be lost. Is it OK?", function(result) {
+        if(result){
+            $("#btn-save").addClass("btn-info");
 
         var text_values = $('.step-description').map(function() {
             return this.value;
@@ -99,6 +101,10 @@ $(document).ready(function(){
                 assign_remove_buttons();
             }
         });
+        }
+        });
+
+
     });
 
 
