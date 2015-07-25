@@ -1,6 +1,6 @@
 from translator.executables.nlp.components.component import *
 from translator.executables.nlp.components.execution import *
-from translator.executables.nlp.components.robot_commands import Command
+from translator.executables.nlp.components.robot_commands import Action
 from translator.executables.nlp.states import id_pool
 from translator.executables.nlp.Type0py.grammar import Grammar
 from translator.executables.nlp.states.state import State, ConditionState, SelectByKeyState
@@ -147,9 +147,9 @@ def grammar_transform(components_list):
     gr = Grammar()
     gr.append_rule(input=[("unrecognised", IgnoredComponent)], transformation=remove_unrecognised)
 
-    gr.append_rule(input=[("c1", Command), ("p", Parallel), ("c2", Command)], transformation=parallel_commands)
-    gr.append_rule(input=[("c1", Command), ("p", Parallel), ("s2", State)], transformation=command_parallel_state)
-    gr.append_rule(input=[("s1", State), ("p", Parallel), ("c2", Command)], transformation=state_parallel_command)
+    gr.append_rule(input=[("c1", Action), ("p", Parallel), ("c2", Action)], transformation=parallel_commands)
+    gr.append_rule(input=[("c1", Action), ("p", Parallel), ("s2", State)], transformation=command_parallel_state)
+    gr.append_rule(input=[("s1", State), ("p", Parallel), ("c2", Action)], transformation=state_parallel_command)
     gr.append_rule(input=[("s1", State), ("p", Parallel), ("s2", State)], transformation=state_parallel_state)
 
     gr.append_rule(input=[("s1", State), ("s", Sequence), ("s2", State)], transformation=state_sequence_state)
@@ -160,9 +160,9 @@ def grammar_transform(components_list):
     gr.append_rule(input=[("c", Condition), ("g", GoTo)], transformation=condition_goto)
     gr.append_rule(input=[("s", State), ("g", GoTo)], transformation=state_goto)
 
-    gr.append_rule(input=[("cnd", Condition), ("c", Command)], transformation=condition_command)
+    gr.append_rule(input=[("cnd", Condition), ("c", Action)], transformation=condition_command)
     gr.append_rule(input=[("cnd", Condition), ("s", State)], transformation=condition_state)
-    gr.append_rule(input=[("c", Command)], transformation=command)
+    gr.append_rule(input=[("c", Action)], transformation=command)
 
     gr.append_rule(input=[("u1", UnrecognisedComponent), ("u2", UnrecognisedComponent)],
                    transformation=define_two_unrecognised)

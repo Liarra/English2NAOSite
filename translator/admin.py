@@ -6,10 +6,11 @@ from translator.models import *
 
 
 class ComponentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'summary', 'tags')
+    list_display = ('name', 'summary')
 
 
 admin.site.register(Scenario)
 admin.site.register(Step)
-admin.site.register(AtomicActionComponent, ComponentAdmin)
+admin.site.register(AtomicActionComponent,ComponentAdmin)
+admin.site.register(AtomicConditionComponent, ComponentAdmin)
 admin.site.register(UserActionComponent)

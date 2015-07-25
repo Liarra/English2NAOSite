@@ -37,4 +37,16 @@ class AtomicActionComponent(ActionComponent):
 class UserActionComponent(ActionComponent):
     program = models.ForeignKey(Scenario)
     icon = models.ImageField()
-    tags = TaggableManager()
+
+class ConditionComponent(Component):
+    pass
+
+
+class AtomicConditionComponent(ConditionComponent):
+    command = models.TextField(default="")
+    component_class = models.CharField(max_length=500, default="Condition")
+
+
+class UserConditionComponent(ConditionComponent):
+    program = models.ForeignKey(Scenario)
+    icon = models.ImageField()

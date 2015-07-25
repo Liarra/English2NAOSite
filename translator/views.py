@@ -237,7 +237,7 @@ def load_actions_from_db():
 
     components = []
 
-    atomic_components = commons.getAllAtomicActionComponents()
+    atomic_components = commons.get_all_atomic_action_components()
     user_components = UserActionComponent.objects.all()
 
     components.extend(atomic_components)
@@ -248,8 +248,10 @@ def load_actions_from_db():
 def load_conditions_from_db():
     conditions = [button_press]
 
-    atomic_components = AtomicActionComponent.objects.all()
+    atomic_components = commons.get_all_atomic_condition_components()
     user_components = UserActionComponent.objects.all()
+
+    conditions.extend(atomic_components)
 
     return conditions
 

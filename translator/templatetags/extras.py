@@ -1,4 +1,4 @@
-from translator.executables.nlp.components.robot_commands import move_command, Command
+from translator.executables.nlp.components.robot_commands import move_command, Action
 
 __author__ = 'NBUCHINA'
 from django import template
@@ -20,7 +20,7 @@ def get_str(value):
 def get_icon(value):
     folder = '/static/translator/img/icons/'
     icon = ''
-    if isinstance(value, Command):
+    if isinstance(value, Action):
         body_part = value.params['body_part']
 
         if body_part == 'crouch':
