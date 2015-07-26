@@ -20,6 +20,10 @@ def update_state(states_list, state_id, actions_to_add=None, conditions_to_add=N
         conditions_to_add = []
     if not change_conditions:
         change_conditions = []
+
+    conditions_to_remove=set(conditions_to_remove)
+    actions_to_remove=set(actions_to_remove)
+
     new_states = states_list
     for states_for_step in new_states:
         for state in states_for_step:
@@ -68,9 +72,7 @@ def update_state(states_list, state_id, actions_to_add=None, conditions_to_add=N
                 for condition in conditions_to_add:
                     condition_params = condition
                     condition_class_name = condition_params["class"]
-                    condition_class = class_for_name("translator.executables.nlp.components.robot_commands",
-                                                     condition_class_name)
-                    condition_instance = condition_class()
+                    condition_instance = commons.get_component_by_ref_id(condition_class_name)
                     condition_instance.load_params(condition_params["params"])
 
                     if not hasattr(state, 'condition'):

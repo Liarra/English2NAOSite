@@ -17,6 +17,15 @@ def class_for_name(module_name, class_name):
 def get_component_from_model(model):
     if not isinstance(model, Component):
         raise ValueError("model must be a Component")
+    if hasattr(model, "actioncomponent"):
+        model = model.actioncomponent
+        if hasattr(model, "atomicactioncomponent"):
+            model = model.atomicactioncomponent
+
+    if hasattr(model, "conditioncomponent"):
+        model = model.conditioncomponent
+        if hasattr(model, "atomicconditioncomponent"):
+            model = model.atomicconditioncomponent
 
     if isinstance(model, AtomicActionComponent) or isinstance(model, AtomicConditionComponent):
         component_class_name = model.component_class
