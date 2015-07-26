@@ -12,7 +12,7 @@
                 {% if state.condition|length > 0 %}
                     {% for condition in state.condition %}
                         <div class="component">
-                            <span class='program-box glyphicon glyphicon-button-input condition-box'
+                            <span class='program-box glyphicon glyphicon-button-input condition-box existing-condition'
                                   title='{{condition}}' about="{{forloop.counter}}">{{condition.params.button}}</span>
                             <div class="component-buttons">
                                 <button type="button" class="btn btn-remove-component" title="Remove this condition">x</button>

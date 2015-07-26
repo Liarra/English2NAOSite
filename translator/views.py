@@ -218,7 +218,7 @@ def update_state(request):
     actions_to_remove = json.loads(request.POST.get('actions_to_remove'))
     conditions_to_remove = json.loads(request.POST.get('conditions_to_remove'))
     change_actions = json.loads(request.POST.get('change_actions'))
-    change_conditions = json.loads(request.POST.get('change_actions'))
+    change_conditions = json.loads(request.POST.get('change_conditions'))
     change_next_id = json.loads(request.POST.get('change_next_id'))
 
     request.session["states"] = program_editor.update_state(request.session["states"], state_id,

@@ -430,6 +430,23 @@ for (index = 0; index < added_icons.length; ++index) {
     }
 
     changelist.changeAction(index,params);
+
+   added_icons=$(".existing-condition");
+for (index = 0; index < added_icons.length; ++index) {
+    console.log(added_icons[index]);
+    var params_div_id=added_icons[index].attributes["about"].nodeValue;
+    var params_div=$("#c"+params_div_id);
+    var param_textboxes=params_div.children("div").first().children("input");
+    var params = {};
+
+    for (jindex = 0; jindex < param_textboxes.length; ++jindex) {
+        name=param_textboxes[jindex].attributes["name"].nodeValue;
+        value=param_textboxes[jindex].value;
+        params[name]=value;
+    }
+
+    changelist.changeCondition(index,params);
+}
 }
 
 next_id_field=$("#next_id");
