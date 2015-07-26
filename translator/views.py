@@ -235,7 +235,7 @@ def load_actions_from_db():
     # components = [say_command, wait_command,
     # wave, nod, handshake, stand, cry, crouch, dance]
 
-    components = []
+    components = [say_command()]
 
     atomic_components = commons.get_all_atomic_action_components()
     user_components = UserActionComponent.objects.all()
@@ -246,7 +246,7 @@ def load_actions_from_db():
 
 
 def load_conditions_from_db():
-    conditions = [button_press]
+    conditions = []
 
     atomic_components = commons.get_all_atomic_condition_components()
     user_components = UserActionComponent.objects.all()

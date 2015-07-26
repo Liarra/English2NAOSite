@@ -6,7 +6,7 @@ from translator.models import *
 
 
 class ComponentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'summary')
+    list_display = ('id','name', 'summary')
 
 
 admin.site.register(Scenario)

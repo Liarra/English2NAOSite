@@ -1,5 +1,5 @@
 class Component(object):
-    tags = []
+    tags = set()
     regexp = ""
 
     tivipe_component_name = ""
@@ -43,7 +43,7 @@ class Condition(Component):
 
 class UnrecognisedComponent(Component):
     default_params = {"unrecognised_text": ''}
-    tags = []
+    tags = set()
     regexp = r"(?!x)x"  # A regex that never matches
     command = "_UNRECOGNISED_[{unrecognised_text}]"
 
@@ -55,17 +55,16 @@ class UnrecognisedComponent(Component):
 
 
 class IgnoredComponent(UnrecognisedComponent):
-    tags = [
+    tags = {
         "if", "or",
         "i", "robot",
         "the", "a",
-    ]
+        }
 
     default_params = {"ignored_text": ''}
 
     command = "_IGNORED_[{ignored_text}]"
 
-    @classmethod
     def from_string(cls, string, index_in_text=0):
         ret = super().from_string(string, index_in_text)
         ret.params["ignored_text"] = string

@@ -357,7 +357,7 @@ function addNewConditionTemplate(senderIcon){
             url: "/translator/editor-class-params/",
             type:"POST",
             data: {
-                class_name: new_class
+                ref_id: new_class
             },
 
             success: function( data ) {

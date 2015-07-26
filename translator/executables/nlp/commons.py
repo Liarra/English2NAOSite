@@ -36,7 +36,7 @@ def get_component_from_model(model):
         dd = {ord(c): None for c in chars_to_remove}
         new_params_string = model.params.translate(dd)
         new_component.load_params(json.loads(new_params_string))
-        new_component.tags.extend(model.tags.names())
+        new_component.tags.add(model.tags.names())
 
         new_component.ref_id = model.id
 
@@ -45,7 +45,7 @@ def get_component_from_model(model):
 
 def get_model_from_atomic_action(action):
     model = AtomicActionComponent()
-    model.component_class = action.__class__
+    model.component_class = action.__class__.__name__
     model.regex = action.regexp
     model.name = action.name
     model.summary = action.summary
@@ -59,7 +59,7 @@ def get_model_from_atomic_action(action):
 
 def get_model_from_atomic_condition(condition):
     model = AtomicConditionComponent()
-    model.component_class = condition.__class__
+    model.component_class = condition.__class__.__name__
     model.regex = condition.regexp
     model.name = condition.name
     model.summary = condition.summary
@@ -90,4 +90,4 @@ def get_all_atomic_condition_components():
 
 
 def get_component_by_ref_id(ref_id):
-    return get_component_from_model(AtomicActionComponent.objects.get(id=ref_id))
+    return get_component_from_model(Component.objects.get(id=ref_id))

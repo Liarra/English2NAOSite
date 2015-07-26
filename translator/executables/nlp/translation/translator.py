@@ -10,8 +10,8 @@ __author__ = 'NBUCHINA'
 
 
 def translate(text, step_number=1, components_from_db=None):
-    components = [Sequence, Parallel, GoTo,
-                  IgnoredComponent]
+    components = [Sequence(), Parallel(), GoTo(),
+                  IgnoredComponent()]
 
     if not components_from_db:
         components_from_db = []

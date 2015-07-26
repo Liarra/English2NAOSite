@@ -6,7 +6,7 @@ class Action(Component):
 
 
 class say_command(Action):
-    tags = ["say", "tell", "ask"]
+    tags = {"say", "tell", "ask"}
     regexp = r"(say|tell|ask)(s|ing)? ['\"“](?P<what>.+)['\"”]"
     default_params = {"text": '', 'body_part': 'tts'}
     command = "[say({text})]"
@@ -14,7 +14,7 @@ class say_command(Action):
     name = "Say something"
     summary = "This command makes the robot say the specified text."
 
-    @classmethod
+
     def from_string(cls, string, index_in_text=0):
         ret = super().from_string(string, index_in_text)
 
@@ -35,15 +35,15 @@ class say_command(Action):
 
 
 class wait_command(Action):
-    tags = ["wait"]
+    tags = {"wait"}
     regexp = r"waits?.* (?P<number>\d{1,3}) (?P<units>second|minute|ms|sec|min|millisecond)s?"
     tivipe_component_name = "CommandState2"
-    command = "wait({ms})"
+    command = "[wait({ms})]"
     default_params = {"ms": 0, 'body_part': 'timer'}
     name = "Wait"
     summary = "Makes the robot wait for specified number of milliseconds (1 second=1000 milliseconds)"
 
-    @classmethod
+
     def from_string(cls, string, index_in_text=0):
         ret = super().from_string(string, index_in_text)
 
@@ -77,7 +77,7 @@ This command is a bit different from others. Here, text is checked not against c
 
 
 class move_command(Action):
-    tags = []
+    tags = set()
     regexp = r"(?!x)x"  # A regex that never matches
     command = "[[stiff (1, 500, 0)] & [posture({base_pose})] & [{move}] & [posture({base_pose})] & [stiff (0, 500, 0)]]"
     default_params = {"name": "", "move": '', "base_pose": 'Crouch', 'body_part': 'crouch'}
@@ -98,7 +98,7 @@ class button_press(Condition):
     name = "Keyboard button press"
     summary = "The action is performed when a button on the keyboard is pressed"
 
-    tags = ["press", "button", "key", "type"]
+    tags = {"press", "button", "key", "type"}
     regexp = r"(['\"](?P<button_pre>.)['\"] .{0,10})?(press|type)(e?d|ing)?(.{0,10}['\"](?P<button_post>.)['\"])?$"
 
     default_params = {"button": '', 'body_part': 'keyboard'}
@@ -106,7 +106,7 @@ class button_press(Condition):
     tivipe_component_name = "CommandStateSelectByKey"
 
 
-    @classmethod
+
     def from_string(cls, string, index_in_text=0):
         ret = super().from_string(string, index_in_text)
 
