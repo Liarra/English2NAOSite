@@ -1,3 +1,6 @@
+from collections import OrderedDict
+
+
 class Component(object):
     tags = set()
     regexp = ""
@@ -11,7 +14,8 @@ class Component(object):
     default_params = {}
 
     def __init__(self, **params):
-        self.params = self.default_params.copy()
+        self.params =  OrderedDict()
+        self.params.update(self.default_params.copy())
 
         self.load_params(params)
 

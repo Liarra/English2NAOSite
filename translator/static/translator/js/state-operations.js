@@ -437,7 +437,7 @@ added_icons=$(".existing-action");
 for (index = 0; index < added_icons.length; ++index) {
     console.log(added_icons[index]);
     var params_div_id=added_icons[index].attributes["about"].nodeValue;
-    var params_div=$("#s"+params_div_id);
+    var params_div=$("#a"+params_div_id);
     var param_textboxes=params_div.children("div").first().children("input");
     var params = {};
 
