@@ -68,7 +68,6 @@ def update_state(states_list, state_id, actions_to_add=None, conditions_to_add=N
                     action_instance.load_params(action_params["params"])
                     state.commands.append(action_instance)
 
-#TODO: Same for conditions
                 for condition in conditions_to_add:
                     condition_params = condition
                     condition_class_name = condition_params["class"]

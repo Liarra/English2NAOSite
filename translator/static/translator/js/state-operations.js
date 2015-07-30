@@ -136,18 +136,22 @@ function assign_substep_actions_icons(){
          var component = $(this).parent().parent().children(".program-box").first();
          var component_index=component.attr("about");
 
-         component.parent().remove();
-
+        component.parent().remove();
          //If component was added in this dialogue, just remove the icon
          if (component.hasClass("added-action") || component.hasClass("added-condition")){
+            $(component_index).remove();
             return;
          }
 
         else {
-            if (component.hasClass("condition-box"))
+            if (component.hasClass("condition-box")){
                 changelist.removeCondition(component_index);
-            else if (component.hasClass("existing-action"))
+                $("#c"+component_index).remove();
+                }
+            else if (component.hasClass("existing-action")){
                 changelist.removeAction(component_index);
+                $("#a"+component_index).remove();
+                }
             else if (component.hasClass("existing-next"))
                 changelist.setNext(-1);
         }
