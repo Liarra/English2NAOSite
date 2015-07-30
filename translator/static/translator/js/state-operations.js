@@ -51,10 +51,22 @@ var changelist={
     }
 }
 
-var i=0
-
+var i=-1;
 
 function assign_substep_actions_icons(){
+    $(".existing-action").off("click");
+    $(".condition-box").off("click");
+    $(".state-id-clickable").off("click");
+    $(".added-action").off("click");
+    $(".added-condition").off("click");
+    $(".added-next").off("click");
+    $("#empty-action-box").off("click");
+    $("#empty-condition-box").off("click");
+    $("#empty-next-box").off("click");
+    $(".btn-remove-component").off("click");
+
+
+
     $(".existing-action").click(
         function(){
         $(".active-box").removeClass("active-box");
@@ -157,6 +169,8 @@ function assign_substep_actions_icons(){
         }
         }
     );
+
+    i=$(".component").length;
 }
 
 function load_actions_library(){
