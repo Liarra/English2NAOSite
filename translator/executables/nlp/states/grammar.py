@@ -3,7 +3,7 @@ from translator.executables.nlp.components.execution import *
 from translator.executables.nlp.components.robot_commands import Action
 from translator.executables.nlp.states import id_pool
 from translator.executables.nlp.Type0py.grammar import Grammar
-from translator.executables.nlp.states.state import State, ConditionState, SelectByKeyState
+from translator.executables.nlp.states.state import State, ConditionState, SelectByKeyState, MetaState
 
 __author__ = 'NBUCHINA'
 
@@ -197,11 +197,11 @@ def arrange_identifiers(states_list):
             states_list[i].next_ID = states_list[i + 1].ID
 
 
-
 def unite_condition_states(states_list):
     first_condition_state_id = -1
 
     disappearing_states = []
+    meta_state = MetaState()
     for state in states_list:
         if isinstance(state, ConditionState):
             if first_condition_state_id == -1:
@@ -210,6 +210,13 @@ def unite_condition_states(states_list):
             if state.ID != first_condition_state_id:
                 disappearing_states.append(state.ID)
                 state.ID = first_condition_state_id
+
+            meta_state.states.append(state)
+
+    for state in meta_state.states:
+        states_list.remove(state)
+
+    states_list.append(meta_state)
 
     for state in states_list:
         if state.next_ID in disappearing_states:

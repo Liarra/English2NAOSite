@@ -9,6 +9,9 @@
             {% for state in states_for_step %}
                 <div class="substep-div">
 
+                {% if state|get_class=='MetaState' %}
+                {% endif %}
+
                 {% if state.uID %}
                 <span class='program-box glyphicon glyphicon-step' uid="{{state.uID}}"> {{state.ID}} </span>
                 {% else %}

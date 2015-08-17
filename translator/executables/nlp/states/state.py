@@ -29,6 +29,11 @@ class ConditionState(State):
         self.uID = -1
 
 
+class MetaState(State):
+   def __init__(self):
+        self.states = []
+
+
 class SelectByKeyState(State):
     keys = []
     states = []
