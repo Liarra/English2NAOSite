@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+{% load extras %}
+
+
+
+{% if show_id %}
+{% if state.uID %}
+<div class="substep-div" uid="{{state.uID}}">
+<span class='program-box glyphicon glyphicon-step' > {{state.ID}} </span>
+{% else %}
+    <div class="substep-div" uid="{{state.ID}}">
+<span class='program-box glyphicon glyphicon-step'> {{state.ID}} </span>
+{% endif %}
+
+ {% else %}
+        {% if state.uID %}
+        <div class="substep-div" uid="{{state.uID}}">
+
+        {% else %}
+        <div class="substep-div" uid="{{state.ID}}">
+        {% endif %}
+{% endif %}
+
+
+<!--Conditions-->
+{% if state.condition|length > 0 %}
+    {% for condition in state.condition %}
+        <span class='program-box glyphicon glyphicon-button-input condition-box' title='{{condition}}'>{{condition.params.button}}</span>
+    {% endfor %}
+{% endif %}
+
+<!--Arrow-->
+<span class='arrow-box glyphicon glyphicon-arrow-right'></span>
+
+<!--Commands-->
+{% if state.commands|length > 0 %}
+    {% for command in state.commands %}
+        {% if command|get_class == 'move_command' %}
+        <span class='program-box glyphicon' style="background-image: url({{command|icon}})" title='{{command.params.name}}'>&nbsp;</span>
+        {% endif %}
+
+        {% if command|get_class == 'say_command' %}
+        <span class='program-box glyphicon' style="background-image: url({{command|icon}})" title='{{command}}'>&nbsp;</span>
+        {% endif %}
+
+        {% if command|get_class == 'wait_command' %}
+        <span class='program-box glyphicon glyphicon-time' title='{{command}}'></span>
+        {% endif %}
+
+        {% if command|get_class == 'UnrecognisedComponent' %}
+        <span class='program-box glyphicon glyphicon-question-sign' title='{{command}}'></span>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if state.next_ID != -1 %}
+<span class='arrow-box glyphicon glyphicon-arrow-right'></span>
+<span class='program-box glyphicon glyphicon-step'>{{state.next_ID}}</span>
+{% endif %}
+
+
+    <div class="substep-buttons">
+        <button type="button" class="btn btn-edit-substep" title="Edit this state">...</button>
+        <button type="button" class="btn btn-remove-substep" title="Remove this state">X</button>
+    </div>
+                </div>

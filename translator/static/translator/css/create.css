@@ -122,3 +122,11 @@ vertical-align:middle;
 .component{
 display:inline-block;
 }
+
+.metastate-container, .metastate-id{
+display:table-cell
+}
+
+.metastate{
+border-spacing:5px;
+}

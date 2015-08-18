@@ -7,59 +7,28 @@
         <center>(EMPTY STEP)</center>
         {% else %}
             {% for state in states_for_step %}
-                <div class="substep-div">
 
-                {% if state|get_class=='MetaState' %}
-                {% endif %}
 
-                {% if state.uID %}
-                <span class='program-box glyphicon glyphicon-step' uid="{{state.uID}}"> {{state.ID}} </span>
-                {% else %}
-                <span class='program-box glyphicon glyphicon-step' uid="{{state.ID}}"> {{state.ID}} </span>
-                {% endif %}
+                {% if state|get_class == 'MetaState' %}
+        <div class="metastate">
+                    <span class='metastate-id program-box glyphicon glyphicon-step' uid="{{state.uID}}"> {{state.ID}} </span>
+                <div class="metastate-container">
+                    {% for sub_state in state.states %}
+                    {% with state=sub_state %}
+                         {% include "translator/formal_description_state_noid.html" %}
+                    {% endwith %}
 
-                <!--Conditions-->
-                {% if state.condition|length > 0 %}
-                    {% for condition in state.condition %}
-                        <span class='program-box glyphicon glyphicon-button-input condition-box' title='{{condition}}'>{{condition.params.button}}</span>
                     {% endfor %}
-                {% endif %}
-
-                <!--Arrow-->
-                <span class='arrow-box glyphicon glyphicon-arrow-right'></span>
-
-                <!--Commands-->
-                {% if state.commands|length > 0 %}
-                    {% for command in state.commands %}
-                        {% if command|get_class == 'move_command' %}
-                        <span class='program-box glyphicon' style="background-image: url({{command|icon}})" title='{{command.params.name}}'>&nbsp;</span>
-                        {% endif %}
-
-                        {% if command|get_class == 'say_command' %}
-                        <span class='program-box glyphicon' style="background-image: url({{command|icon}})" title='{{command}}'>&nbsp;</span>
-                        {% endif %}
-
-                        {% if command|get_class == 'wait_command' %}
-                        <span class='program-box glyphicon glyphicon-time' title='{{command}}'></span>
-                        {% endif %}
-
-                        {% if command|get_class == 'UnrecognisedComponent' %}
-                        <span class='program-box glyphicon glyphicon-question-sign' title='{{command}}'></span>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-
-                {% if state.next_ID != -1 %}
-                <span class='arrow-box glyphicon glyphicon-arrow-right'></span>
-                <span class='program-box glyphicon glyphicon-step'>{{state.next_ID}}</span>
-                {% endif %}
-
-
-                    <div class="substep-buttons">
-                        <button type="button" class="btn btn-edit-substep" title="Edit this state">...</button>
-                        <button type="button" class="btn btn-remove-substep" title="Remove this state">X</button>
-                    </div>
                 </div>
+            </div>
+
+                {% else %}
+                    {% with show_id=1 %}
+                    {% include "translator/formal_description_state_noid.html" %}
+                    {% endwith %}
+                {% endif %}
+
+
             {% endfor %}
         {% endif %}
     </div>

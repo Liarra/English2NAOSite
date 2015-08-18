@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from translator.executables.nlp import commons
 from translator.executables.nlp.components.component import UnrecognisedComponent
 from translator.executables.nlp.components.moves.demo_moves import *
+from translator.executables.nlp.states.state import MetaState
 from translator.executables.nlp.translation import translator
 from translator.executables.nlp.components.robot_commands import *
 from translator.models import *
@@ -101,11 +102,21 @@ def csv(request):
     # remove unrecognised parts, if any
     for states_for_step in states:
         for state in states_for_step:
-            for command in state.commands:
-                if isinstance(command, UnrecognisedComponent):
-                    state.commands.remove(command)
-                    if len(state.commands) == 0:
-                        states_for_step.remove(state)
+
+            if isinstance(state, MetaState):
+                for substate in state.states:
+                    for command in substate.commands:
+                        if isinstance(command, UnrecognisedComponent):
+                            substate.commands.remove(command)
+                            if len(substate.commands) == 0:
+                                state.states.remove(substate)
+
+            else:
+                for command in state.commands:
+                    if isinstance(command, UnrecognisedComponent):
+                        state.commands.remove(command)
+                        if len(state.commands) == 0:
+                            states_for_step.remove(state)
 
     csv_file = translator.get_csv_file_with_header_and_first_state(states[0])
     for states_for_step in states:
@@ -126,14 +137,25 @@ def state_editor(request):
     state_to_display = None
     for states_for_step in states:
         for state in states_for_step:
-            id = None
-            if hasattr(state, "uID"):
-                id = state.uID
-            else:
-                id = state.ID
+            if isinstance(state, MetaState):
+                for sub_state in state.states:
+                    id = None
+                    if hasattr(sub_state, "uID"):
+                        id = sub_state.uID
+                    else:
+                        id = sub_state.ID
 
-            if id == state_id:
-                state_to_display = state
+                    if id == state_id:
+                        state_to_display = sub_state
+            else:
+                id = None
+                if hasattr(state, "uID"):
+                    id = state.uID
+                else:
+                    id = state.ID
+
+                if id == state_id:
+                    state_to_display = state
 
     context = {'state': state_to_display}
     return render(request, 'translator/state_editor.html', context)

@@ -24,7 +24,7 @@ $(".btn-remove-substep").click(function() {
 
 $(".btn-edit-substep").click(function(){
  var substep_div = $(this).parent().parent();
- var substep_number=substep_div.children(".glyphicon-step").first().attr("uid");
+ var substep_number=substep_div.attr("uid");
  changelist.clear();
  edit_substep(substep_div);
 });
@@ -71,7 +71,7 @@ function edit_substep(substep_div){
             url: "/translator/editor-substep/",
             type:"POST",
             data: {
-                substep_id: substep_div.children(".glyphicon-step").first().attr("uid"),
+                substep_id: substep_div.attr("uid"),
             },
 
             success: function( data ) {

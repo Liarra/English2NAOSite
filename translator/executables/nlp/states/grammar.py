@@ -202,10 +202,16 @@ def unite_condition_states(states_list):
 
     disappearing_states = []
     meta_state = MetaState()
+
+    for state in states_list:
+        if isinstance(state, MetaState):
+            return state.ID
+
     for state in states_list:
         if isinstance(state, ConditionState):
             if first_condition_state_id == -1:
                 first_condition_state_id = state.ID
+                meta_state.ID = state.ID
 
             if state.ID != first_condition_state_id:
                 disappearing_states.append(state.ID)
@@ -216,9 +222,10 @@ def unite_condition_states(states_list):
     for state in meta_state.states:
         states_list.remove(state)
 
-    states_list.append(meta_state)
+    if len(meta_state.states) > 0:
+        states_list.append(meta_state)
 
-    for state in states_list:
+    for state in meta_state.states:
         if state.next_ID in disappearing_states:
             state.next_ID = -1
 
@@ -236,12 +243,13 @@ def get_new_list_with_keypress_states(states):
     new_list = []
 
     for state in states:
-        if isinstance(state, ConditionState) and len(state.condition) > 0:
-            orphan_state = select_key.add_cstep(state)
-            select_key.ID = state.ID
+        if isinstance(state, MetaState) and len(state.states) > 0:
+            for substate in state.states:
+                orphan_state = select_key.add_cstep(substate)
+                select_key.ID = substate.ID
 
-            if orphan_state is not None:
-                new_list.append(orphan_state)
+                if orphan_state is not None:
+                    new_list.append(orphan_state)
 
         else:
             new_list.append(state)
