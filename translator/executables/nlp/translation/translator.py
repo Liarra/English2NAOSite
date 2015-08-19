@@ -31,6 +31,7 @@ def translate(text, step_number=1, components_from_db=None):
     grammar.unrecognised_enabled = False
     components_from_text = grammar.transform(components_from_text)
     grammar.unite_condition_states(components_from_text)
+    components_from_text.sort(key=lambda x: x.ID, reverse=False)
 
     return components_from_text
 

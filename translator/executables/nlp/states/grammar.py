@@ -14,7 +14,6 @@ unrecognised_enabled = True
 def remove_unrecognised(unrecognised):
     return []
 
-
 def parallel_commands(c1, p, c2):
     new_state = State()
     new_state.text_index_start = c1.text_index_start
@@ -46,12 +45,8 @@ def state_parallel_command(s1, p, c2):
 
 
 def state_parallel_state(s1, p, s2):
-    new_state = State()
-    new_state.text_index_start = s1.text_index_start
-    new_state.tivipe_component_name = s1.tivipe_component_name
+    new_state = s1
     new_state.description = s1.description + ", " + s2.description
-    new_state.ID = s1.ID
-    new_state.commands.extend(s1.commands)
     new_state.commands.extend(s2.commands)
 
     return [new_state]
@@ -75,6 +70,8 @@ def parallel_goto(p, g):
 
 
 def define_two_unrecognised(u1, u2):
+    if isinstance(u2,IgnoredComponent):
+        return [u1]
     return [UnrecognisedComponent.from_string(u1.description + ", " + u2.description, u1.text_index_start)]
 
 

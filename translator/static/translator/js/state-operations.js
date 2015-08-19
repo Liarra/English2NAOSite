@@ -166,6 +166,7 @@ function assign_substep_actions_icons(){
                 }
             else if (component.hasClass("existing-next"))
                 changelist.setNext(-1);
+                $("#n").remove();
         }
         }
     );
