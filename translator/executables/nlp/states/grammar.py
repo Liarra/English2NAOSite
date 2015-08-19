@@ -172,7 +172,7 @@ def grammar_transform(components_list):
 
     return new_states_list
 
-
+#TODO: Can be done as grammar rule
 def remove_orphans(states_list):
     new_list = []
 
@@ -190,13 +190,14 @@ def remove_orphans(states_list):
     else:
         return new_list
 
-
+#TODO: Can be done as grammar rule
 def arrange_identifiers(states_list):
     for i in range(0, len(states_list) - 1):
         if isinstance(states_list[i], State) and isinstance(states_list[i + 1], State) and states_list[i].next_ID == -1:
             states_list[i].next_ID = states_list[i + 1].ID
 
 
+#TODO: Can be done as grammar rule. First push all conditionstates to the end, then unite them in MetaState
 def unite_condition_states(states_list):
     first_condition_state_id = -1
 
@@ -231,7 +232,7 @@ def unite_condition_states(states_list):
 
     return first_condition_state_id
 
-
+#TODO: Can be done as a grammar rule
 def get_new_list_with_keypress_states(states):
     global state_counter
     first_cstate_id = unite_condition_states(states)

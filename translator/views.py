@@ -46,6 +46,7 @@ def translate(request):
 
     header_cycle = cycle(header_list)
     for text in text_list:
+        text.strip()
         step_descriptions.append([next(header_cycle), text])
 
         if text == "":
@@ -243,7 +244,7 @@ def update_state(request):
     change_conditions = json.loads(request.POST.get('change_conditions'))
     change_next_id = json.loads(request.POST.get('change_next_id'))
 
-    request.session["states"] = program_editor.update_state(request.session["states"], state_id,
+    request.session["states"] = program_editor.update_states(request.session["states"], state_id,
                                                             actions_to_add, conditions_to_add,
                                                             actions_to_remove, conditions_to_remove,
                                                             change_actions, change_conditions,

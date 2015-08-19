@@ -50,7 +50,7 @@ function remove_substep(substep_div){
             url: "/translator/remove-substep/",
             type:"POST",
             data: {
-                substep_id: substep_div.children(".glyphicon-step").first().attr("uid"),
+                substep_id: substep_div.attr("uid"),
             },
 
             success: function( data ) {

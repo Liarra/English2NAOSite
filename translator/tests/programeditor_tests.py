@@ -23,53 +23,53 @@ class ProgramEditorTests(TestCase):
 
     def test_update_state_no_input_states_stay_the_same(self):
         sample_states = self.getSampleStates()
-        new_states = program_editor.update_state(sample_states, '1.00', [], [], [], [], [], [])
+        new_states = program_editor.update_states(sample_states, '1.00', [], [], [], [], [], [])
         self.assertEqual(sample_states, new_states)
 
-        new_states = program_editor.update_state(sample_states, '1.01', [], [], [], [], [], [])
+        new_states = program_editor.update_states(sample_states, '1.01', [], [], [], [], [], [])
         self.assertEqual(sample_states, new_states)
 
-        new_states = program_editor.update_state(sample_states, '1.02', [], [], [], [], [], [])
+        new_states = program_editor.update_states(sample_states, '1.02', [], [], [], [], [], [])
         self.assertEqual(sample_states, new_states)
 
-        new_states = program_editor.update_state(sample_states, '2.00', [], [], [], [], [], [])
+        new_states = program_editor.update_states(sample_states, '2.00', [], [], [], [], [], [])
         self.assertEqual(sample_states, new_states)
 
-        new_states = program_editor.update_state(sample_states, '2.01', [], [], [], [], [], [])
+        new_states = program_editor.update_states(sample_states, '2.01', [], [], [], [], [], [])
         self.assertEqual(sample_states, new_states)
 
-        new_states = program_editor.update_state(sample_states, '3.00', [], [], [], [], [], [])
+        new_states = program_editor.update_states(sample_states, '3.00', [], [], [], [], [], [])
         self.assertEqual(sample_states, new_states)
 
     def test_update_state_remove_action(self):
         sample_states = self.getSampleStates()
-        new_states = program_editor.update_state(sample_states, '1.00', actions_to_remove=[0])
+        new_states = program_editor.update_states(sample_states, '1.00', actions_to_remove=[0])
         new_commands = new_states[0][0].commands
         self.assertTrue(len(new_commands) == 0)
 
-        new_states = program_editor.update_state(sample_states, '1.01', actions_to_remove=[0])
+        new_states = program_editor.update_states(sample_states, '1.01', actions_to_remove=[0])
         new_commands = new_states[0][1].commands
         self.assertTrue(len(new_commands) == 0)
 
-        new_states = program_editor.update_state(sample_states, '2.01', actions_to_remove=[0])
+        new_states = program_editor.update_states(sample_states, '2.01', actions_to_remove=[0])
         new_commands = new_states[1][1].commands
         not_affected_commands = new_states[1][0].commands
         self.assertTrue(len(new_commands) == 0)
         self.assertTrue(len(not_affected_commands) == 1)
 
-        new_states = program_editor.update_state(sample_states, '3.00', actions_to_remove=[0])
+        new_states = program_editor.update_states(sample_states, '3.00', actions_to_remove=[0])
         new_commands = new_states[2][0].commands
         self.assertTrue(len(new_commands) == 1)
 
 
     def test_update_state_remove_condition(self):
         sample_states = self.getSampleStates()
-        new_states = program_editor.update_state(sample_states, '1.00', conditions_to_remove=[0])
+        new_states = program_editor.update_states(sample_states, '1.00', conditions_to_remove=[0])
         new_state = new_states[0][0]
         self.assertIsInstance(new_state, State)
         self.assertNotIsInstance(new_state, ConditionState)
 
-        new_states = program_editor.update_state(sample_states, '2.01', conditions_to_remove=[0])
+        new_states = program_editor.update_states(sample_states, '2.01', conditions_to_remove=[0])
         new_state = new_states[1][1]
         self.assertIsInstance(new_state, State)
         self.assertNotIsInstance(new_state, ConditionState)
@@ -81,17 +81,17 @@ class ProgramEditorTests(TestCase):
 
         change_actions = [new_action]
 
-        new_states = program_editor.update_state(sample_states, '1.00', change_actions=change_actions)
+        new_states = program_editor.update_states(sample_states, '1.00', change_actions=change_actions)
         new_command = new_states[0][0].commands
         self.assertEquals(1, len(new_command))
         self.assertEquals('[say(Omg Yes Yes Yes)]', str(new_command[0]))
 
-        new_states = program_editor.update_state(sample_states, '2.01', change_actions=change_actions)
+        new_states = program_editor.update_states(sample_states, '2.01', change_actions=change_actions)
         new_command = new_states[1][1].commands
         self.assertEquals(1, len(new_command))
         self.assertEquals('[say(Omg Yes Yes Yes)]', str(new_command[0]))
 
-        new_states = program_editor.update_state(sample_states, '1.01', change_actions=change_actions)
+        new_states = program_editor.update_states(sample_states, '1.01', change_actions=change_actions)
         new_command = new_states[0][1].commands
         self.assertEquals(1, len(new_command))
         self.assertEquals('wait(1000)', str(new_command[0]))
@@ -103,12 +103,12 @@ class ProgramEditorTests(TestCase):
 
         change = [new_condition]
 
-        new_states = program_editor.update_state(sample_states, '1.00', change_conditions=change)
+        new_states = program_editor.update_states(sample_states, '1.00', change_conditions=change)
         new_condition = new_states[0][0].condition
         self.assertEquals(1, len(new_condition))
         self.assertEquals('key[b]->', str(new_condition[0]))
 
-        new_states = program_editor.update_state(sample_states, '2.01', change_conditions=change)
+        new_states = program_editor.update_states(sample_states, '2.01', change_conditions=change)
         new_condition = new_states[1][1].condition
         self.assertEquals(1, len(new_condition))
         self.assertEquals('key[b]->', str(new_condition[0]))
@@ -120,7 +120,7 @@ class ProgramEditorTests(TestCase):
         #new_action_json = json.dumps(new_action)
         addition = [new_action]
 
-        new_states = program_editor.update_state(sample_states, '1.01', actions_to_add=addition)
+        new_states = program_editor.update_states(sample_states, '1.01', actions_to_add=addition)
         new_command = new_states[0][1].commands
         self.assertEquals(2, len(new_command))
         self.assertEquals('[say(I wish i knew...)]', str(new_command[1]))
@@ -133,13 +133,13 @@ class ProgramEditorTests(TestCase):
         #new_condition_json = json.dumps(new_condition)
         addition = [new_condition]
 
-        new_states = program_editor.update_state(sample_states, '3.00', conditions_to_add=addition)
+        new_states = program_editor.update_states(sample_states, '3.00', conditions_to_add=addition)
         new_state = new_states[2][0]
         self.assertIsInstance(new_state, ConditionState)
         self.assertEquals(1, len(new_state.condition))
         self.assertEquals('key[A]->', str(new_state.condition[0]))
 
-        new_states = program_editor.update_state(sample_states, '1.00', conditions_to_add=addition)
+        new_states = program_editor.update_states(sample_states, '1.00', conditions_to_add=addition)
         new_state = new_states[0][0]
         self.assertIsInstance(new_state, ConditionState)
         self.assertEquals(2, len(new_state.condition))
@@ -164,7 +164,7 @@ class ProgramEditorTests(TestCase):
         change_action = {"text": "No"}
         change_actions = [{}, change_action]
 
-        new_states = program_editor.update_state(sample_states, '4.00',
+        new_states = program_editor.update_states(sample_states, '4.00',
                                                 actions_to_add=action_addition, conditions_to_add=condition_addition,
                                                 actions_to_remove=remove_actions,
                                                 conditions_to_remove=remove_conditions,
