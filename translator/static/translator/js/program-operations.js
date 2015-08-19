@@ -54,7 +54,14 @@ function remove_substep(substep_div){
             },
 
             success: function( data ) {
+                meta=substep_div.parent();
                 substep_div.remove();
+                if (meta.hasClass("metastate-container")){
+                 if (meta.children().length==0){
+                    meta.parent().remove();
+                 }
+                }
+
             },
 
             fail:function(data){

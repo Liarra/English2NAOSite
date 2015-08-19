@@ -15,6 +15,10 @@ class say_command(Action):
     summary = "This command makes the robot say the specified text."
 
 
+    def load_params(self, params):
+        super().load_params(params)
+        self.params["text"] = self._tivipefy_text_(self.params["text"])
+
     def from_string(cls, string, index_in_text=0):
         ret = super().from_string(string, index_in_text)
 
@@ -32,6 +36,13 @@ class say_command(Action):
         say_what = say_what.replace('\'', '')
         ret.params["text"] = say_what
         return ret
+
+    def _tivipefy_text_(self, text):
+        text = text.replace(' ', '_')
+        text = text.replace(',', '')
+        text = text.replace('\'', '')
+
+        return text
 
 
 class wait_command(Action):
@@ -104,7 +115,6 @@ class button_press(Condition):
     default_params = {"button": '', 'body_part': 'keyboard'}
     command = "key[{button}]->"
     tivipe_component_name = "CommandStateSelectByKey"
-
 
 
     def from_string(cls, string, index_in_text=0):

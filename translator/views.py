@@ -14,7 +14,6 @@ from translator.executables.nlp.components.robot_commands import *
 from translator.models import *
 
 
-
 def create(request):
     return render(request, 'translator/create.html')
 
@@ -132,31 +131,9 @@ def csv(request):
 
 
 def state_editor(request):
-    states = request.session['states']
     state_id = request.POST['substep_id'].strip()
 
-    state_to_display = None
-    for states_for_step in states:
-        for state in states_for_step:
-            if isinstance(state, MetaState):
-                for sub_state in state.states:
-                    id = None
-                    if hasattr(sub_state, "uID"):
-                        id = sub_state.uID
-                    else:
-                        id = sub_state.ID
-
-                    if id == state_id:
-                        state_to_display = sub_state
-            else:
-                id = None
-                if hasattr(state, "uID"):
-                    id = state.uID
-                else:
-                    id = state.ID
-
-                if id == state_id:
-                    state_to_display = state
+    state_to_display = get_state_by_ID(request, state_id)
 
     context = {'state': state_to_display}
     return render(request, 'translator/state_editor.html', context)
@@ -175,7 +152,6 @@ def get_components_list(request):
 
 
 def get_component_params(request):
-    states = request.session['states']
     state_id = request.POST['substep_id'].strip()
 
     action_index = None
@@ -187,18 +163,12 @@ def get_component_params(request):
         condition_index = int(request.POST['substep_condition_index'].strip())
 
     action = None
-    for states_for_step in states:
-        for state in states_for_step:
-            id = None
-            if hasattr(state, "uID"):
-                id = state.uID
-            else:
-                id = state.ID
-            if id == state_id:
-                if action_index:
-                    action = state.commands[action_index - 1]
-                elif condition_index:
-                    action = state.condition[condition_index - 1]
+    state = get_state_by_ID(request, state_id)
+
+    if action_index:
+        action = state.commands[action_index - 1]
+    elif condition_index:
+        action = state.condition[condition_index - 1]
 
     context = {'component': action}
     return render(request, "translator/component_properties.html", context)
@@ -217,15 +187,18 @@ def remove_state(request):
     states = request.session['states']
     state_id_for_removal = request.POST['substep_id'].strip()
 
+    state_for_removal = get_state_by_ID(request, state_id_for_removal)
     for states_for_step in states:
+        if state_for_removal in states_for_step:
+            states_for_step.remove(state_for_removal)
+            break
         for state in states_for_step:
-            id = None
-            if hasattr(state, "uID"):
-                id = state.uID
-            else:
-                id = state.ID
-            if id == state_id_for_removal:
-                states_for_step.remove(state)
+            if hasattr(state, "states"):
+                if state_for_removal in state.states:
+                    state.states.remove(state_for_removal)
+                    if len(state.states) == 0:
+                        states_for_step.remove(state)
+                    break
 
     request.session['states'] = states
     return HttpResponse("OK")
@@ -245,10 +218,10 @@ def update_state(request):
     change_next_id = json.loads(request.POST.get('change_next_id'))
 
     request.session["states"] = program_editor.update_states(request.session["states"], state_id,
-                                                            actions_to_add, conditions_to_add,
-                                                            actions_to_remove, conditions_to_remove,
-                                                            change_actions, change_conditions,
-                                                            change_next_id)
+                                                             actions_to_add, conditions_to_add,
+                                                             actions_to_remove, conditions_to_remove,
+                                                             change_actions, change_conditions,
+                                                             change_next_id)
     states = request.session["states"]
     context = {'states_list': states}
     return render(request, 'translator/formal_description.html', context)
@@ -285,3 +258,31 @@ def load_user_selected_actions_from_db():
 
 def load_user_selected_conditions_from_db():
     pass
+
+
+def get_state_by_ID(request, state_id):
+    states = request.session["states"]
+
+    for states_for_step in states:
+        for state in states_for_step:
+            if isinstance(state, MetaState):
+                for sub_state in state.states:
+                    id = None
+                    if hasattr(sub_state, "uID"):
+                        id = sub_state.uID
+                    else:
+                        id = sub_state.ID
+
+                    if id == state_id:
+                        ret = sub_state
+            else:
+                id = None
+                if hasattr(state, "uID"):
+                    id = state.uID
+                else:
+                    id = state.ID
+
+                if id == state_id:
+                    ret = state
+
+    return ret
