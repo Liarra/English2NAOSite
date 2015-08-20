@@ -15,7 +15,7 @@ function getCookie(name) {
     return cookieValue;
 }
 var csrftoken = getCookie('csrftoken');
-
+var modified_steps=[];
 
 
 function csrfSafeMethod(method) {
@@ -34,15 +34,7 @@ $(document).ready(function(){
 
     assign_balloons();
     alignTextWithProgram();
-
-
-    $(".step-name-text").focus(function(){
-        $("#btn-save").addClass("btn-info");
-    });
-
-    $(".step-description").focus(function(){
-        $("#btn-save").addClass("btn-info");
-    });
+    assignModificationHooks();
 
     $("#btn-save").click(function(){
 
@@ -72,7 +64,7 @@ $(document).ready(function(){
 
     $(".btn-translate").click(function(){
 
-        bootbox.confirm("Doing this will replace an existing program on the left with a translation. Any changes you made to the program will be lost. Is it OK?", function(result) {
+        bootbox.confirm("Doing this will replace an existing program on the left with a translation. Any changes you made to the program on the left will be lost. Is it OK?", function(result) {
         if(result){
             $("#btn-save").addClass("btn-info");
 
@@ -89,7 +81,8 @@ $(document).ready(function(){
             type:"POST",
             data: {
                 text: text_values,
-                headers: headers_values
+                headers: headers_values,
+                modified: modified_steps
             },
 
             success: function( data ) {
@@ -99,6 +92,7 @@ $(document).ready(function(){
                 assign_balloons();
                 alignTextWithProgram();
                 assign_remove_buttons();
+                modified_steps=[];
             }
         });
         }
@@ -182,4 +176,22 @@ function alignTextWithProgram(){
 
 
     }
+}
+
+function assignModificationHooks(){
+
+$(".step-name-text").unbind("focus");
+$(".step-description").unbind("focus");
+
+
+$(".step-name-text").focus(function(){
+    $("#btn-save").addClass("btn-info");
+});
+
+$(".step-description").focus(function(){
+        $("#btn-save").addClass("btn-info");
+        parent=$(this).parent().parent();
+        step_num_div=parent.children(".row").first().children(".step-number").first();
+        modified_steps.push(step_num_div.html());
+    });
 }

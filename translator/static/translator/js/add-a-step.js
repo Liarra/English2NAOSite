@@ -15,6 +15,7 @@ $("#steps-column")
         steps_counter+=1;
 
         curRow.removeClass("inactive").find("textarea:last").focus();
+        assignModificationHooks();
     })
     .on("click", ".step-div .row .step-delete", function(e) {
         $(this).closest(".step-div").remove();

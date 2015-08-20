@@ -36,24 +36,30 @@ def edit(request, program_id):
 def translate(request):
     text_list = request.POST.getlist('text[]')
     header_list = request.POST.getlist('headers[]')
-    i = 1
+    modified_steps = set([int(x.replace('.', '')) for x in request.POST.getlist('modified[]')])
 
-    states = []
-    step_descriptions = []
+    states = request.session['states']
+    step_descriptions = request.session['step_descriptions']
 
     components = load_actions_from_db() + load_conditions_from_db()
 
-    header_cycle = cycle(header_list)
-    for text in text_list:
+    for text_number in modified_steps:
+        i = text_number - 1
+        text = text_list[i]
         text.strip()
-        step_descriptions.append([next(header_cycle), text])
+
+        if len(step_descriptions) < text_number:
+            step_descriptions.extend(["" for x in range(len(step_descriptions) - 1, text_number)])
+        if len(states) < text_number:
+            states.extend([[] for x in range(len(states) - 1, text_number)])
+
+        step_descriptions[i] = [header_list[i], text]
 
         if text == "":
-            states.append({})
+            states[i] = {}
         else:
             result = translator.translate(text, i, components)
-            states.append(result)
-        i += 1
+            states[i] = result
 
     request.session['states'] = states
     request.session['step_descriptions'] = step_descriptions
