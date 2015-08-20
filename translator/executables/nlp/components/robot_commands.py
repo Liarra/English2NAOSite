@@ -132,3 +132,13 @@ class button_press(Condition):
         button = m.group('button_pre') if m.group('button_pre') else m.group('button_post')
         ret.params["button"] = button
         return ret
+
+class prompt_interface(Action):
+    name = "Bring out the prompt interface"
+    summary = "Brings out the interface to interfere to the scenario run"
+
+    tags = {"prompt", "interface", "control",}
+
+    default_params = {'body_part': 'keyboard'}
+    command = ""
+    tivipe_component_name = "CommandStateInterface"

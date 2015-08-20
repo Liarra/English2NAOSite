@@ -96,14 +96,17 @@ class Ranker(object):
         return rank
 
     def rank_tags(self, text, component):
+        import re
         text = text.lower()
-        text_words = text.split(" .,!:;?()")
+        text_words = re.findall(r"[\w']+", text)
         tags_sum = 0
+        tags_number = 0
         for tag in component.tags:
             for word in text_words:
                 if tag == word:
                     tags_sum += self.price_for_tag
-        rank = tags_sum
+                    tags_number += 1
+        rank = tags_sum + (tags_number - 1)
         return rank
 
     def rank_regexp(self, text, component):

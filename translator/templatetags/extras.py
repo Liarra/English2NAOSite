@@ -42,6 +42,9 @@ def get_icon(value):
         elif body_part == 'timer':
             icon = 'wait.png'
 
+        elif body_part=='keyboard':
+            icon='keyboard.png'
+
         return folder + icon
 
     else:

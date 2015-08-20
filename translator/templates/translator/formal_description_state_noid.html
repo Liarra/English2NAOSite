@@ -35,8 +35,8 @@
 <!--Commands-->
 {% if state.commands|length > 0 %}
     {% for command in state.commands %}
-        {% if command|get_class == 'move_command' %}
-        <span class='program-box glyphicon' style="background-image: url({{command|icon}})" title='{{command.params.name}}'>&nbsp;</span>
+        {% if command|get_class == 'move_command' or command|get_class == 'prompt_interface' %}
+        <span class='program-box glyphicon' style="background-image: url({{command|icon}})" title='{{command.name}}'>&nbsp;</span>
         {% endif %}
 
         {% if command|get_class == 'say_command' %}
