@@ -8,7 +8,7 @@ from django.db import models, migrations
 
 
 def create_atomic(something, something_else):
-    actions = [say_command(), wait_command(),
+    actions = [say_command(), wait_command(), prompt_interface(),
                cry, dance, stand, crouch]
 
     conditions = [button_press()]
