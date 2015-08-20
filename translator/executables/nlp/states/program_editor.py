@@ -44,9 +44,9 @@ def update_states(states_list, state_id, actions_to_add=None, conditions_to_add=
                 else:
                     state_unique_id = state.ID
 
-            if state_unique_id == state_id:
-                update_state(state, actions_to_add, conditions_to_add, actions_to_remove, conditions_to_remove,
-                             change_actions, change_conditions, change_next_id)
+                if state_unique_id == state_id:
+                    update_state(state, actions_to_add, conditions_to_add, actions_to_remove, conditions_to_remove,
+                                 change_actions, change_conditions, change_next_id)
 
     return new_states
 

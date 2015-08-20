@@ -1,5 +1,5 @@
 from translator.executables.nlp.translation import longestpath
-from translator.executables.nlp.components.component import UnrecognisedComponent
+from translator.executables.nlp.components.component import UnrecognisedComponent, IgnoredComponent
 
 
 class TextBreaker(object):
@@ -76,6 +76,7 @@ class TextBreaker(object):
 
 class Ranker(object):
     price_for_tag = 5
+    price_for_ignored = 1
     price_for_regexp = 15
     price_for_length = -2
     price_for_punctuation = 5
@@ -97,6 +98,11 @@ class Ranker(object):
 
     def rank_tags(self, text, component):
         import re
+
+        price_for_tag = self.price_for_tag
+        if isinstance(component,IgnoredComponent):
+            price_for_tag=self.price_for_ignored
+
         text = text.lower()
         text_words = re.findall(r"[\w']+", text)
         tags_sum = 0
@@ -104,9 +110,9 @@ class Ranker(object):
         for tag in component.tags:
             for word in text_words:
                 if tag == word:
-                    tags_sum += self.price_for_tag
+                    tags_sum += price_for_tag
                     tags_number += 1
-        rank = tags_sum + (tags_number - 1)
+        rank = tags_sum + 2*(tags_number - 1)
         return rank
 
     def rank_regexp(self, text, component):
@@ -125,7 +131,7 @@ class Ranker(object):
         return 0
 
     def rank_length(self, text):
-        shortest = 3
+        shortest = 2
         longest = 500
         if len(text) > longest or len(text) < shortest:
             return self.price_for_length

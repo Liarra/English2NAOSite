@@ -137,7 +137,7 @@ class prompt_interface(Action):
     name = "Bring out the prompt interface"
     summary = "Brings out the interface to interfere to the scenario run"
 
-    tags = {"prompt", "interface", "control",}
+    tags = {"prompt", "interface", "control","show"}
 
     default_params = {'body_part': 'keyboard'}
     command = ""

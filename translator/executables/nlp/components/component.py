@@ -14,7 +14,7 @@ class Component(object):
     default_params = {}
 
     def __init__(self, **params):
-        self.params =  OrderedDict()
+        self.params = OrderedDict()
         self.params.update(self.default_params.copy())
 
         self.load_params(params)
@@ -63,7 +63,7 @@ class IgnoredComponent(UnrecognisedComponent):
         "if", "or",
         "i", "robot",
         "the", "a",
-        }
+    }
 
     default_params = {"ignored_text": ''}
 
