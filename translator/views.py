@@ -38,8 +38,15 @@ def translate(request):
     header_list = request.POST.getlist('headers[]')
     modified_steps = set([int(x.replace('.', '')) for x in request.POST.getlist('modified[]')])
 
-    states = request.session['states']
-    step_descriptions = request.session['step_descriptions']
+    if "states" in request.session:
+        states = request.session['states']
+    else:
+        states = []
+
+    if "step_descriptions" in request.session:
+        step_descriptions = request.session['step_descriptions']
+    else:
+        step_descriptions = []
 
     components = load_actions_from_db() + load_conditions_from_db()
 
@@ -58,7 +65,7 @@ def translate(request):
         if text == "":
             states[i] = {}
         else:
-            result = translator.translate(text, i, components)
+            result = translator.translate(text, i+1, components)
             states[i] = result
 
     request.session['states'] = states

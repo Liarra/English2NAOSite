@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 class Component(object):
     tags = set()
-    regexp = ""
+    regexp = None
 
     tivipe_component_name = ""
     name = ""

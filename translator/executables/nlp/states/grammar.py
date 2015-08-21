@@ -14,6 +14,14 @@ unrecognised_enabled = True
 def remove_unrecognised(unrecognised):
     return []
 
+
+def remove_space_unrecognised(unrecognised):
+    if unrecognised.params["unrecognised_text"] == ' ':
+        return []
+    else:
+        return [unrecognised]
+
+
 def parallel_commands(c1, p, c2):
     new_state = State()
     new_state.text_index_start = c1.text_index_start
@@ -70,7 +78,7 @@ def parallel_goto(p, g):
 
 
 def define_two_unrecognised(u1, u2):
-    if isinstance(u2,IgnoredComponent):
+    if isinstance(u2, IgnoredComponent):
         return [u1]
     return [UnrecognisedComponent.from_string(u1.description + ", " + u2.description, u1.text_index_start)]
 
@@ -143,7 +151,7 @@ def transform(components_list):
 def grammar_transform(components_list):
     gr = Grammar()
     gr.append_rule(input=[("unrecognised", IgnoredComponent)], transformation=remove_unrecognised)
-
+    # gr.append_rule(input=[("unrecognised", UnrecognisedComponent)], transformation=remove_space_unrecognised)
     gr.append_rule(input=[("c1", Action), ("p", Parallel), ("c2", Action)], transformation=parallel_commands)
     gr.append_rule(input=[("c1", Action), ("p", Parallel), ("s2", State)], transformation=command_parallel_state)
     gr.append_rule(input=[("s1", State), ("p", Parallel), ("c2", Action)], transformation=state_parallel_command)
@@ -169,7 +177,8 @@ def grammar_transform(components_list):
 
     return new_states_list
 
-#TODO: Can be done as grammar rule
+
+# TODO: Can be done as grammar rule
 def remove_orphans(states_list):
     new_list = []
 
@@ -186,6 +195,7 @@ def remove_orphans(states_list):
         return grammar_transform(new_list)
     else:
         return new_list
+
 
 #TODO: Can be done as grammar rule
 def arrange_identifiers(states_list):
@@ -228,6 +238,7 @@ def unite_condition_states(states_list):
             state.next_ID = -1
 
     return first_condition_state_id
+
 
 #TODO: Can be done as a grammar rule
 def get_new_list_with_keypress_states(states):

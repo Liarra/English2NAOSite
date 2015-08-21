@@ -93,7 +93,8 @@ class Ranker(object):
         rank = 0
         text = text.strip(',. ')
         rank += self.rank_tags(text, component)
-        rank += self.rank_regexp(text, component)
+        if component.regexp:
+            rank += self.rank_regexp(text, component)
         return rank
 
     def rank_tags(self, text, component):

@@ -5,7 +5,6 @@ __author__ = 'NBUCHINA'
 
 class Sequence(Component):
     tags = {"after", "then", "next"}
-    regexp = r"(then|next)$"
     command = " & "
 
     @classmethod
@@ -15,8 +14,7 @@ class Sequence(Component):
 
 
 class Parallel(Component):
-    tags = {"same time"}
-    regexp = r"^\ ?(and|while)$"
+    tags = {"same time", "and", "while"}
     command = " | "
 
     @classmethod
