@@ -8,6 +8,13 @@ __author__ = 'NBUCHINA'
 def write_csv_from_states(states, csv_file):
     state_writer = csv.writer(csv_file, delimiter=',',
                               quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    existing_ids = []
+    for state in states:
+        existing_ids.append(state.ID)
+
+    for state in states:
+        if state.next_ID not in existing_ids:
+            state.next_ID = -1
 
     for state in states:
         step_commands = "|".join([str(x) for x in state.commands])
