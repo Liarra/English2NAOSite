@@ -449,6 +449,7 @@ for (index = 0; index < added_icons.length; ++index) {
     }
 
     changelist.changeAction(index,params);
+    }
 
    added_icons=$(".existing-condition");
 for (index = 0; index < added_icons.length; ++index) {
@@ -466,7 +467,7 @@ for (index = 0; index < added_icons.length; ++index) {
 
     changelist.changeCondition(index,params);
 }
-}
+
 
 next_id_field=$("#next_id");
 if (next_id_field.length)
