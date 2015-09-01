@@ -41,7 +41,12 @@ class GoTo(Component):
         string = string.lower()
 
         m = p.search(string)
-        if (m == None):
+        if m == None:
             return
-        ret.params["where"] = int(m.group('number'))*100
+
+        number = m.group('number')
+        if len(number) < 3:
+            number = int(number) * 100
+
+        ret.params["where"] = int(number)
         return ret
