@@ -14,6 +14,10 @@ class Component(object):
     default_params = {}
 
     def __init__(self, **params):
+        self.tags = set()
+        self.tags.update(self.__class__.tags)
+        self.name = ""
+        self.summary = ""
         self.params = OrderedDict()
         self.params.update(self.default_params.copy())
 

@@ -27,7 +27,7 @@ def parallel_commands(c1, p, c2):
     new_state.text_index_start = c1.text_index_start
     new_state.tivipe_component_name = c1.tivipe_component_name
     new_state.description = c1.description + ", " + c2.description
-    new_state.ID = id_pool.get_float_id(state_counter)
+    new_state.set_uID(id_pool.get_float_id(state_counter))
     new_state.commands.append(c1)
     new_state.commands.append(c2)
 
@@ -222,7 +222,7 @@ def unite_condition_states(states_list):
 
             if state.uID != first_condition_state_id:
                 disappearing_states.append(state.ID)
-                state.set_uID(first_condition_state_id)
+                # state.set_uID(first_condition_state_id)
 
             meta_state.states.append(state)
 

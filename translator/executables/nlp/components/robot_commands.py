@@ -9,7 +9,7 @@ class say_command(Action):
     tags = {"say", "tell", "ask"}
     regexp = r"(say|tell|ask)(s|ing)? ['\"“](?P<what>.+)['\"”]"
     default_params = {"text": '', 'body_part': 'tts'}
-    command = "[say({text})]"
+    command = "[wait(2500)&say({text})]"
     tivipe_component_name = "CommandState2"
     name = "Say something"
     summary = "This command makes the robot say the specified text."
@@ -101,6 +101,9 @@ class move_command(Action):
         ret.regexp = self.regexp
         ret.command = self.command
         ret.tags = self.tags
+        ret.description = self.description
+        ret.name = self.name
+        ret.summary = self.summary
 
         return ret
 
@@ -133,11 +136,12 @@ class button_press(Condition):
         ret.params["button"] = button
         return ret
 
+
 class prompt_interface(Action):
     name = "Bring out the prompt interface"
     summary = "Brings out the interface to interfere to the scenario run"
 
-    tags = {"prompt", "interface", "control","show"}
+    tags = {"prompt", "interface", "control", "show"}
 
     default_params = {'body_part': 'keyboard'}
     command = ""

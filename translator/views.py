@@ -277,7 +277,9 @@ def load_user_selected_conditions_from_db():
 
 
 def get_state_by_ID(request, state_id):
+    state_id=int(state_id)
     states = request.session["states"]
+    ret=None
 
     for states_for_step in states:
         for state in states_for_step:

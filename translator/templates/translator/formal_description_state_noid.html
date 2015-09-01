@@ -40,15 +40,15 @@
         {% endif %}
 
         {% if command|get_class == 'say_command' %}
-        <span class='program-box glyphicon' style="background-image: url({{command|icon}})" title='{{command}}'>&nbsp;</span>
+        <span class='program-box glyphicon' style="background-image: url({{command|icon}})" title='Say "{{command.params.text}}"'>&nbsp;</span>
         {% endif %}
 
         {% if command|get_class == 'wait_command' %}
-        <span class='program-box glyphicon glyphicon-time' title='{{command}}'></span>
+        <span class='program-box glyphicon glyphicon-time' title='Wait "{{command.params.ms}}"'></span>
         {% endif %}
 
         {% if command|get_class == 'UnrecognisedComponent' %}
-        <span class='program-box glyphicon glyphicon-question-sign' title='{{command}}'></span>
+        <span class='program-box glyphicon glyphicon-question-sign' title='{{command.params.unrecognised_text}}'></span>
         {% endif %}
     {% endfor %}
 {% endif %}

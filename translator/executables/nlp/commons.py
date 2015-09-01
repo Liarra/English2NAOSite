@@ -45,7 +45,7 @@ def get_component_from_model(model):
         dd = {ord(c): None for c in chars_to_remove}
         new_params_string = model.params.translate(dd)
         new_component.load_params(json.loads(new_params_string))
-        new_component.tags.add(model.tags.names())
+        new_component.tags.update(model.tags.names())
 
         new_component.ref_id = model.id
 

@@ -1,9 +1,7 @@
 from translator.executables.nlp.components.component import IgnoredComponent
 from translator.executables.nlp.components.execution import *
-from translator.executables.nlp.components.moves.demo_moves import *
 from translator.executables.nlp.encoders import encode2csv
 from translator.executables.nlp.translation.ranker import TextBreaker
-from translator.executables.nlp.components.robot_commands import *
 from translator.executables.nlp.states import grammar
 
 __author__ = 'NBUCHINA'

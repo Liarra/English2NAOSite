@@ -21,6 +21,8 @@ def update_states(states_list, state_id, actions_to_add=None, conditions_to_add=
     if not change_conditions:
         change_conditions = []
 
+    state_id = int(state_id)
+
     conditions_to_remove = set(conditions_to_remove)
     actions_to_remove = set(actions_to_remove)
 
@@ -35,7 +37,8 @@ def update_states(states_list, state_id, actions_to_add=None, conditions_to_add=
                         state_unique_id = sub_state.ID
 
                     if state_unique_id == state_id:
-                        update_state(sub_state, actions_to_add, conditions_to_add, actions_to_remove, conditions_to_remove,
+                        update_state(sub_state, actions_to_add, conditions_to_add, actions_to_remove,
+                                     conditions_to_remove,
                                      change_actions, change_conditions, change_next_id)
 
             else:
@@ -64,7 +67,7 @@ def update_state(state, actions_to_add=None, conditions_to_add=None, actions_to_
         state.condition[i].load_params(condition_params)
 
     if change_next_id and not change_next_id == 0:
-        state.next_ID = change_next_id*10
+        state.next_ID = int(change_next_id)
 
     # Then remove stuff
     for action_index in actions_to_remove:

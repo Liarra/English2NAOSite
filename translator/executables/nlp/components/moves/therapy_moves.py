@@ -188,7 +188,7 @@ stretch_hand.params[
 movem(RShoulderPitch, 78, 200, 71, 200, 59, 200, 48, 200, 36, 200, 32, 200,
       RElbowRoll,     15, 200, 19, 200, 23, 200, 32, 200, 35, 200, 37, 200,
                       39, 200,
-      RHand,           0, 400, 57,1000)]
+      RHand,           0, 400, 57,1000)]&[wait(10000)]
 
     """
 stretch_hand.tags = ["stretch", "hand", "provide", "provides", "stretches","providing", "stretching"]
