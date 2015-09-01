@@ -7,7 +7,7 @@ from translator.executables.nlp.states.state import State, ConditionState, Selec
 
 __author__ = 'NBUCHINA'
 
-state_counter = 1
+state_counter = 1000
 unrecognised_enabled = True
 
 
@@ -27,7 +27,7 @@ def parallel_commands(c1, p, c2):
     new_state.text_index_start = c1.text_index_start
     new_state.tivipe_component_name = c1.tivipe_component_name
     new_state.description = c1.description + ", " + c2.description
-    new_state.ID = "%.2f" % id_pool.get_float_id(state_counter)
+    new_state.ID = id_pool.get_float_id(state_counter)
     new_state.commands.append(c1)
     new_state.commands.append(c2)
 
@@ -88,8 +88,8 @@ def condition_goto(c, g):
     new_state.text_index_start = c.text_index_start
     new_state.tivipe_component_name = c.tivipe_component_name
     new_state.description = c.description + ", " + g.description
-    new_state.ID = new_state.uID = "%.2f" % id_pool.get_float_id(state_counter)
-    new_state.next_ID = "%.2f" % g.params["where"]
+    new_state.set_uID(id_pool.get_float_id(state_counter))
+    new_state.next_ID = g.params["where"]
     new_state.condition.append(c)
 
     return [new_state]
@@ -97,7 +97,7 @@ def condition_goto(c, g):
 
 def state_goto(s, g):
     new_state = s
-    new_state.next_ID = "%.2f" % g.params["where"]
+    new_state.next_ID = g.params["where"]
 
     return [new_state]
 
@@ -107,7 +107,7 @@ def condition_command(cnd, c):
     new_state.text_index_start = cnd.text_index_start
     new_state.tivipe_component_name = cnd.tivipe_component_name
     new_state.description = cnd.description + ", " + c.description
-    new_state.ID = new_state.uID = "%.2f" % id_pool.get_float_id(state_counter)
+    new_state.set_uID(id_pool.get_float_id(state_counter))
     new_state.commands.append(c)
     new_state.condition.append(cnd)
 
@@ -119,8 +119,7 @@ def condition_state(cnd, s):
     new_state.text_index_start = cnd.text_index_start
     new_state.tivipe_component_name = cnd.tivipe_component_name
     new_state.description = cnd.description + ", " + s.description
-    new_state.ID = s.ID
-    new_state.uID = s.ID
+    new_state.set_uID(s.uID)
     new_state.commands.extend(s.commands)
     new_state.condition.append(cnd)
 
@@ -132,7 +131,7 @@ def command(c):
     new_state.text_index_start = c.text_index_start
     new_state.tivipe_component_name = c.tivipe_component_name
     new_state.description = c.description
-    new_state.ID = "%.2f" % id_pool.get_float_id(state_counter)
+    new_state.set_uID(id_pool.get_float_id(state_counter))
     new_state.commands.append(c)
 
     return [new_state]
@@ -197,7 +196,7 @@ def remove_orphans(states_list):
         return new_list
 
 
-#TODO: Can be done as grammar rule
+# TODO: Can be done as grammar rule
 def arrange_identifiers(states_list):
     for i in range(0, len(states_list) - 1):
         if isinstance(states_list[i], State) and isinstance(states_list[i + 1], State) and states_list[i].next_ID == -1:
@@ -213,17 +212,17 @@ def unite_condition_states(states_list):
 
     for state in states_list:
         if isinstance(state, MetaState):
-            return state.ID
+            return state.uID
 
     for state in states_list:
         if isinstance(state, ConditionState):
             if first_condition_state_id == -1:
-                first_condition_state_id = state.ID
-                meta_state.ID = state.ID
+                first_condition_state_id = state.uID
+                meta_state.set_uID(state.uID)
 
-            if state.ID != first_condition_state_id:
+            if state.uID != first_condition_state_id:
                 disappearing_states.append(state.ID)
-                state.ID = first_condition_state_id
+                state.set_uID(first_condition_state_id)
 
             meta_state.states.append(state)
 
@@ -253,9 +252,9 @@ def get_new_list_with_keypress_states(states):
 
     for state in states:
         if isinstance(state, MetaState) and len(state.states) > 0:
+            select_key.set_uID(state.uID)
             for substate in state.states:
                 orphan_state = select_key.add_cstep(substate)
-                select_key.ID = substate.ID
 
                 if orphan_state is not None:
                     new_list.append(orphan_state)

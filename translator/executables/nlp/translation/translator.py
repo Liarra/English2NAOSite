@@ -27,7 +27,7 @@ def translate(text, step_number=1, components_from_db=None):
         if found_component is not None:
             components_from_text.append(found_component)
 
-    grammar.state_counter = step_number
+    grammar.state_counter = step_number*1000
     grammar.unrecognised_enabled = False
     components_from_text = grammar.transform(components_from_text)
     grammar.unite_condition_states(components_from_text)
@@ -45,4 +45,11 @@ def get_csv_file_with_header_and_first_state(first_states):
 
 def write_csv(states, csv_for_result):
     states_list = grammar.get_new_list_with_keypress_states(states)
+
+    #  existing_ids = []
+    #
+    # for states_for_step in states:
+    #     for state in states_for_step:
+    #         existing_ids.append(state.ID)
+
     encode2csv.write_csv_from_states(states_list, csv_for_result)

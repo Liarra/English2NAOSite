@@ -15,8 +15,11 @@ from translator.models import *
 
 
 def create(request):
+    if "states" in request.session:
+        del request.session['states']
+    if "step_descriptions" in request.session:
+        del request.session['step_descriptions']
     return render(request, 'translator/create.html')
-
 
 def edit(request, program_id):
     scenario = Scenario.objects.get(id=program_id)

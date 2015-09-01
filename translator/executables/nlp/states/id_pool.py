@@ -1,8 +1,8 @@
 __author__ = 'NBUCHINA'
 
-counter = 0.0
-modifier = 0.1
-base_id = 1.0
+counter = 0
+modifier = 10
+base_id = 1000
 
 
 def get_float_id(base_id):
@@ -16,4 +16,4 @@ def get_float_id(base_id):
 
 def reset():
     global counter
-    counter=0.0
+    counter=0

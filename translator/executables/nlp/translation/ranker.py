@@ -17,6 +17,8 @@ class TextBreaker(object):
         for i in range(0, len(maxpath) - 1):
             text_piece = self.text[maxpath[i]: maxpath[i + 1]]
             text_piece = text_piece.strip(' .,')
+            if text_piece == ' ' or len(text_piece) == 0:
+                continue
             component = components_mapping[maxpath[i]][maxpath[i + 1]]
 
             if component is not None:
@@ -101,8 +103,8 @@ class Ranker(object):
         import re
 
         price_for_tag = self.price_for_tag
-        if isinstance(component,IgnoredComponent):
-            price_for_tag=self.price_for_ignored
+        if isinstance(component, IgnoredComponent):
+            price_for_tag = self.price_for_ignored
 
         text = text.lower()
         text_words = re.findall(r"[\w']+", text)
@@ -113,7 +115,7 @@ class Ranker(object):
                 if tag == word:
                     tags_sum += price_for_tag
                     tags_number += 1
-        rank = tags_sum + 2*(tags_number - 1)
+        rank = tags_sum + 2 * (tags_number - 1)
         return rank
 
     def rank_regexp(self, text, component):

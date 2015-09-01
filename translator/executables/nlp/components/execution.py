@@ -43,5 +43,5 @@ class GoTo(Component):
         m = p.search(string)
         if (m == None):
             return
-        ret.params["where"] = float(m.group('number'))
+        ret.params["where"] = int(m.group('number'))*100
         return ret

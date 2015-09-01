@@ -64,7 +64,7 @@ def update_state(state, actions_to_add=None, conditions_to_add=None, actions_to_
         state.condition[i].load_params(condition_params)
 
     if change_next_id and not change_next_id == 0:
-        state.next_ID = change_next_id
+        state.next_ID = change_next_id*10
 
     # Then remove stuff
     for action_index in actions_to_remove:
