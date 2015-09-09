@@ -19,7 +19,7 @@ class Step(models.Model):
 
 class Component(models.Model):
     tags = TaggableManager()
-    regex = models.CharField(max_length=500)
+    regex = models.CharField(max_length=500, null=True, blank=True)
     name = models.CharField(max_length=200)
     summary = models.TextField()
     params = models.TextField()
