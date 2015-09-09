@@ -7,9 +7,8 @@ class Action(Component):
 
 class say_command(Action):
     tags = {"say", "tell", "ask"}
-    regexp = r"(say|tell|ask)(s|ing)? ['\"“](?P<what>.+)['\"”]"
+    regexp = r"(say|tell|ask)(s|ing)? ['\"“](?P<what>.+)['\"”]$"
     default_params = {"text": '', 'body_part': 'tts'}
-    command = "[wait(2500)&say({text})]"
     tivipe_component_name = "CommandState2"
     name = "Say something"
     summary = "This command makes the robot say the specified text."
@@ -17,7 +16,8 @@ class say_command(Action):
 
     def load_params(self, params):
         super().load_params(params)
-        self.params["text"] = self._tivipefy_text_(self.params["text"])
+        self.tivipe_text = self._tivipefy_text_(self.params["text"])
+        self.command = "[wait(2500)&say(" + self.tivipe_text + ")]"
 
     def from_string(cls, string, index_in_text=0):
         ret = super().from_string(string, index_in_text)
@@ -31,10 +31,10 @@ class say_command(Action):
         m = p.search(string)
         if m is None:
             return
-        say_what = m.group('what').replace(' ', '_')
-        say_what = say_what.replace(',', '')
-        say_what = say_what.replace('\'', '')
-        ret.params["text"] = say_what
+        ret.params["text"] = m.group('what')
+        ret.tivipe_text = ret._tivipefy_text_(m.group('what'))
+        ret.command = "[wait(2500)&say(" + ret.tivipe_text + ")]"
+
         return ret
 
     def _tivipefy_text_(self, text):

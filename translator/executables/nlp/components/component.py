@@ -67,6 +67,7 @@ class IgnoredComponent(UnrecognisedComponent):
         "if", "or",
         "i", "robot",
         "the", "a",
+        "for",
     }
 
     default_params = {"ignored_text": ''}
