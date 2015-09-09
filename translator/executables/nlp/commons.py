@@ -32,8 +32,10 @@ def get_component_from_model(model):
         component_class = class_for_name("translator.executables.nlp.components.robot_commands", component_class_name)
 
         new_component = component_class()
-        if len(model.regex) > 0:
-            new_component.regexp = model.regex
+        if model.regex:
+            if len(model.regex) > 0:
+                new_component.regexp = model.regex
+
         if len(model.name) > 0:
             new_component.name = model.name
         if len(model.summary) > 0:
