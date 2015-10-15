@@ -45,7 +45,7 @@ $(document).ready(function(){
     });
 
     $("#btn-save").click(function(){
-
+        var url_to_go=$(this).attr("to");
         var text_values = $('.step-description').map(function() {
             return this.value;
         }).get()
@@ -55,7 +55,7 @@ $(document).ready(function(){
         }).get()
 
         $.ajax({
-            url: "/translator/save/",
+            url: url_to_go,
             type:"POST",
             data: {
                 text: text_values,
@@ -71,10 +71,11 @@ $(document).ready(function(){
     });
 
     $(".btn-translate").click(function(){
-
+        var url_to_go=$(this).attr("to");
         bootbox.confirm("Doing this will replace an existing program on the left with a translation. Any changes you made to the program will be lost. Is it OK?", function(result) {
         if(result){
-            $("#btn-save").addClass("btn-info");
+
+        $("#btn-save").addClass("btn-info");
 
         var text_values = $('.step-description').map(function() {
             return this.value;
@@ -85,7 +86,7 @@ $(document).ready(function(){
         }).get()
 
         $.ajax({
-            url: "/translator/translate/",
+            url: url_to_go,
             type:"POST",
             data: {
                 text: text_values,
@@ -116,7 +117,7 @@ $(document).ready(function(){
     });
 
     $("#btn-download").click(function(){
-
+        var url_to_go=$(this).attr("to");
         var values = $('.step-description').map(function() {
             return this.value;
         }).get()
@@ -130,7 +131,7 @@ $(document).ready(function(){
         }
 
         $.ajax({
-            url: "/translator/csv/",
+            url: url_to_go,
             type:"POST",
             data: params,
 
