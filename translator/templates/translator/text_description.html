@@ -8,12 +8,12 @@
 {% endif %}
     <div class="row">
     <div class="step-number col-md-1"> {{forloop.counter}}. </div>
-    <div class="step-name col-md-10"><input type="text" class="form-control step-name-text"  placeholder="Step name" value="{{description.step_name}}"></div>
+    <div class="step-name col-md-10"><input type="text" class="form-control step-name-text"  placeholder="Step name" value="{{description.step_name}}" pattern="[\w\d !\x22#&'(\),-.:;?_`']+"></div>
     <div class="step-delete col-md-1"><span class=" glyphicon glyphicon-remove"> </span></div>
     </div>
 
     <div class="step-description-div">
-        <textarea class="form-control step-description"rows="1">{{description.step_description}}</textarea>
+        <textarea class="form-control step-description"rows="1" pattern="[\w\d !\x22#&'(\),-.:;?_`']+">{{description.step_description}}</textarea>
     </div>
 </div>
 
@@ -26,12 +26,12 @@
     <div class="step-div inactive">
          <div class="row">
     <div class="step-number col-md-1"> 1. </div>
-    <div class="step-name col-md-10"><input type="text" class="form-control step-name-text"  placeholder="Step name" value="{{description.step_name}}"></div>
+    <div class="step-name col-md-10"><input type="text" class="form-control step-name-text"  placeholder="Step name" value="{{description.step_name}}" pattern="[\w\d !\x22#&'(\),-.:;?_`']+"></div>
     <div class="step-delete col-md-1"><span class=" glyphicon glyphicon-remove"> </span></div>
     </div>
 
     <div class="step-description-div">
-        <textarea class="form-control step-description">{{description.step_description}}</textarea>
+        <textarea class="form-control step-description" pattern="[\w\d !\x22#&'(\),-.:;?_`']+">{{description.step_description}}</textarea>
     </div>
 </div>
 {% endif %}

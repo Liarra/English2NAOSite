@@ -48,7 +48,8 @@
     <div class="container">
 
       <div class="starter-template">
-        <h1>Make your own scenario   <button type="button" class="btn" id="btn-download">Download</button> <button type="button" class="btn" id="btn-save">Save</button></h1>
+        <h1>Make your own scenario   <button type="button" class="btn" id="btn-download" to="{% url 'translator:csv-generator' %}">Download</button>
+            <button type="button" class="btn" id="btn-save" to="{% url 'translator:save-program' %}">Save</button></h1>
       </div>
       
       <div class="row">
@@ -62,7 +63,7 @@
             </div>
         </div>
 
-        <button type="button" class="btn btn-success btn-translate">Translate</button>
+        <button type="button" class="btn btn-success btn-translate" to="{% url 'translator:translate-engine' %}">Translate</button>
     </div><!-- /.container -->
 
 

@@ -15,7 +15,7 @@ function getCookie(name) {
     return cookieValue;
 }
 var csrftoken = getCookie('csrftoken');
-var modified_steps=[];
+
 
 
 function csrfSafeMethod(method) {
@@ -34,10 +34,18 @@ $(document).ready(function(){
 
     assign_balloons();
     alignTextWithProgram();
-    assignModificationHooks();
+
+
+    $(".step-name-text").focus(function(){
+        $("#btn-save").addClass("btn-info");
+    });
+
+    $(".step-description").focus(function(){
+        $("#btn-save").addClass("btn-info");
+    });
 
     $("#btn-save").click(function(){
-
+        var url_to_go=$(this).attr("to");
         var text_values = $('.step-description').map(function() {
             return this.value;
         }).get()
@@ -47,7 +55,7 @@ $(document).ready(function(){
         }).get()
 
         $.ajax({
-            url: "/translator/save/",
+            url: url_to_go,
             type:"POST",
             data: {
                 text: text_values,
@@ -63,10 +71,11 @@ $(document).ready(function(){
     });
 
     $(".btn-translate").click(function(){
-
-        bootbox.confirm("Doing this will replace an existing program on the left with a translation. Any changes you made to the program on the left will be lost. Is it OK?", function(result) {
+        var url_to_go=$(this).attr("to");
+        bootbox.confirm("Doing this will replace an existing program on the left with a translation. Any changes you made to the program will be lost. Is it OK?", function(result) {
         if(result){
-            $("#btn-save").addClass("btn-info");
+
+        $("#btn-save").addClass("btn-info");
 
         var text_values = $('.step-description').map(function() {
             return this.value;
@@ -77,12 +86,11 @@ $(document).ready(function(){
         }).get()
 
         $.ajax({
-            url: "/translator/translate/",
+            url: url_to_go,
             type:"POST",
             data: {
                 text: text_values,
-                headers: headers_values,
-                modified: modified_steps
+                headers: headers_values
             },
 
             success: function( data ) {
@@ -92,7 +100,6 @@ $(document).ready(function(){
                 assign_balloons();
                 alignTextWithProgram();
                 assign_remove_buttons();
-                modified_steps=[];
             }
         });
         }
@@ -110,7 +117,7 @@ $(document).ready(function(){
     });
 
     $("#btn-download").click(function(){
-
+        var url_to_go=$(this).attr("to");
         var values = $('.step-description').map(function() {
             return this.value;
         }).get()
@@ -124,7 +131,7 @@ $(document).ready(function(){
         }
 
         $.ajax({
-            url: "/translator/csv/",
+            url: url_to_go,
             type:"POST",
             data: params,
 
@@ -176,22 +183,4 @@ function alignTextWithProgram(){
 
 
     }
-}
-
-function assignModificationHooks(){
-
-$(".step-name-text").unbind("focus");
-$(".step-description").unbind("focus");
-
-
-$(".step-name-text").focus(function(){
-    $("#btn-save").addClass("btn-info");
-});
-
-$(".step-description").focus(function(){
-        $("#btn-save").addClass("btn-info");
-        parent=$(this).parent().parent();
-        step_num_div=parent.children(".row").first().children(".step-number").first();
-        modified_steps.push(step_num_div.html());
-    });
 }
