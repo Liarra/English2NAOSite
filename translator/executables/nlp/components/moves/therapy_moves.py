@@ -191,5 +191,5 @@ movem(RShoulderPitch, 78, 200, 71, 200, 59, 200, 48, 200, 36, 200, 32, 200,
       RHand,           0, 400, 57,1000)]&[wait(10000)]
 
     """
-stretch_hand.tags = ["stretch", "hand", "provide", "provides", "stretches","providing", "stretching"]
+stretch_hand.tags = ["stretch", "hand", "shake", "handshake", "shaking", "provide", "provides", "stretches","providing", "stretching"]
 stretch_hand.params["base_pose"] = "Crouch"

@@ -64,7 +64,7 @@ class UnrecognisedComponent(Component):
 
 class IgnoredComponent(UnrecognisedComponent):
     tags = {
-        "if", "or",
+        "if", "or", "when",
         "i", "robot",
         "the", "a",
         "for",
