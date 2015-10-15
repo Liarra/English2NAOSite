@@ -133,7 +133,7 @@ $(document).ready(function(){
                 var disp = request.getResponseHeader('Content-Disposition');
                 if (disp && disp.search('attachment') != -1) {
 
-                var form = $('<form method="POST" class="application-form" action="/translator/csv/">{% csrf_token %}');
+                var form = $('<form method="POST" class="application-form" action="'+url_to_go+'">{% csrf_token %}');
                 $.each(params, function(k, v) {
                     form.append($("<input type='hidden' name='text[]' value='" + v + "'>"));
                 });
