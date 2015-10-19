@@ -47,7 +47,7 @@ function remove_substep(substep_div){
     $("#btn-save").addClass("btn-info");
 
     $.ajax({
-            url: "/translator/remove-substep/",
+            url: remove_state_URL,
             type:"POST",
             data: {
                 substep_id: substep_div.attr("uid"),
@@ -75,7 +75,7 @@ function edit_substep(substep_div){
  $("#btn-save").addClass("btn-info");
 
  $.ajax({
-            url: "/translator/editor-substep/",
+            url: edit_state_URL,
             type:"POST",
             data: {
                 substep_id: substep_div.attr("uid"),

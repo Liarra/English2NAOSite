@@ -77,10 +77,12 @@
 
 <!--URLs are passed to scripts as variables-->
     <script type="text/javascript">
-        var load_available_actions_URL="/translator/editor-substep-actions/";
-        var load_component_params_URL="/translator/editor-substep-params/";
-        var load_class_params_URL="/translator/editor-class-params/";
-        var load_update_state_URL="/translator/editor-substep-update/";
+        var remove_state_URL="{% url 'translator:remove-substep' %}";
+        var edit_state_URL="{% url 'translator:edit-substep' %}";
+        var load_available_actions_URL="{% url 'translator:substep-actions' %}";
+        var load_component_params_URL="{% url 'translator:substep-params' %}";
+        var load_class_params_URL="{% url 'translator:substep-class' %}";
+        var load_update_state_URL="{% url 'translator:update-substep' %}";
 
     </script>
 
