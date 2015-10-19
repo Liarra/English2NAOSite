@@ -180,9 +180,9 @@ function load_actions_library(){
         $("#library").show();
         return
     }
-
+//<script type="text/javascript">
     $.ajax({
-            url: "/translator/editor-substep-actions/",
+            url: load_available_actions_URL,
             type:"POST",
             data:{
                 components_type: "components",
@@ -215,7 +215,7 @@ function load_conditions_library(){
     }
 
     $.ajax({
-            url: "/translator/editor-substep-actions/",
+            url: load_available_actions_URL,
             type:"POST",
             data:{
                 components_type: "conditions",
@@ -262,7 +262,7 @@ function load_component_params(index, state_id, letter){
         }
     }
     $.ajax({
-            url: "/translator/editor-substep-params/",
+            url: load_component_params_URL,
             type:"POST",
 
             data: ajax_data,
@@ -335,7 +335,7 @@ function addNewActionTemplate(senderIcon){
     $(".new-action").removeClass("new-action");
 
     $.ajax({
-            url: "/translator/editor-class-params/",
+            url: load_class_params_URL,
             type:"POST",
             data: {
                 ref_id: new_class
@@ -373,7 +373,7 @@ function addNewConditionTemplate(senderIcon){
     $(".new-condition").removeClass("new-condition");
 
     $.ajax({
-            url: "/translator/editor-class-params/",
+            url: load_class_params_URL,
             type:"POST",
             data: {
                 ref_id: new_class
@@ -476,7 +476,7 @@ if (next_id_field.length)
 
 function sendSubstepUpdate(){
 $.ajax({
-            url: "/translator/editor-substep-update/",
+            url: load_update_state_URL,
             type:"POST",
 
             data: {
