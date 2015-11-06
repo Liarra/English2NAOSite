@@ -78,6 +78,7 @@ class TextBreaker(object):
 
 class Ranker(object):
     price_for_tag = 5
+    price_for_unrecognised = 0.2
     price_for_ignored = 0.2
     price_for_regexp = 15
     price_for_length = -2

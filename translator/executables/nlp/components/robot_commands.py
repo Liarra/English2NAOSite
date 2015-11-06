@@ -6,7 +6,7 @@ class Action(Component):
 
 
 class say_command(Action):
-    tags = {"say", "tell", "ask"}
+    tags = set()
     regexp = r"(say|tell|ask)(s|ing)? ['\"“](?P<what>.+)['\"”]$"
     default_params = {"text": '', 'body_part': 'tts'}
     tivipe_component_name = "CommandState2"
@@ -46,7 +46,7 @@ class say_command(Action):
 
 
 class wait_command(Action):
-    tags = {"wait"}
+    tags = set()
     regexp = r"waits?.* (?P<number>\d{1,3}) (?P<units>second|minute|ms|sec|min|millisecond)s?"
     tivipe_component_name = "CommandState2"
     command = "[wait({ms})]"
