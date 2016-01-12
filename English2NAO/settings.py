@@ -24,9 +24,31 @@ SECRET_KEY = 'r2#wlvxl$(=bwrk7#wp7e$o11j^x-u^af$7xs+#mi6h*i-gokr'
 DEBUG = True
 
 TEMPLATE_DEBUG = True
-# TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
+
 TEMPLATE_LOADERS = ('django.template.loaders.filesystem.Loader',
                     'django.template.loaders.app_directories.Loader')
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "debug": DEBUG,
+            "context_processors": [
+                "django.contrib.auth.context_processors.auth",
+                "django.core.context_processors.debug",
+                "django.core.context_processors.i18n",
+                "django.core.context_processors.media",
+                "django.core.context_processors.static",
+                "django.core.context_processors.tz",
+                "django.core.context_processors.request",
+                "django.contrib.messages.context_processors.messages",
+                "account.context_processors.account",
+            ],
+        },
+    },
+]
+
 
 ALLOWED_HOSTS = []
 
@@ -42,6 +64,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'translator',
     "taggit",
+    "account",
+    "bootstrapform",
+    "pinax_theme_bootstrap",
 )
 
 MIDDLEWARE_CLASSES = (
@@ -52,6 +77,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "account.middleware.LocaleMiddleware",
+    "account.middleware.TimezoneMiddleware",
 )
 
 ROOT_URLCONF = 'English2NAO.urls'
@@ -68,6 +95,8 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
