@@ -8,7 +8,12 @@ from django.db.models import Model
 
 class Scenario(models.Model):
     pickled_formal_description = models.BinaryField()
-    # user = models.ForeignKey(User)
+    user = models.ForeignKey(User)
+
+
+class UserLibrary(models.Model):
+    user = models.ForeignKey(User)
+    pass
 
 
 class Step(models.Model):
@@ -25,6 +30,12 @@ class Component(models.Model):
     params = models.TextField()
 
 
+class Behaviour(models.Model):
+    is_atomic = models.BooleanField
+    implementation = models.OneToOneField(Component)
+    user_library=models.ManyToManyField(UserLibrary)
+
+
 class ActionComponent(Component):
     pass
 
@@ -37,6 +48,7 @@ class AtomicActionComponent(ActionComponent):
 class UserActionComponent(ActionComponent):
     program = models.ForeignKey(Scenario)
     icon = models.ImageField()
+
 
 class ConditionComponent(Component):
     pass
