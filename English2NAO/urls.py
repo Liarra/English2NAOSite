@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.views.generic import TemplateView
+from django.template import Context, RequestContext
+from django.template.loader import get_template
 
 urlpatterns = patterns('',
     # Examples:
@@ -10,6 +12,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^translator/', include('translator.urls', namespace="translator")),
     url(r"^account/", include("account.urls")),
-    url(r'^home/', TemplateView.as_view(template_name="translator/profile.html"), name="home"),
-    url(r'^$', TemplateView.as_view(template_name="translator/profile.html"), name="home")
+    url(r'^$', include("social.urls"))
 )

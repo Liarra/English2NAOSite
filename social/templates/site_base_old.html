@@ -37,33 +37,27 @@
             </div>
             <div class="panel panel-default">
               <div class="panel-body">
-                <a class="btn btn-block btn-default">Click me</a>
-                <a class="btn btn-block btn-danger">Click me</a>
+                <a class="btn btn-block btn-default">Change password</a>
+                <a class="btn btn-block btn-danger">Delete account</a>
               </div>
             </div>
           </div>
           <div class="col-md-4">
             <h1>Scenarios</h1>
+
+              {% for s in  scenarios %}
             <ul class="media-list">
               <li class="media">
                 <a class="pull-left" href="#"><img class="media-object" src="http://pingendo.github.io/pingendo-bootstrap/assets/placeholder.png" height="64" width="64"></a>
                 <div class="media-body">
-                  <h4 class="media-heading">Media heading</h4>
-                  <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque
-                    ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at,
-                    tempus viverra turpis.</p>
-                </div>
-              </li>
-              <li class="media">
-                <a class="pull-left" href="#"><img class="media-object" src="http://pingendo.github.io/pingendo-bootstrap/assets/placeholder.png" height="64" width="64"></a>
-                <div class="media-body">
-                  <h4 class="media-heading">Media heading</h4>
+                  <h4 class="media-heading">Scenario heading</h4>
                   <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque
                     ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at,
                     tempus viverra turpis.</p>
                 </div>
               </li>
             </ul>
+              {% endfor %}
           </div>
           <div class="col-md-4">
             <h1>Library</h1>

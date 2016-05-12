@@ -1,0 +1,90 @@
+{% extends "theme_bootstrap/base.html" %}
+{% block nav %}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+{% endblock %}
+
+{% block body %}
+<style>
+
+    body { padding-top: 70px; }
+
+</style>
+
+ <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1>Welcome to English2NAO!</h1>
+            <p>Hi! Welcome to English2NAO, the natural language tool for programming
+              robots. Just type what you want the robot to do in plain formal English,
+              and your program is ready.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <div class="container" style="margin-top:40px;">
+        <div class="row">
+          <div class="col-md-6">
+            <img src="static/translator/img/Screen_e2n_text.png"
+            class="img-responsive img-thumbnail">
+          </div>
+          <div class="col-md-6">
+            <h1>Tell what your want the robot to do</h1>
+            <p>Write down your requirements in the steps on the left.&nbsp;
+              <br>
+              <br>&nbsp;Use words like "and" or "while" to&nbsp;execute two actions at once.
+              &nbsp;Type "go to step N" to make the robot do the step number N.
+              <br>
+              <br>The robot currently can do the following tricks:
+              <br>- Say something;
+              <br>- Wait;
+              <br>- Wave;
+              <br>- Dance;
+              <br>- Nod;
+              <br>- Cry.
+              <br>
+              <br>It can also sit, stand and kneel!</p>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="container" style="margin-top:40px;">
+        <div class="row">
+          <div class="col-md-6">
+            <h1>Check and modify your program</h1>
+            <p>Check if English2NAO understood your instruction. If you see question
+              marks signs - then it missed something!
+              <br>
+              <br>The numbers show you in which order the instructions will be executed.
+              <br>
+              <br>You can remove the whole row of instructions or go deep and edit its individual
+              components.</p>
+          </div>
+          <div class="col-md-6">
+            <img src="static/translator/img/Screen_e2n_program.png"
+            class="img-responsive img-thumbnail">
+          </div>
+        </div>
+      </div>
+
+<div class="container" style="margin-top:40px;">
+<a class="btn btn-block btn-lg btn-danger" href="translator">Let's get started!</a>
+ </div>
+{% endblock %}
+
+{%  block footer %}
+
+        <div class="container">
+            <hr>
+            <footer>
+                <p>&copy; Myself, 2014</p>
+            </footer>
+        </div>
+
+{% endblock %}
