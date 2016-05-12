@@ -31,7 +31,7 @@ class Component(models.Model):
 
 
 class Behaviour(models.Model):
-    is_atomic = models.BooleanField
+    is_atomic = models.BooleanField()
     implementation = models.OneToOneField(Component)
     user_library=models.ManyToManyField(UserLibrary)
 
