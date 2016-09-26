@@ -130,3 +130,7 @@ display:table-cell
 .metastate{
 border-spacing:5px;
 }
+
+.glyphicon{
+cursor:pointer;
+}

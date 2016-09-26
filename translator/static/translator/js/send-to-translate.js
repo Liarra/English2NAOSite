@@ -190,7 +190,7 @@ $(".step-name-text").focus(function(){
 
 $(".step-description").focus(function(){
         $("#btn-save").addClass("btn-info");
-        parent=$(this).parent().parent();
+        parent=$(this).parents('.step-div');
         step_num_div=parent.children(".row").first().children(".step-number").first();
         modified_steps.push(step_num_div.html());
     });

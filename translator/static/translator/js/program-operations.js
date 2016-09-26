@@ -28,7 +28,21 @@ $(".btn-edit-substep").click(function(){
  changelist.clear();
  edit_substep(substep_div);
 });
+
+$(".substep-div").click(function(){
+
+ var substep_number=$(this).attr("uid");
+ changelist.clear();
+ edit_substep($(this));
+
+});
+
+$(".glyphicon-book").click(function(){
+show_actions_library();
+});
 }
+
+
 
 
 
@@ -116,6 +130,11 @@ $('textarea').each(function () {
 
 function throw_exception(){
     alert("Something went wrong");
+}
+
+
+function show_actions_library(){
+ bootbox.dialog({message: "there be libraryz"});
 }
 
 assign_remove_buttons();
