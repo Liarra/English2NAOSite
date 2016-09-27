@@ -159,7 +159,9 @@ def get_components_list(request):
     components = load_actions_from_db()
     conditions = load_conditions_from_db()
 
-    if request.POST["components_type"] == "components":
+    if not request.POST:
+        context = {'components_list': components}
+    elif request.POST["components_type"] == "components":
         context = {'components_list': components}
     else:
         context = {'components_list': conditions}

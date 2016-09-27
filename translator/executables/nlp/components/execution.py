@@ -25,7 +25,7 @@ class Parallel(Component):
 
 class GoTo(Component):
     tags = {}
-    regexp = r"go to ((sub)?(step|state|point)) (?P<number>\d{1,5}\.?\d{0,2})"
+    regexp = r"go to ((sub)?(step|state|point|line)) (?P<number>\d{1,5}\.?\d{0,2})"
     where = float(-1)
     default_params = {"where": -1}
     command = "goto[{where}]"

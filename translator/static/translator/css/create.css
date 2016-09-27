@@ -134,3 +134,14 @@ border-spacing:5px;
 .glyphicon{
 cursor:pointer;
 }
+
+.tutorial{
+position:absolute;
+top:0px;
+bottom:0px;
+height:100%;
+width:100%;
+z-index:2500;
+background-image:url('../img/tour/0.png');
+background-size:100% 100%;
+}

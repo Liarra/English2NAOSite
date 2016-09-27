@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Starter Template for Bootstrap</title>
+    <title>English2NAO</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/static/translator/bootstrap/css/bootstrap.simplex.min.css" rel="stylesheet">
@@ -25,6 +25,7 @@
   <body>
 {% csrf_token %}
 
+<div class="tutorial"></div>
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
@@ -41,6 +42,10 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">First prototype</a></li>
           </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+              <li><a><span class="glyphicon glyphicon-question-sign help" style="font-size:1.5em;"></span></a></li>
+            </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -78,6 +83,7 @@
     <script src="/static/translator/js/program-operations.js"></script>
     <script src="/static/translator/js/jquery.balloon.min.js"></script>
     <script src="/static/translator/js/bootbox.min.js"></script>
+    <script src="/static/translator/js/tour.js"></script>
 
 
     <script>

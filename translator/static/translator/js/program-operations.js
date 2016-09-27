@@ -29,20 +29,16 @@ $(".btn-edit-substep").click(function(){
  edit_substep(substep_div);
 });
 
-$(".substep-div").click(function(){
-
- var substep_number=$(this).attr("uid");
- changelist.clear();
- edit_substep($(this));
-
-});
+//$(".substep-div").click(function(){
+// changelist.clear();
+// edit_substep($(this));
+//
+//});
 
 $(".glyphicon-book").click(function(){
 show_actions_library();
 });
 }
-
-
 
 
 
@@ -134,7 +130,15 @@ function throw_exception(){
 
 
 function show_actions_library(){
- bootbox.dialog({message: "there be libraryz"});
+ $.ajax({
+            url: "/translator/editor-substep-actions/",
+            type:"GET",
+             success: function( data ) {
+                bootbox.dialog({
+                message:"<h4>Available robot actions</h4>"+data,
+                })
+             }
+});
 }
 
 assign_remove_buttons();
