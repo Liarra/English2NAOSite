@@ -35,6 +35,7 @@ $(".btn-edit-substep").click(function(){
 //
 //});
 
+$(".glyphicon-book").unbind();
 $(".glyphicon-book").click(function(){
 show_actions_library();
 });
@@ -135,7 +136,7 @@ function show_actions_library(){
             type:"GET",
              success: function( data ) {
                 bootbox.dialog({
-                message:"<h4>Available robot actions</h4>"+data,
+                message:"<h4>Available robot actions</h4> <p>You may type in any of these actions</p>"+data,
                 })
              }
 });
