@@ -1,0 +1,9 @@
+Django==1.8.15
+django-appconf==1.0.2
+django-bootstrap-form==3.2.1
+django-forms-bootstrap==3.0.1
+django-taggit==0.18.0
+django-user-accounts==2.0.0
+Pillow==3.1.1
+pinax-eventlog==1.1.2
+pinax-theme-bootstrap==8.0.1
